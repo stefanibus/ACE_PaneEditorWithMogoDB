@@ -1,65 +1,140 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import SplitPane from "react-split-pane";
 
-export default function Home() {
+import { CssEditor, HtmlEditor, JavascriptEditor } from "../components/editors";
+import { useDebounce } from "../utils/useDebounce";
+
+import styles from "./index.module.css";
+
+const Index = () => {
+  const [heightValue, setHeightValue] = useState("485px");
+
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  const [htmlValue, setHtmlValue] = useState("");
+  const [jsValue, setJsValue] = useState("");
+  const [cssValue, setCssValue] = useState("");
+  const [outputValue, setOutputValue] = useState("");
+
+  const debouncedHtml = useDebounce(htmlValue, 1000);
+  const debouncedJs = useDebounce(jsValue, 1000);
+  const debouncedCss = useDebounce(cssValue, 1000);
+
+  const router = useRouter();
+  const { id } = router.query;
+
+  useEffect(() => {
+    async function fetchData() {
+      const response = await fetch(`../api/pens/${id}`);
+      const { data } = await response.json();
+
+      if (response.status !== 200) {
+        await router.push("/404");
+      }
+
+      setHtmlValue(data.html);
+      setCssValue(data.css);
+      setJsValue(data.js);
+
+      setLoading(false);
+    }
+
+    if (id) {
+      setLoading(true);
+      fetchData();
+    } else {
+      setLoading(false);
+    }
+  }, [id]);
+
+  useEffect(() => {
+    const output = `<html>
+                    <style>
+                    ${debouncedCss}
+                    </style>
+                    <body>
+                    ${debouncedHtml}
+                    <script type="text/javascript">
+                    ${debouncedJs}
+                    </script>
+                    </body>
+                  </html>`;
+    setOutputValue(output);
+  }, [debouncedHtml, debouncedCss, debouncedJs]);
+
+    const save = async () => {
+      setSaving(true);
+      const requestOptions = {
+        method: !id ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          html: htmlValue,
+          css: cssValue,
+          js: jsValue,
+          id: id,
+        }),
+    };
+    const response = await fetch(`../api/pens/${id}`, requestOptions);
+    const {
+      data: { updatedRecord, newRecordId },
+    } = await response.json();
+
+    setSaving(false);
+    if (!updatedRecord) {
+      await router.push(`?id=${newRecordId}`);
+    }
+  };
+
+  if (loading) {
+    return <div className={styles.loading}>Loading...</div>;
+  }
+
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
+    <>
+    <div className={styles.header}>
+      <button
+          className={styles.button}
+          onClick={() => (location.href = "/")}
+      >
+        New
+      </button>
+      <button className={styles.button} onClick={save}>
+        {saving ? "Saving..." : "Save"}
+      </button>
     </div>
-  )
-}
+    <SplitPane
+      style={{ marginTop: "60px" }}
+      split="horizontal"
+      minSize={"50%"}
+      onDragFinished={(height) => {
+        setHeightValue(`${height - 40}px`);
+      }}
+    >
+      <SplitPane split="vertical" minSize={"33%"}>
+        <HtmlEditor
+          height={heightValue}
+          value={htmlValue}
+          onChange={setHtmlValue}
+        />
+        <SplitPane split="vertical" minSize={"50%"}>
+          <CssEditor
+            height={heightValue}
+            value={cssValue}
+            onChange={setCssValue}
+          />
+          <JavascriptEditor
+            height={heightValue}
+            value={jsValue}
+            onChange={setJsValue}
+          />
+        </SplitPane>
+      </SplitPane>
+      <iframe srcDoc={outputValue} className={styles.previewIframe} />
+    </SplitPane>
+    </>
+  );
+};
+
+export default Index;

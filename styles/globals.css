@@ -1,16 +1,87 @@
-html,
 body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    margin: 0px;
+}
+.Resizer {
+    z-index: 10000;
+    box-sizing: border-box;
+    background-clip: padding-box;
 }
 
-a {
-  color: inherit;
+.Resizer:hover {
+    transition: all 2s ease;
+    border: 10px solid #333642;
+}
+
+.Resizer.horizontal {
+    height: 11px;
+    margin: -5px 0;
+    cursor: row-resize;
+    width: 100%;
+    border: 8px solid #333642;
+}
+
+.Resizer.vertical {
+    margin: 0 -5px;
+
+    cursor: col-resize;
+    border: 8px solid #333642;
+}
+
+.Resizer.disabled {
+    cursor: not-allowed;
+}
+.Resizer.disabled:hover {
+    border-color: transparent;
+}
+
+.ace_fold-widget  {
+    border: 1px solid green;
+}
+
+
+.ace_fold-widget.ace_open {
+    border: 1px solid red;
+}
+
+
+
+
+.ace_fold-widget  {
+  display: inline;
+  position: relative;
+}
+
+.ace_fold-widget:hover {
+  color: #c00;
   text-decoration: none;
 }
 
-* {
-  box-sizing: border-box;
+.ace_fold-widget:hover:after {
+  background: #111;
+  background: rgba(0, 0, 0, .8);
+  border-radius: .5em;
+  bottom: 1.35em;
+  color: #fff;
+  content: attr(title);
+  display: block;
+  left: 1em;
+  padding: .3em 1em;
+  position: absolute;
+  text-shadow: 0 1px 0 #000;
+  white-space: nowrap;
+  z-index: 98;
 }
+
+.ace_fold-widget:hover:before {
+  border: solid;
+  border-color: #111 transparent;
+  border-color: rgba(0, 0, 0, .8) transparent;
+  border-width: .4em .4em 0 .4em;
+  bottom: 1em;
+  content: "";
+  display: block;
+  left: 2em;
+  position: absolute;
+  z-index: 99;
+}
+
