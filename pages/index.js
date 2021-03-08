@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import SplitPane from "react-split-pane";
 
-import { CssEditor, HtmlEditor, JavascriptEditor } from "../components/editors";
+import { CssEditor, HtmlEditor, JavascriptEditor } from "../components/Editors";
 import { useDebounce } from "../utils/useDebounce";
 
 import styles from "./index.module.css";
