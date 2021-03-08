@@ -1,6 +1,6 @@
 import React from "react";
 import dynamic from "next/dynamic";
-import styles from "./editors.module.css";
+import styles from "./Editors.module.css";
 
 export const JavascriptEditor = (props) => {
   return <Editor mode="javascript" title={"JS"} {...props} />;
