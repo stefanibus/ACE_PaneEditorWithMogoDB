@@ -9,7 +9,7 @@
 /coverage
 
 # next.js
-/.next/
+#  HEROKU DEPLOYMENT seems to request for this folder: /.next/
 /out/
 
 # production
