@@ -1,7 +1,9 @@
 import { MongoClient, ObjectId } from "mongodb";
+const dotenv = require("dotenv");
+dotenv.config();
 
-const dbName = "pensDB";
-const url = `mongodb+srv://stefanibus:stefan007@cluster0.91hdr.mongodb.net/test?retryWrites=true&w=majority`;
+const dbName = process.env.DBNAME;
+const url = process.env.URL;
 
 const client = new MongoClient(url, {
   useNewUrlParser: true,

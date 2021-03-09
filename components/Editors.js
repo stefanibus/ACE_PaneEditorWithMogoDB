@@ -15,6 +15,11 @@ export const CssEditor = (props) => {
 };
 
 
+
+// Workaround for  issue:  "window is not defined"
+// it occurred when trying to run the  render on the Heroku server
+// created a so-called NoSSR component:
+// I had to work around an issue with AcerEditor-Component not beeing present while the server wanted to render it
 // https://nextjs.org/docs/advanced-features/dynamic-import
 // https://nextjs.org/docs/advanced-features/dynamic-import
 // https://github.com/jaredpalmer/razzle/issues/1193#issuecomment-754596005
