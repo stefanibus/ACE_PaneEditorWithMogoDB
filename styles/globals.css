@@ -1,5 +1,7 @@
 body {
     margin: 0px;
+    font-family: Garamond,serif;
+    font-size: 12px;
 }
 .Resizer {
     z-index: 10000;
@@ -85,3 +87,13 @@ body {
   z-index: 99;
 }
 
+.custom-select{
+    display: flex;
+    align-items: center;
+}
+.form-input{
+    height: 36px;
+    margin: 0 10px;
+    font-family: Garamond,
+    serif;
+}
