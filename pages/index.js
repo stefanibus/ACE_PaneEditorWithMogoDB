@@ -138,24 +138,6 @@ const Index = () => {
       meth = "PUT";
     }
 
-    if (projectName == "") {
-      alert("Please input project name");
-      setSaving(false);
-      return false;
-    } else if (htmlValue == "") {
-      alert("Please add html file");
-      setSaving(false);
-      return false;
-    }
-    else if (jsValue == "") {
-      alert("Please add js file");
-      setSaving(false);
-      return false;
-    } else if (cssValue == "") {
-      alert("Please add css file");
-      setSaving(false);
-      return false;
-    }
 
     const requestOptions = {
       method: meth,
