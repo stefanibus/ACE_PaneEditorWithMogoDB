@@ -76,6 +76,7 @@ const Index = () => {
     setProject(data);
   }
 
+
   useEffect(() => {
     async function fetchData() {
       const response = await fetch(`../api/pens/${id}`);
@@ -235,7 +236,8 @@ const Index = () => {
             />
           </SplitPane>
         </SplitPane>
-        <iframe srcDoc={paneValues} className={styles.previewIframe} />
+         <iframe src="http://localhost:3000/api/surfly/604a14869e030b0015714a6f" className={styles.previewIframe} />
+         {/*<iframe srcDoc={paneValues} className={styles.previewIframe} />*/}
       </SplitPane>
     </>
   );

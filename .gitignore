@@ -33,5 +33,9 @@ yarn-error.log*
 .env
 
 
+# next
+.next/cache
+.next/
+
 # vercel
 .vercel

@@ -1,5 +1,4 @@
 import { connect, ObjectId } from "../../../utils/database";
-//import { connect, ObjectId } from "../../../utils/fake-Database";
 
 export default async (req, res) => {
   const {
