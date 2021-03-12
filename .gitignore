@@ -29,13 +29,15 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
+.env.build
 # regular env File
 .env
 
 
-# next
-.next/cache
-.next/
-
 # vercel
 .vercel
+
+# next.js build output
+.next/cache
+.next/
+.next

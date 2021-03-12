@@ -236,8 +236,10 @@ const Index = () => {
             />
           </SplitPane>
         </SplitPane>
-         <iframe src="http://localhost:3000/api/surfly/604a14869e030b0015714a6f" className={styles.previewIframe} />
-         {/*<iframe srcDoc={paneValues} className={styles.previewIframe} />*/}
+          {/*  THIS WILL BE OUR JS and CSS from Mogno (and more)
+          <iframe src="https://guarded-anchorage-85319.herokuapp.com/api/surfly/604a14869e030b0015714a6f" className={styles.previewIframe} />
+          */}
+        <iframe srcDoc={paneValues} className={styles.previewIframe} />
       </SplitPane>
     </>
   );
