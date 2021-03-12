@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import SplitPane from "react-split-pane";
 
+// import StartSurfly from "../utils/surfly";
+
+
 import { CssEditor, HtmlEditor, JavascriptEditor } from "../components/Editors";
 import { useDebounce } from "../utils/useDebounce";
 
@@ -138,6 +141,11 @@ const Index = () => {
     } else {
       meth = "PUT";
     }
+    if (projectName == "") {
+      alert("Please input project name");
+      setSaving(false);
+      return false;
+    }
 
 
     const requestOptions = {
@@ -168,10 +176,195 @@ const Index = () => {
     return <div className={styles.loading}>Loading...</div>;
   }
 
+
+
+// const SurflyTest = (number) => {
+//   console.log("alte Methode = surfly.js and number: " + number)
+//   StartSurfly.start(number);
+//   console.log("neue Methode sollte nun durch sein.")
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(function (s, u, r, f, l, y) {
+  s[f] = s[f] || {
+    init: function () {
+      s[f].q = arguments;
+    }
+  };
+  l = u.createElement(r);
+  y = u.getElementsByTagName(r)[0];
+  l.async = 1;
+  l.src = "https://surfly.com/surfly.js";
+  y.parentNode.insertBefore(l, y);
+})(window, document, "script", "Surfly");
+
+var timestamp = Date.now();
+
+var url_string = window.location.href;
+var url = new URL(url_string);
+var domainpath = url.searchParams.get("domain");
+//  console.log("grab the domainpath from Window.location: ", domainpath, );
+
+//  console.log('Refresh API Request TEST: ' );
+
+
+const RefreshTest = (domainpath) => {
+    console.log(' RefreshTest  started running! ' );
+
+  fetch(
+    "https://surfly.com/v2/sessions/?api_key=394ef3e384e546aaaf820a225e097878",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8"
+      },
+      // pass  "domainpath"  new:
+      // https://www.smazy.me/surfly_switch.js?timestamp=timestamp
+      // http://localhost:3000/api/surfly/604a14869e030b0015714a6f
+      // https://guarded-anchorage-85319.herokuapp.com/api/surfly/604a14869e030b0015714a6f
+      // ?timestamp=timestamp
+      body: JSON.stringify({
+        script_embedded:
+          "https://guarded-anchorage-85319.herokuapp.com/api/surfly/604a14869e030b0015714a6f",
+        ui_off: "true",
+        url: domainpath,
+        splash: "false"
+      })
+    }
+  )
+    .then(function (response) {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error("Could not reach the API: " + response.statusText);
+      }
+    })
+    .then(function (response) {
+        console.log("response.leader_link: ", response.leader_link)
+        setpaneValues(response.leader_link);
+    })
+    .catch(function (error) {
+        console.log('error: ');
+        console.log(error.message);
+    });
+}
+
+// window.addEventListener("DOMContentLoaded", function () {
+//   // https://appelsiini.net/2017/accessing-api-with-javascript/   // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+
+//   });
+
+// RefreshTest(domainpath)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   return (
     <>
       <div className={styles.header}>
         <div>
+           <button
+            className={styles.button}
+            onClick={() => {
+              RefreshTest("https://www.medienwerft.de/karriere/offene-stellen/entwicklung/praktikum-frontend/");
+            }}
+          >
+            Surfly Internal Test
+          </button>}
+{/*           <button
+            className={styles.button}
+            onClick={() => {
+              SurflyTest(5);
+            }}
+          >
+            Surfly External Test
+          </button> */}
           <button
             className={styles.button}
             onClick={() => {
@@ -239,7 +432,9 @@ const Index = () => {
           {/*  THIS WILL BE OUR JS and CSS from Mogno (and more)
           <iframe src="https://guarded-anchorage-85319.herokuapp.com/api/surfly/604a14869e030b0015714a6f" className={styles.previewIframe} />
           */}
-        <iframe srcDoc={paneValues} className={styles.previewIframe} />
+          <iframe key={paneValues} src={paneValues}  className={styles.previewIframe} ></iframe>
+          {/*<iframe srcDoc={paneValues}  id="showUrl_Result"  name="showUrl_Result"  className={styles.previewIframe} />*/}
+        {/*<iframe srcDoc={paneValues} className={styles.previewIframe} />*/}
       </SplitPane>
     </>
   );

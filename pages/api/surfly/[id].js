@@ -35,9 +35,14 @@ export default async (req, res) => {
 ${data.js}
 `
 ;
+//         const cssResult   =
+// `
+// document.head.insertAdjacentText("beforeend",  "<style>${data.css}</style>");
+// `
+// ;
         const cssResult   =
 `
-document.head.insertAdjacentText("beforeend",  "<style>${data.css}</style>");
+const style = document.createElement('style'); style.innerHTML =  " body { background-color: yellow; color:red; } "; document.head.appendChild(style);
 `
 ;
         // https://stackoverflow.com/questions/524696/how-to-create-a-style-tag-with-javascript/28662118#28662118
@@ -47,7 +52,8 @@ document.head.insertAdjacentText("beforeend",  "<style>${data.css}</style>");
         // res.setHeader.contentType('text/javascript') ;
         // we use res.END here not res.send  because we want to be able to set the content type to JavaScript
         res.
-        send(ScrollBarDesign + fullResult  );
+        // send(ScrollBarDesign + fullResult  );
+        send(  fullResult  );
       } catch (error) {
         res.
         status(500).json({ success: false });
