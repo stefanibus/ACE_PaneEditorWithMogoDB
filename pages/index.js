@@ -288,7 +288,7 @@ const RefreshTest = (domainpath) => {
       // ?timestamp=timestamp
       body: JSON.stringify({
         script_embedded:
-          "https://guarded-anchorage-85319.herokuapp.com/api/surfly/604a14869e030b0015714a6f",
+          "https://guarded-anchorage-85319.herokuapp.com/api/surfly/604a14869e030b0015714a6f/?timestamp="+timestamp ,
         ui_off: "true",
         url: domainpath,
         splash: "false"
