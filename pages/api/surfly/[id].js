@@ -1,61 +1,46 @@
-// CALL THIS FILE LIKE SO
-// <script id="demo" src="http://localhost:3000/api/surfly/604a14869e030b0015714a6f"></script>
-// <script id="demo" src="http://localhost:3000/api/surfly/:ProjectID"></script>
+ export default async (req, res) => {
 
+  // dotENV Surfly KEY
+     const surflyFetchURL = 'https://surfly.com/v2/sessions/?api_key=' + process.env.SURFLYKEY;
+     var timestamp = Date.now();
+  // get [ID] from query
+     const { query: { id }, method, } = req;
+     const projectID = id;
+     const requestOptions   = { method: "GET", headers: { "Content-Type": "application/json" }, };
 
-import { connect, ObjectId } from "../../../utils/database";
-// import    "../test";
+  // API fetch LongURL
+     const response = await fetch(`https://guarded-anchorage-85319.herokuapp.com/api/surfly/longurl/${projectID}`, requestOptions);
+     const { longUrlResponse } = await response.json();
+     if (response.status !== 200) { await router.push("/404"); }
 
-export default async (req, res) => {
+  // API fetch Surfly with TWO dynamic Params = projectID and longUrlResponse!
+     fetch(surflyFetchURL, {
+             method: "POST",
+             headers: {
+                 "Content-Type": "application/json; charset=utf-8"
+             },
+             body: JSON.stringify({
+                 script_embedded: `https://guarded-anchorage-85319.herokuapp.com/api/surfly/projectData/${projectID}/?timestamp=` + timestamp,
+                 ui_off: "true",
+                 url: longUrlResponse,
+                 splash: "false"
+             })
+         })
+         .then(function(response) {
+             if (response.ok) {
+                 return response.json();
+             } else {
+                 throw new Error("Could not reach the API: " + response.statusText);
+             }
+         })
+         .then(function(response) {
+             res.status(200).json( response.leader_link )
+         })
+         .catch(function(error) {
+             console.log('error: ');
+             console.log(error.message);
+         });
+ };
 
-  const ScrollBarDesign =
-  `
- // Scrollbar design
- const externalCSS = document.createElement('link');
- externalCSS.id = "dynamic-externalCSS";
- externalCSS.href = 'https://www.make-mobile.de/customers/universal/comparison/stylesheets/scrollbar_nachherStyling.css';
- externalCSS.setAttribute('rel', 'stylesheet');
- externalCSS.type = 'text/css';
- externalCSS.async = false; // <-- this is important
- document.getElementsByTagName('head')[0].appendChild(externalCSS);
- `
-
-  const collectionName = "pensName";
-  const { id } = req.query
-      try {
-        const { db } = await connect();
-        const data = await db
-          .collection(collectionName)
-          .findOne({ _id: ObjectId(id) });
-        if (!data) {
-          res.status(404).json({ success: false });
-        }
-        const jsResult    =
-`
-${data.js}
-`
-;
-//         const cssResult   =
-// `
-// document.head.insertAdjacentText("beforeend",  "<style>${data.css}</style>");
-// `
-// ;
-        const cssResult   =
-`
-const style = document.createElement('style'); style.innerHTML =  " body { background-color: yellow; color:red; } "; document.head.appendChild(style);
-`
-;
-        // https://stackoverflow.com/questions/524696/how-to-create-a-style-tag-with-javascript/28662118#28662118
-        const fullResult  = jsResult + cssResult   ;
-         res.
-         setHeader('Content-Type', 'application/javascript') ;
-        // res.setHeader.contentType('text/javascript') ;
-        // we use res.END here not res.send  because we want to be able to set the content type to JavaScript
-        res.
-        // send(ScrollBarDesign + fullResult  );
-        send(  fullResult  );
-      } catch (error) {
-        res.
-        status(500).json({ success: false });
-      }
-};
+export const config = {   api: {     externalResolver: true,   }, }
+// Documantation for externalResolver   https://nextjs.org/docs/api-routes/api-middlewares#custom-config

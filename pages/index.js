@@ -1,8 +1,11 @@
+
+// stefano clean up thoroughly
+const surfly_key = '394ef3e384e546aaaf820a225e097878';
+
+
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import SplitPane from "react-split-pane";
-
-// import StartSurfly from "../utils/surfly";
 
 
 import { CssEditor, HtmlEditor, JavascriptEditor } from "../components/Editors";
@@ -15,6 +18,7 @@ import { BsTrash } from "react-icons/bs";
 
 const Index = () => {
   const [heightValue, setHeightValue] = useState("485px");
+  const [askLongURL, setAskLongURL] = useState(false);
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -22,6 +26,8 @@ const Index = () => {
   const [htmlValue, setHtmlValue] = useState("");
   const [jsValue, setJsValue] = useState("");
   const [cssValue, setCssValue] = useState("");
+  const [longurlValue, setLongurlValue] = useState("https://www.medienwerft.de/karriere/offene-stellen/entwicklung/praktikum-frontend/")
+  const [shorturlValue, setLShorturlValue] = useState("shortURL_DEFAULT")
   const [paneValues, setpaneValues] = useState("");
   const [userID, setUserID] = useState("");
   const [project, setProject] = useState([]);
@@ -73,13 +79,12 @@ const Index = () => {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     };
-    // const response = await fetch(`../api/users/${visitorId}`, requestOptions);
     const response = await fetch(`../api/users/${visitorId}`, requestOptions);
     const { data } = await response.json();
     setProject(data);
   }
 
-
+  // API PENS
   useEffect(() => {
     async function fetchData() {
       const response = await fetch(`../api/pens/${id}`);
@@ -87,12 +92,14 @@ const Index = () => {
       if (response.status !== 200) {
         await router.push("/404");
       }
+      //console.log('surfly_data in PENS:  ' , data);
       setProjectName(data.projectName)
 
       setHtmlValue(data.html);
       setCssValue(data.css);
       setJsValue(data.js);
       setProjectID(id);
+      // setLongurlValue(data.longurl);  // stefano, might not be requiered here anymore lateron...
 
       setLoading(false);
     }
@@ -110,6 +117,8 @@ const Index = () => {
       setVisitorID(router.query.user_id);
     }
   }, [user_id]);
+
+
 
   useEffect( () => {
     // console.log('css js html changed AND paneOutput is SET with paneOutput beeing ')
@@ -130,6 +139,7 @@ const Index = () => {
   }, [debouncedHtml, debouncedCss, debouncedJs]);
 
   const save = async () => {
+    setAskLongURL(false);
     setSaving(true);
     var meth = "PUT";
     if (visitorID) {
@@ -141,9 +151,10 @@ const Index = () => {
     } else {
       meth = "PUT";
     }
-    if (projectName == "") {
+    if (projectName == " ") {
       alert("Please input project name");
       setSaving(false);
+      setAskLongURL(true);
       return false;
     }
 
@@ -261,21 +272,38 @@ const Index = () => {
   y.parentNode.insertBefore(l, y);
 })(window, document, "script", "Surfly");
 
-var timestamp = Date.now();
 
-var url_string = window.location.href;
-var url = new URL(url_string);
-var domainpath = url.searchParams.get("domain");
-//  console.log("grab the domainpath from Window.location: ", domainpath, );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //  console.log('Refresh API Request TEST: ' );
+const RefreshTest = (projectID, longurlValue) => {
 
-
-const RefreshTest = (domainpath) => {
+    console.log(  'projectID       YES   ',projectID);
+    console.log(  'longurlValue  YES   ',longurlValue);
+    const surflyFetchURL = 'https://surfly.com/v2/sessions/?api_key=394ef3e384e546aaaf820a225e097878';
+    var timestamp = Date.now();
     console.log(' RefreshTest  started running! ' );
 
-  fetch(
-    "https://surfly.com/v2/sessions/?api_key=394ef3e384e546aaaf820a225e097878",
+  fetch( surflyFetchURL,
     {
       method: "POST",
       headers: {
@@ -285,12 +313,13 @@ const RefreshTest = (domainpath) => {
       // https://www.smazy.me/surfly_switch.js?timestamp=timestamp
       // http://localhost:3000/api/surfly/604a14869e030b0015714a6f
       // https://guarded-anchorage-85319.herokuapp.com/api/surfly/604a14869e030b0015714a6f
-      // ?timestamp=timestamp
+      // https://guarded-anchorage-85319.herokuapp.com/api/surfly/${projectID}/?timestamp=`+timestamp,
+
       body: JSON.stringify({
         script_embedded:
-          "https://guarded-anchorage-85319.herokuapp.com/api/surfly/604a14869e030b0015714a6f/?timestamp="+timestamp ,
+          `https://guarded-anchorage-85319.herokuapp.com/api/surfly/${projectID}/?timestamp=`+timestamp,
         ui_off: "true",
-        url: domainpath,
+        url: longurlValue,
         splash: "false"
       })
     }
@@ -312,14 +341,35 @@ const RefreshTest = (domainpath) => {
     });
 }
 
-// window.addEventListener("DOMContentLoaded", function () {
-//   // https://appelsiini.net/2017/accessing-api-with-javascript/   // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
-
-//   });
-
-// RefreshTest(domainpath)
 
 
+    // SURFLY
+const testAPI = (projectID, longurlValue) => {
+
+    // console.log(  'projectID       YES   ',projectID);
+    // console.log(  'longurlValue  YES   ',longurlValue);
+
+    console.log('http://localhost:3000/api/surfly/surfly', )
+    // console.log(`http://localhost:3000/api/surfly/${projectID}`  )
+
+ // import {surfly_api} from "../api/surfly/surfly";
+    async function fetchData() {
+      const requestOptions = {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      };
+      const response = await fetch(`../api/surfly/surfly`, requestOptions);
+      // console.log('WAS IS DAS surfly response' , response);
+      // console.log('surfly response.url' , response.url);
+      const { data } = await response.json();
+      // console.log('surfly data' , data);
+        setpaneValues(data);
+      if (response.status !== 200) {
+        await router.push("/404");
+      }
+    }
+    fetchData()
+}
 
 
 
@@ -328,20 +378,31 @@ const RefreshTest = (domainpath) => {
 
 
 
+const HandleProjectNameChange = (e) => {
+    console.log('HandleProjectNameChange TEST ')
+    setProjectName(e.target.value)
+}
+
+const HandleLongURL_Change = (e) => {
+    console.log('HandleLongURL_Change TEST ' )
+    // let longurlNewValue = ...longurlValue , e.target.value;
+    setLongurlValue(e.target.value)
+}
 
 
 
 
 
-
-
-
-
-
-
-
-
-
+// console.log(  'heightValue', heightValue);
+// console.log(  'loading', loading);
+// console.log(  'saving', saving);
+// console.log(  'htmlValue', htmlValue);
+// console.log(  'paneValues', paneValues);
+// console.log(  'userID', userID);
+// console.log(  'project', project);
+// console.log(  'projectID', projectID);
+  // console.log(  'projectName', projectName);
+  // console.log(  'longurlValue', longurlValue);
 
 
 
@@ -352,12 +413,21 @@ const RefreshTest = (domainpath) => {
            <button
             className={styles.button}
             onClick={() => {
-              RefreshTest("https://www.medienwerft.de/karriere/offene-stellen/entwicklung/praktikum-frontend/");
+              testAPI(projectID, longurlValue);
+
             }}
           >
-            Surfly Internal Test
-          </button>}
-{/*           <button
+            Surfly Test API Request
+          </button>
+           <button
+            className={styles.button}
+            onClick={() => {
+              RefreshTest(projectID, longurlValue);
+            }}
+          >
+            pass 2 Values
+          </button>
+{/* stefanoCleanUp           <button
             className={styles.button}
             onClick={() => {
               SurflyTest(5);
@@ -369,7 +439,8 @@ const RefreshTest = (domainpath) => {
             className={styles.button}
             onClick={() => {
               setProjectID("");
-              location.href = "/";
+              setAskLongURL(true);
+              // location.href = "/";
             }}
           >
             New
@@ -377,10 +448,24 @@ const RefreshTest = (domainpath) => {
           <button className={styles.button} onClick={save}>
             {saving ? "Saving..." : "Save"}
           </button>
-
+          <input
+            className={`${askLongURL ? 'enterLongURLisActive' : '' }  form-control form-input`}
+            value={longurlValue}
+            style={{ display: "none" }}
+            placeholder="Pls. enter any valid Internet-Website-Adress here"
+            //onChange={(e) => { setLongurlValue(e.target.value) }}
+            onChange={(e) => {HandleLongURL_Change(e)}}
+            >
+          </input>
         </div>
         <div className="custom-select">
-          <input className="form-control form-input" value={projectName} placeholder="Project name" onChange={(e) => { setProjectName(e.target.value) }}></input>
+          <input
+            className="form-control form-input"
+            value={projectName}
+            placeholder="Project name"
+            onChange={(e) => {HandleProjectNameChange(e)}}
+            >
+           </input>
           {project && project.length > 0 && (
             <select
               className="form-control form-input"
@@ -405,6 +490,7 @@ const RefreshTest = (domainpath) => {
       <SplitPane
         style={{ marginTop: "60px" }}
         split="horizontal"
+        className={askLongURL ? 'enterLongURLisActive' : '' }
         minSize={"50%"}
         onDragFinished={(height) => {
           setHeightValue(`${height - 40}px`);
