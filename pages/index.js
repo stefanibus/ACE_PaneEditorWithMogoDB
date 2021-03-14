@@ -201,17 +201,14 @@ const Index = () => {
 
 
     // SURFLY
-    const  surflyRender = (projectID, longurlValue) => {
+    const  surflyRender = (projectID) => {
         async function fetchData() {
           const requestOptions = {
             method: "GET",
             headers: { "Content-Type": "application/json" },
           };
-          const response = await fetch(`../api/surfly/${projectID}`, requestOptions);
-          // console.log('WAS IS DAS surfly response' , response);
-          // console.log('surfly response.url' , response.url);
+          const response = await fetch(`https://guarded-anchorage-85319.herokuapp.com/api/surfly/${projectID}`, requestOptions);
           const { data } = await response.json();
-          // console.log('surfly data' , data);
             setpaneValues(data);
           if (response.status !== 200) {
             await router.push("/404");
@@ -219,8 +216,6 @@ const Index = () => {
         }
         fetchData()
     }
-
-
 
 
 
@@ -259,10 +254,10 @@ const Index = () => {
            <button
             className={styles.button}
             onClick={() => {
-               surflyRender(projectID, longurlValue);
+               surflyRender(projectID);
             }}
           >
-            Surfly Test
+            (Save) currently: view Surfly
           </button>
           <button
             className={styles.button}
@@ -272,10 +267,10 @@ const Index = () => {
               // location.href = "/";
             }}
           >
-            New unfinished
+            New Project / Website
           </button>
           <button className={styles.button} onClick={save}>
-            {saving ? "Saving..." : "Save"}
+            {saving ? "Saving..." : "Save (currenlty Panes only"}
           </button>
           <input
             className={`${askLongURL ? 'enterLongURLisActive' : '' }  form-control form-input`}

@@ -2,5 +2,8 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/": "pages/index.js"
+  "/": "pages/index.js",
+  "/api/pens/[id]": "pages/api/pens/[id].js",
+  "/api/surfly/[id]": "pages/api/surfly/[id].js",
+  "/api/users/[id]": "pages/api/users/[id].js"
 }
