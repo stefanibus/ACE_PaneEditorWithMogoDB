@@ -4,6 +4,7 @@
 
 # privat
 /stefanoInternally
+/staticDev
 # dependencies
 /node_modules
 /.pnp

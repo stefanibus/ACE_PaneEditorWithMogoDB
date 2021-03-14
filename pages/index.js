@@ -27,7 +27,7 @@ const Index = () => {
   const [jsValue, setJsValue] = useState("");
   const [cssValue, setCssValue] = useState("");
   const [longurlValue, setLongurlValue] = useState("https://www.medienwerft.de/karriere/offene-stellen/entwicklung/praktikum-frontend/")
-  const [shorturlValue, setLShorturlValue] = useState("shortURL_DEFAULT")
+  const [shorturlValue, setLShorturlValue] = useState(" ")
   const [paneValues, setpaneValues] = useState("");
   const [userID, setUserID] = useState("");
   const [project, setProject] = useState([]);
@@ -67,9 +67,7 @@ const Index = () => {
 
   async function getProjects() {
     const fp = await FingerprintJS.load();
-
-    // The FingerprintJS agent is ready.
-    // Get a visitor identifier when you'd like to.
+    // FingerprintJS agent is ready: Get a visitor identifier when you'd like to.
     const result = await fp.get();
 
     // This is the visitor identifier:
@@ -92,15 +90,11 @@ const Index = () => {
       if (response.status !== 200) {
         await router.push("/404");
       }
-      //console.log('surfly_data in PENS:  ' , data);
       setProjectName(data.projectName)
-
       setHtmlValue(data.html);
       setCssValue(data.css);
       setJsValue(data.js);
       setProjectID(id);
-      // setLongurlValue(data.longurl);  // stefano, might not be requiered here anymore lateron...
-
       setLoading(false);
     }
 
@@ -121,7 +115,6 @@ const Index = () => {
 
 
   useEffect( () => {
-    // console.log('css js html changed AND paneOutput is SET with paneOutput beeing ')
     const paneOutput = `<html>
                     <style>
                     ${debouncedCss}
@@ -189,74 +182,6 @@ const Index = () => {
 
 
 
-// const SurflyTest = (number) => {
-//   console.log("alte Methode = surfly.js and number: " + number)
-//   StartSurfly.start(number);
-//   console.log("neue Methode sollte nun durch sein.")
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 (function (s, u, r, f, l, y) {
@@ -275,134 +200,55 @@ const Index = () => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//  console.log('Refresh API Request TEST: ' );
-const RefreshTest = (projectID, longurlValue) => {
-
-    console.log(  'projectID       YES   ',projectID);
-    console.log(  'longurlValue  YES   ',longurlValue);
-    const surflyFetchURL = 'https://surfly.com/v2/sessions/?api_key=394ef3e384e546aaaf820a225e097878';
-    var timestamp = Date.now();
-    console.log(' RefreshTest  started running! ' );
-
-  fetch( surflyFetchURL,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json; charset=utf-8"
-      },
-      // pass  "domainpath"  new:
-      // https://www.smazy.me/surfly_switch.js?timestamp=timestamp
-      // http://localhost:3000/api/surfly/604a14869e030b0015714a6f
-      // https://guarded-anchorage-85319.herokuapp.com/api/surfly/604a14869e030b0015714a6f
-      // https://guarded-anchorage-85319.herokuapp.com/api/surfly/${projectID}/?timestamp=`+timestamp,
-
-      body: JSON.stringify({
-        script_embedded:
-          `https://guarded-anchorage-85319.herokuapp.com/api/surfly/${projectID}/?timestamp=`+timestamp,
-        ui_off: "true",
-        url: longurlValue,
-        splash: "false"
-      })
-    }
-  )
-    .then(function (response) {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw new Error("Could not reach the API: " + response.statusText);
-      }
-    })
-    .then(function (response) {
-        console.log("response.leader_link: ", response.leader_link)
-        setpaneValues(response.leader_link);
-    })
-    .catch(function (error) {
-        console.log('error: ');
-        console.log(error.message);
-    });
-}
-
-
-
     // SURFLY
-const testAPI = (projectID, longurlValue) => {
-
-    // console.log(  'projectID       YES   ',projectID);
-    // console.log(  'longurlValue  YES   ',longurlValue);
-
-    console.log('http://localhost:3000/api/surfly/surfly', )
-    // console.log(`http://localhost:3000/api/surfly/${projectID}`  )
-
- // import {surfly_api} from "../api/surfly/surfly";
-    async function fetchData() {
-      const requestOptions = {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      };
-      const response = await fetch(`../api/surfly/surfly`, requestOptions);
-      // console.log('WAS IS DAS surfly response' , response);
-      // console.log('surfly response.url' , response.url);
-      const { data } = await response.json();
-      // console.log('surfly data' , data);
-        setpaneValues(data);
-      if (response.status !== 200) {
-        await router.push("/404");
-      }
+    const  surflyRender = (projectID, longurlValue) => {
+        async function fetchData() {
+          const requestOptions = {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+          };
+          const response = await fetch(`../api/surfly/${projectID}`, requestOptions);
+          // console.log('WAS IS DAS surfly response' , response);
+          // console.log('surfly response.url' , response.url);
+          const { data } = await response.json();
+          // console.log('surfly data' , data);
+            setpaneValues(data);
+          if (response.status !== 200) {
+            await router.push("/404");
+          }
+        }
+        fetchData()
     }
-    fetchData()
-}
 
 
 
 
 
-
-
-
-const HandleProjectNameChange = (e) => {
-    console.log('HandleProjectNameChange TEST ')
-    setProjectName(e.target.value)
-}
-
-const HandleLongURL_Change = (e) => {
-    console.log('HandleLongURL_Change TEST ' )
-    // let longurlNewValue = ...longurlValue , e.target.value;
-    setLongurlValue(e.target.value)
-}
+    // controlled States = this is also still unfinished business
+    const HandleProjectNameChange = (e) => {
+        console.log('HandleProjectNameChange TEST ')
+        setProjectName(e.target.value)
+    }
+    const HandleLongURL_Change = (e) => {
+        console.log('HandleLongURL_Change TEST ' )
+        // let longurlNewValue = ...longurlValue , e.target.value;
+        setLongurlValue(e.target.value)
+    }
 
 
 
 
 
-// console.log(  'heightValue', heightValue);
-// console.log(  'loading', loading);
-// console.log(  'saving', saving);
-// console.log(  'htmlValue', htmlValue);
-// console.log(  'paneValues', paneValues);
-// console.log(  'userID', userID);
-// console.log(  'project', project);
-// console.log(  'projectID', projectID);
-  // console.log(  'projectName', projectName);
-  // console.log(  'longurlValue', longurlValue);
+      // console.log(  'heightValue', heightValue);
+      // console.log(  'loading', loading);
+      // console.log(  'saving', saving);
+      // console.log(  'htmlValue', htmlValue);
+      // console.log(  'paneValues', paneValues);
+      // console.log(  'userID', userID);
+      // console.log(  'project', project);
+      // console.log(  'projectID', projectID);
+      // console.log(  'projectName', projectName);
+      // console.log(  'longurlValue', longurlValue);
 
 
 
@@ -413,28 +259,11 @@ const HandleLongURL_Change = (e) => {
            <button
             className={styles.button}
             onClick={() => {
-              testAPI(projectID, longurlValue);
-
+               surflyRender(projectID, longurlValue);
             }}
           >
-            Surfly Test API Request
+            Surfly Test
           </button>
-           <button
-            className={styles.button}
-            onClick={() => {
-              RefreshTest(projectID, longurlValue);
-            }}
-          >
-            pass 2 Values
-          </button>
-{/* stefanoCleanUp           <button
-            className={styles.button}
-            onClick={() => {
-              SurflyTest(5);
-            }}
-          >
-            Surfly External Test
-          </button> */}
           <button
             className={styles.button}
             onClick={() => {
@@ -443,7 +272,7 @@ const HandleLongURL_Change = (e) => {
               // location.href = "/";
             }}
           >
-            New
+            New unfinished
           </button>
           <button className={styles.button} onClick={save}>
             {saving ? "Saving..." : "Save"}
@@ -515,12 +344,7 @@ const HandleLongURL_Change = (e) => {
             />
           </SplitPane>
         </SplitPane>
-          {/*  THIS WILL BE OUR JS and CSS from Mogno (and more)
-          <iframe src="https://guarded-anchorage-85319.herokuapp.com/api/surfly/604a14869e030b0015714a6f" className={styles.previewIframe} />
-          */}
           <iframe key={paneValues} src={paneValues}  className={styles.previewIframe} ></iframe>
-          {/*<iframe srcDoc={paneValues}  id="showUrl_Result"  name="showUrl_Result"  className={styles.previewIframe} />*/}
-        {/*<iframe srcDoc={paneValues} className={styles.previewIframe} />*/}
       </SplitPane>
     </>
   );
