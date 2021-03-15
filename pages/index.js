@@ -216,7 +216,7 @@ const Index = () => {
           const { SurflyResponseURL } = await getSurflyURL.json();
           console.log('SurflyResponseURL: ', SurflyResponseURL);
           //
-           setpaneValues(yesThis);
+           setpaneValues(SurflyResponseURL);
           if (response.status !== 200) {
             await router.push("/404");
           }
