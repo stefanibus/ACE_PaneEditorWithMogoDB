@@ -203,21 +203,18 @@ const Index = () => {
               var timestamp = Date.now();
 
               console.log(  'projectID: ',projectID);
-                const surflyFetch = "https://guarded-anchorage-85319.herokuapp.com/api/surfly/"+projectID+"/?timestamp="+timestamp;
-             // const surflyFetch = {"SurflyResponseURL":"https://surfly.com/m10V7gkLlF6US8CVlcCSLl0fWQ"}
+               const Heroku_Url_For_Surfly = "https://guarded-anchorage-85319.herokuapp.com/api/surfly/"+projectID+"/?timestamp="+timestamp;
+              console.log('surflyFetch new: ', Heroku_Url_For_Surfly);
 
-              console.log('surflyFetch new: ', surflyFetch);
-              console.log('surflyFetch.SurflyResponseURL TEST ', surflyFetch.SurflyResponseURL);
-              const finalTest = surflyFetch.SurflyResponseURL ;
-              console.log('finalTest: ', finalTest)
+            const requestOptions = {
+              method: "GET",
+              headers: { "Content-Type": "application/json; charset=utf-8" },
+            };
+            const getSurflyURL = await fetch(Heroku_Url_For_Surfly, requestOptions);
 
-          const requestOptions = {
-            method: "GET",
-            headers: { "Content-Type": "application/json; charset=utf-8" },
-          };
-          const response = await fetch(finalTest, requestOptions);
-          const { yesThis } = await response.json();
-          console.log('SurflyResponseURL: ', yesThis);
+              // const finalTest = surflyFetch.SurflyResponseURL ;
+          const { SurflyResponseURL } = await getSurflyURL.json();
+          console.log('SurflyResponseURL: ', SurflyResponseURL);
           //
            setpaneValues(yesThis);
           if (response.status !== 200) {

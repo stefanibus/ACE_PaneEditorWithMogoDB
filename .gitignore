@@ -13,8 +13,7 @@
 # testing
 /coverage
 
-# next.js
-#  HEROKU DEPLOYMENT seems to request for this folder: /.next/
+
 /out/
 
 # production
@@ -44,5 +43,5 @@ yarn-error.log*
 
 # next.js build output
 .next/cache
-.next/
 .next
+.next/
