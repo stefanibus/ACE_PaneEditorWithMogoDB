@@ -23,13 +23,15 @@ export default async (req, res) => {
         if (!data) {
           res.status(404).json({ success: false });
         }
-        const jsResult    = `${data.js}` ;
-        const cssResult   = ` const style = document.createElement('style'); style.innerHTML =  "  ${data.css} "; document.head.appendChild(style); ` ;
-        const fullResult  = jsResult + cssResult   ;
+        const jsResult    = ` ${data.js} ` ;
+        const cssResult   = ` ; const style = document.createElement('style'); style.innerHTML =  "   background-color: yellow; color:red;  "; document.head.appendChild(style); ` ;
+        const fullResult  = jsResult     ;
+        const surflyInjection  =   fullResult     ;
+        // console.log('fullResult: ',fullResult);
          res.
          setHeader('Content-Type', 'application/javascript') ;         // with res.END we might set the content type to JavaScript
         res.
-        send(  fullResult  );
+        send(  surflyInjection );
       } catch (error) {
         res.
         status(500).json({ success: false });
