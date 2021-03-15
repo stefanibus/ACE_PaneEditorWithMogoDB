@@ -203,8 +203,8 @@ const Index = () => {
               if (projectID == "" || projectID == " " ) {
                   alert('ProjectID is missing. Please create a project or work on a new one before you click on SAVE');
               } else {
-                  console.log(  'projectID: ',projectID);
-                  const SurflyAPIstring =  `https://guarded-anchorage-85319.herokuapp.com/api/surfly/${projectID}/?timestamp=`+timestamp;
+                  const SurflyAPIstring = `https://guarded-anchorage-85319.herokuapp.com/api/surfly/${projectID}/?timestamp=`+timestamp;
+                  console.log('SurflyAPIstring with projectID: ',SurflyAPIstring);
                   const fetchRequestOptions = { method: "GET", headers: { "Content-Type": "application/json; charset=utf-8" } };
                   const getSurflyURL = await fetch(SurflyAPIstring, fetchRequestOptions);
                   const { SurflyResponseURL } = await getSurflyURL.json();
