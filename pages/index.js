@@ -197,127 +197,106 @@ const Index = () => {
 
 
 
-    // SURFLY Save =   UNEXPECTED CORS ISSUE
-    const  surflyRender = (projectID) => {
-        async function fetchData() {
+    // SURFLY Save =   UNEXPECTED CORS ISSUE still persists on Localhost
+    const  surflyRender = async (projectID) => {
               var timestamp = Date.now();
-
-              console.log(  'projectID: ',projectID);
-               const Heroku_Url_For_Surfly = "https://guarded-anchorage-85319.herokuapp.com/api/surfly/"+projectID+"/?timestamp="+timestamp;
-              console.log('surflyFetch new: ', Heroku_Url_For_Surfly);
-
-            const requestOptions = {
-              method: "GET",
-              headers: { "Content-Type": "application/json; charset=utf-8" },
-            };
-            const getSurflyURL = await fetch(Heroku_Url_For_Surfly, requestOptions);
-
-              // const finalTest = surflyFetch.SurflyResponseURL ;
-          const { SurflyResponseURL } = await getSurflyURL.json();
-          console.log('SurflyResponseURL: ', SurflyResponseURL);
-          //
-           setpaneValues(SurflyResponseURL);
-          if (response.status !== 200) {
-            await router.push("/404");
-          }
-        }
-        fetchData()
-    }
-
-
-
-              // pass  "domainpath"  new:
-              // https://www.smazy.me/surfly_switch.js?timestamp=timestamp
-              // http://localhost:3000/api/surfly/604a14869e030b0015714a6f
-              // https://guarded-anchorage-85319.herokuapp.com/api/surfly/604a14869e030b0015714a6f
-              // https://guarded-anchorage-85319.herokuapp.com/api/surfly/${projectID}/?timestamp=`+timestamp,
-              // http://localhost:3000/api/surfly/projectData/604ccd50176c15486851f14b
-
-
-
-// pass 2 Values
-  const RefreshTest = (projectID, longurlValue) => {
-
-            // loading of params additinally collapses,  will go back to hardCoding the URLS for better debugging
-            // https://guarded-anchorage-85319.herokuapp.com/api/surfly/projectData/${projectID}/?timestamp=`+timestamp
-
-            console.log(  'projectID       YES   ',projectID);
-            console.log(  'longurlValue  YES   ',longurlValue);
-            const surflyFetchURL = 'https://surfly.com/v2/sessions/?api_key=394ef3e384e546aaaf820a225e097878';
-            var timestamp = Date.now();
-            console.log(' RefreshTest  started running! ' );
-            const surflyInjection = `https://guarded-anchorage-85319.herokuapp.com/api/surfly/projectData/${projectID}?timestamp=`+timestamp;
-            console.log(' surflyInjection: ', surflyInjection );
-
-          fetch( surflyFetchURL,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json; charset=utf-8"
-              },
-              body: JSON.stringify({
-                script_embedded: surflyInjection,
-                ui_off: "true",
-                url: longurlValue,
-                splash: "false"
-              })
-            }
-          )
-            .then(function (response) {
-              if (response.ok) {
-                return response.json();
+              if (projectID == "" || projectID == " " ) {
+                  alert('ProjectID is missing. Please create a project or work on a new one before you click on SAVE');
               } else {
-                throw new Error("Could not reach the API: " + response.statusText);
+                  console.log(  'projectID: ',projectID);
+                  const SurflyAPIstring =  `https://guarded-anchorage-85319.herokuapp.com/api/surfly/${projectID}/?timestamp=`+timestamp;
+                  const fetchRequestOptions = { method: "GET", headers: { "Content-Type": "application/json; charset=utf-8" } };
+                  const getSurflyURL = await fetch(SurflyAPIstring, fetchRequestOptions);
+                  const { SurflyResponseURL } = await getSurflyURL.json();
+                  if (getSurflyURL.status !== 200) { await router.push("/404"); }
+                  setpaneValues(SurflyResponseURL);
               }
-            })
-            .then(function (response) {
-                console.log("response.leader_link: ", response.leader_link)
-                setpaneValues(response.leader_link);
-            })
-            .catch(function (error) {
-                console.log('error: ');
-                console.log(error.message);
-            });
         }
 
 
+// // pass 2 Values
+//   const RefreshTest = (projectID, longurlValue) => {
+
+//             // loading of params additinally collapses,  will go back to hardCoding the URLS for better debugging
+//             // https://guarded-anchorage-85319.herokuapp.com/api/surfly/projectData/${projectID}/?timestamp=`+timestamp
+
+//             console.log(  'projectID       YES   ',projectID);
+//             console.log(  'longurlValue  YES   ',longurlValue);
+//             const surflyFetchURL = 'https://surfly.com/v2/sessions/?api_key=394ef3e384e546aaaf820a225e097878';
+//             var timestamp = Date.now();
+//             console.log(' RefreshTest  started running! ' );
+//             const surflyInjection = `https://guarded-anchorage-85319.herokuapp.com/api/surfly/projectData/${projectID}?timestamp=`+timestamp;
+//             console.log(' surflyInjection: ', surflyInjection );
+
+//           fetch( surflyFetchURL,
+//             {
+//               method: "POST",
+//               headers: {
+//                 "Content-Type": "application/json; charset=utf-8"
+//               },
+//               body: JSON.stringify({
+//                 script_embedded: surflyInjection,
+//                 ui_off: "true",
+//                 url: longurlValue,
+//                 splash: "false"
+//               })
+//             }
+//           )
+//             .then(function (response) {
+//               if (response.ok) {
+//                 return response.json();
+//               } else {
+//                 throw new Error("Could not reach the API: " + response.statusText);
+//               }
+//             })
+//             .then(function (response) {
+//                 console.log("response.leader_link: ", response.leader_link)
+//                 setpaneValues(response.leader_link);
+//             })
+//             .catch(function (error) {
+//                 console.log('error: ');
+//                 console.log(error.message);
+//             });
+//         }
 
 
 
 
-const ariaTest = () => {
 
-       var timestamp = Date.now();
-       fetch('https://surfly.com/v2/sessions/?api_key=394ef3e384e546aaaf820a225e097878', {
-             method: "POST",
-             headers: {
-                 "Content-Type": "application/json; charset=utf-8"
-             },
-             body: JSON.stringify({
-                 script_embedded: 'https://guarded-anchorage-85319.herokuapp.com/api/surfly/projectData/604ccd50176c15486851f14b/?time='+timestamp,
-                 ui_off: "true",
-                 url: 'https://www.medienwerft.de/karriere/offene-stellen/entwicklung/praktikum-frontend/',
-                 splash: "false"
-             })
-         })
-         .then(function(response) {
-             if (response.ok) {
-                 return response.json();
-             } else {
-                 throw new Error("Could not reach the API: " + response.statusText);
-             }
-         })
-         .then(function(response) {
-             // console.log('response', response)
-               console.log('response.leader_link', response.leader_link)
-               setpaneValues(response.leader_link);
 
-         })
-         .catch(function(error) {
-             console.log('error: ');
-             console.log(error.message);
-         });
-}
+// const ariaTest = () => {
+
+//        var timestamp = Date.now();
+//        fetch('https://surfly.com/v2/sessions/?api_key=394ef3e384e546aaaf820a225e097878', {
+//              method: "POST",
+//              headers: {
+//                  "Content-Type": "application/json; charset=utf-8"
+//              },
+//              body: JSON.stringify({
+//                  script_embedded: 'https://guarded-anchorage-85319.herokuapp.com/api/surfly/projectData/604ccd50176c15486851f14b/?time='+timestamp,
+//                  ui_off: "true",
+//                  url: 'https://www.medienwerft.de/karriere/offene-stellen/entwicklung/praktikum-frontend/',
+//                  splash: "false"
+//              })
+//          })
+//          .then(function(response) {
+//              if (response.ok) {
+//                  return response.json();
+//              } else {
+//                  throw new Error("Could not reach the API: " + response.statusText);
+//              }
+//          })
+//          .then(function(response) {
+//              // console.log('response', response)
+//                console.log('response.leader_link', response.leader_link)
+//                setpaneValues(response.leader_link);
+
+//          })
+//          .catch(function(error) {
+//              console.log('error: ');
+//              console.log(error.message);
+//          });
+// }
 
 
 
@@ -354,14 +333,14 @@ const ariaTest = () => {
     <>
       <div className={styles.header}>
         <div>
-           <button
+        {/*   <button
             className={styles.button}
             onClick={() => {
                ariaTest();
             }}
           >
             StaticClient
-          </button>
+          </button>*/}
            <button
             className={styles.button}
             onClick={() => {
@@ -369,7 +348,7 @@ const ariaTest = () => {
             }}
           >
             ServersideSurfly
-          </button>
+          </button>{/*
         <button
         className={styles.button}
         onClick={() => {
@@ -377,7 +356,7 @@ const ariaTest = () => {
         }}
         >
         2 param-Values
-        </button>
+        </button>*/}
 
           <button
             className={styles.button}
