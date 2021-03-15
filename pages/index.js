@@ -9,6 +9,7 @@ import { CssEditor, HtmlEditor, JavascriptEditor } from "../components/Editors";
 import { useDebounce } from "../utils/useDebounce";
 
 import styles from "./index.module.css";
+
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
 
 import { BsTrash } from "react-icons/bs";
@@ -23,7 +24,7 @@ const Index = () => {
   const [htmlValue, setHtmlValue] = useState("");
   const [jsValue, setJsValue] = useState("");
   const [cssValue, setCssValue] = useState("");
-  const [longurlValue, setLongurlValue] = useState("https://www.medienwerft.de/karriere/offene-stellen/entwicklung/praktikum-frontend/")
+  const [longurlValue, setLongurlValue] = useState(" ")
   const [shorturlValue, setLShorturlValue] = useState(" ")
   const [paneValues, setpaneValues] = useState("");
   const [userID, setUserID] = useState("");
@@ -31,9 +32,9 @@ const Index = () => {
   const [projectID, setProjectID] = useState("");
   const [projectName, setProjectName] = useState("")
 
-  const debouncedHtml = useDebounce(htmlValue, 1000);
-  const debouncedJs = useDebounce(jsValue, 1000);
-  const debouncedCss = useDebounce(cssValue, 1000);
+  // const debouncedHtml = useDebounce(htmlValue, 1000);
+  // const debouncedJs = useDebounce(jsValue, 1000);
+  // const debouncedCss = useDebounce(cssValue, 1000);
 
   const router = useRouter();
   const [visitorID, setVisitorID] = useState("");
@@ -64,7 +65,6 @@ const Index = () => {
 
   async function getProjects() {
     const fp = await FingerprintJS.load();
-    // FingerprintJS agent is ready: Get a visitor identifier when you'd like to.
     const result = await fp.get();
 
     // This is the visitor identifier:
@@ -111,22 +111,22 @@ const Index = () => {
 
 
 
-  useEffect( () => {
-    const paneOutput = `<html>
-                    <style>
-                    ${debouncedCss}
-                    </style>
-                    <body>
-                    ${debouncedHtml}
-                    <script type="text/javascript">
-                    ${debouncedJs}
-                    </script>
-                    </body>
-                  </html>`;
-    setpaneValues(paneOutput);
+  // useEffect( () => {
+  //   const paneOutput = `<html>
+  //                   <style>
+  //                   ${debouncedCss}
+  //                   </style>
+  //                   <body>
+  //                   ${debouncedHtml}
+  //                   <script type="text/javascript">
+  //                   ${debouncedJs}
+  //                   </script>
+  //                   </body>
+  //                 </html>`;
+  //   setpaneValues(paneOutput);
 
-    getProjects();
-  }, [debouncedHtml, debouncedCss, debouncedJs]);
+  //   getProjects();
+  // }, [debouncedHtml, debouncedCss, debouncedJs]);
 
   const save = async () => {
     setAskLongURL(false);
@@ -180,7 +180,6 @@ const Index = () => {
 
 
 
-
 (function (s, u, r, f, l, y) {
   s[f] = s[f] || {
     init: function () {
@@ -197,14 +196,19 @@ const Index = () => {
 
 
 
-    // SURFLY Save =   UNEXPECTED CORS ISSUE still persists on Localhost
+
+
+
+
+
+    // SURFLY Save => CORS-ISSUE on Localhost
     const  surflyRender = async (projectID) => {
               var timestamp = Date.now();
               if (projectID == "" || projectID == " " ) {
-                  alert('ProjectID is missing. Please create a project or work on a new one before you click on SAVE');
+                  alert('Please create a project before you click on SAVE (or work already existing projects) ');
               } else {
                   const SurflyAPIstring = `https://guarded-anchorage-85319.herokuapp.com/api/surfly/${projectID}/?timestamp=`+timestamp;
-                  console.log('SurflyAPIstring with projectID: ',SurflyAPIstring);
+                  // console.log('SurflyAPIstring with projectID and TimeStamp: ',SurflyAPIstring);
                   const fetchRequestOptions = { method: "GET", headers: { "Content-Type": "application/json; charset=utf-8" } };
                   const getSurflyURL = await fetch(SurflyAPIstring, fetchRequestOptions);
                   const { SurflyResponseURL } = await getSurflyURL.json();
@@ -212,92 +216,6 @@ const Index = () => {
                   setpaneValues(SurflyResponseURL);
               }
         }
-
-
-// // pass 2 Values
-//   const RefreshTest = (projectID, longurlValue) => {
-
-//             // loading of params additinally collapses,  will go back to hardCoding the URLS for better debugging
-//             // https://guarded-anchorage-85319.herokuapp.com/api/surfly/projectData/${projectID}/?timestamp=`+timestamp
-
-//             console.log(  'projectID       YES   ',projectID);
-//             console.log(  'longurlValue  YES   ',longurlValue);
-//             const surflyFetchURL = 'https://surfly.com/v2/sessions/?api_key=394ef3e384e546aaaf820a225e097878';
-//             var timestamp = Date.now();
-//             console.log(' RefreshTest  started running! ' );
-//             const surflyInjection = `https://guarded-anchorage-85319.herokuapp.com/api/surfly/projectData/${projectID}?timestamp=`+timestamp;
-//             console.log(' surflyInjection: ', surflyInjection );
-
-//           fetch( surflyFetchURL,
-//             {
-//               method: "POST",
-//               headers: {
-//                 "Content-Type": "application/json; charset=utf-8"
-//               },
-//               body: JSON.stringify({
-//                 script_embedded: surflyInjection,
-//                 ui_off: "true",
-//                 url: longurlValue,
-//                 splash: "false"
-//               })
-//             }
-//           )
-//             .then(function (response) {
-//               if (response.ok) {
-//                 return response.json();
-//               } else {
-//                 throw new Error("Could not reach the API: " + response.statusText);
-//               }
-//             })
-//             .then(function (response) {
-//                 console.log("response.leader_link: ", response.leader_link)
-//                 setpaneValues(response.leader_link);
-//             })
-//             .catch(function (error) {
-//                 console.log('error: ');
-//                 console.log(error.message);
-//             });
-//         }
-
-
-
-
-
-
-// const ariaTest = () => {
-
-//        var timestamp = Date.now();
-//        fetch('https://surfly.com/v2/sessions/?api_key=394ef3e384e546aaaf820a225e097878', {
-//              method: "POST",
-//              headers: {
-//                  "Content-Type": "application/json; charset=utf-8"
-//              },
-//              body: JSON.stringify({
-//                  script_embedded: 'https://guarded-anchorage-85319.herokuapp.com/api/surfly/projectData/604ccd50176c15486851f14b/?time='+timestamp,
-//                  ui_off: "true",
-//                  url: 'https://www.medienwerft.de/karriere/offene-stellen/entwicklung/praktikum-frontend/',
-//                  splash: "false"
-//              })
-//          })
-//          .then(function(response) {
-//              if (response.ok) {
-//                  return response.json();
-//              } else {
-//                  throw new Error("Could not reach the API: " + response.statusText);
-//              }
-//          })
-//          .then(function(response) {
-//              // console.log('response', response)
-//                console.log('response.leader_link', response.leader_link)
-//                setpaneValues(response.leader_link);
-
-//          })
-//          .catch(function(error) {
-//              console.log('error: ');
-//              console.log(error.message);
-//          });
-// }
-
 
 
 
@@ -314,50 +232,18 @@ const Index = () => {
 
 
 
-
-
-      // console.log(  'heightValue', heightValue);
-      // console.log(  'loading', loading);
-      // console.log(  'saving', saving);
-      // console.log(  'htmlValue', htmlValue);
-      // console.log(  'paneValues', paneValues);
-      // console.log(  'userID', userID);
-      // console.log(  'project', project);
-      // console.log(  'projectID', projectID);
-      // console.log(  'projectName', projectName);
-      // console.log(  'longurlValue', longurlValue);
-
-
-
   return (
     <>
       <div className={styles.header}>
         <div>
-        {/*   <button
-            className={styles.button}
-            onClick={() => {
-               ariaTest();
-            }}
-          >
-            StaticClient
-          </button>*/}
            <button
             className={styles.button}
             onClick={() => {
                surflyRender(projectID);
             }}
           >
-            ServersideSurfly
-          </button>{/*
-        <button
-        className={styles.button}
-        onClick={() => {
-          RefreshTest(projectID, longurlValue);
-        }}
-        >
-        2 param-Values
-        </button>*/}
-
+            Save & Show new Result
+          </button>
           <button
             className={styles.button}
             onClick={() => {
@@ -438,7 +324,7 @@ const Index = () => {
             />
           </SplitPane>
         </SplitPane>
-          <iframe key={paneValues} src={paneValues}  className={styles.previewIframe} ></iframe>
+          <iframe key={paneValues} src={paneValues}  id="resultFrame"  name="resultFrame" className={styles.previewIframe} ></iframe>
       </SplitPane>
     </>
   );
