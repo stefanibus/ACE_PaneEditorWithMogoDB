@@ -203,17 +203,23 @@ const Index = () => {
               var timestamp = Date.now();
 
               console.log(  'projectID: ',projectID);
-              const surflyFetch = "https://guarded-anchorage-85319.herokuapp.com/api/surfly/"+projectID+"/?timestamp="+timestamp;
-              console.log('surflyFetch: ', surflyFetch)
+                const surflyFetch = "https://guarded-anchorage-85319.herokuapp.com/api/surfly/"+projectID+"/?timestamp="+timestamp;
+             // const surflyFetch = {"SurflyResponseURL":"https://surfly.com/m10V7gkLlF6US8CVlcCSLl0fWQ"}
+
+              console.log('surflyFetch new: ', surflyFetch);
+              console.log('surflyFetch.SurflyResponseURL TEST ', surflyFetch.SurflyResponseURL);
+              const finalTest = surflyFetch.SurflyResponseURL ;
+              console.log('finalTest: ', finalTest)
 
           const requestOptions = {
             method: "GET",
             headers: { "Content-Type": "application/json; charset=utf-8" },
           };
-          const response = await fetch(surflyFetch, requestOptions);
-          const { data } = await response.json();
-          console.log('data: ', data);
-          setpaneValues(data);
+          const response = await fetch(finalTest, requestOptions);
+          const { yesThis } = await response.json();
+          console.log('SurflyResponseURL: ', yesThis);
+          //
+           setpaneValues(yesThis);
           if (response.status !== 200) {
             await router.push("/404");
           }

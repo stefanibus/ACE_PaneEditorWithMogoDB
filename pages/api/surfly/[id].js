@@ -20,9 +20,9 @@ import axios from "axios";
 
 
 
-   console.log('projectData: ', projectData )
+   // console.log('projectData: ', projectData )
 
-    console.log('longUrlResponse: ', longUrlResponse )
+    // console.log('longUrlResponse: ', longUrlResponse )
 
 
 
@@ -69,8 +69,9 @@ import axios from "axios";
          })
          .then(function(response) {
              // console.log('response', response)
-               console.log('response', response.leader_link)
-             res.status(200).json( response.leader_link )
+               // console.log('response', response.leader_link);
+              const SurflyResponseURL =    response.leader_link ;
+             res.status(200).json( {SurflyResponseURL} )
          })
          .catch(function(error) {
              console.log('error: ');
