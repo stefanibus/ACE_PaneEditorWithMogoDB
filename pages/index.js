@@ -12,7 +12,7 @@ import styles from "./index.module.css";
 
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
 
-import { BsTrash } from "react-icons/bs";
+import { BsTrash, BsPlay, BsX,  } from "react-icons/bs";
 
 const Index = () => {
   const [heightValue, setHeightValue] = useState("485px");
@@ -24,26 +24,32 @@ const Index = () => {
   const [htmlValue, setHtmlValue] = useState("");
   const [jsValue, setJsValue] = useState("");
   const [cssValue, setCssValue] = useState("");
-  const [longurlValue, setLongurlValue] = useState(" ")
+  const [longurlValue, setLongurlValue] = useState("")
   const [shorturlValue, setLShorturlValue] = useState(" ")
-  const [paneValues, setpaneValues] = useState("");
+  const [paneValues, setpaneValues] = useState("startpage.html");
   const [userID, setUserID] = useState("");
   const [project, setProject] = useState([]);
   const [projectID, setProjectID] = useState("");
   const [projectName, setProjectName] = useState("")
 
-  // const debouncedHtml = useDebounce(htmlValue, 1000);
-  // const debouncedJs = useDebounce(jsValue, 1000);
-  // const debouncedCss = useDebounce(cssValue, 1000);
+  const debouncedHtml = useDebounce(htmlValue, 1000);
+  const debouncedJs = useDebounce(jsValue, 1000);
+  const debouncedCss = useDebounce(cssValue, 1000);
 
   const router = useRouter();
-  const [visitorID, setVisitorID] = useState("");
+  const [visitorID, setVisitorID] = useState();
   const { id, user_id } = router.query;
 
-  function onChange(event) {
+
+
+
+  function ChangeProjectViewForUser(event) {
+    // console.log('  Dropdown changed: ',event.target.value,  userID);
     if (event.target.value != "") {
-      router.push(`?id=${event.target.value}&user_id=${userID}`);
-      setProjectID(event.target.value);
+      // console.log('userID ', userID)
+      // console.log('event.target.value ', event.target.value )
+       router.push(`?id=${event.target.value}&user_id=${userID}`);
+       setProjectID(event.target.value);
     } else {
       location.href = "/";
       setProjectID("");
@@ -63,29 +69,53 @@ const Index = () => {
     }
   }
 
+
+
+  const NewProject_Start =  () => {  // console.log('toggle visibility ');
+      setAskLongURL(true);
+  };
+ const NewProject_onClose = () => {  // console.log('toggle visibility ');
+      setAskLongURL(false);
+  }
+
+ const NewProject_onStart = async () => { // console.log(' start new project ');
+      setAskLongURL(false);
+      setProjectID("");
+      await router.push(``);  // location.href = "/";
+      save()
+  }
+
+ const underConstruction = () => {
+      alert('this is still unfinished work:  under construction ' )
+  }
+
+
+// getProjects  = get all  data for all projects for this specific user only
   async function getProjects() {
     const fp = await FingerprintJS.load();
     const result = await fp.get();
 
     // This is the visitor identifier:
-    const visitorId = result.visitorId;
-    setUserID(visitorId);
+    const visitorIentification = result.visitorId;
+    setUserID(visitorIentification);
     const requestOptions = {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     };
-    const response = await fetch(`../api/users/${visitorId}`, requestOptions);
+    const response = await fetch(`../api/users/${visitorIentification}`, requestOptions);
     const { data } = await response.json();
     setProject(data);
   }
 
   // API PENS
   useEffect(() => {
+    // console.log("api Pens  ")
     async function fetchData() {
       const response = await fetch(`../api/pens/${id}`);
       const { data } = await response.json();
       if (response.status !== 200) {
-        await router.push("/404");
+        alert("there is no page for this ProjectID");
+        await router.push("/404");  //  create specific 404 for this case
       }
       setProjectName(data.projectName)
       setHtmlValue(data.html);
@@ -111,34 +141,45 @@ const Index = () => {
 
 
 
-  // useEffect( () => {
-  //   const paneOutput = `<html>
-  //                   <style>
-  //                   ${debouncedCss}
-  //                   </style>
-  //                   <body>
-  //                   ${debouncedHtml}
-  //                   <script type="text/javascript">
-  //                   ${debouncedJs}
-  //                   </script>
-  //                   </body>
-  //                 </html>`;
-  //   setpaneValues(paneOutput);
+  useEffect( () => {
+    const paneOutput = `<html>
+                    <style>
+                    ${debouncedCss}
+                    </style>
+                    <body>
+                    ${debouncedHtml}
+                    <script type="text/javascript">
+                    ${debouncedJs}
+                    </script>
+                    </body>
+                  </html>`;
+    // setpaneValues(paneOutput);
 
-  //   getProjects();
-  // }, [debouncedHtml, debouncedCss, debouncedJs]);
+    getProjects();
+  }, [debouncedHtml, debouncedCss, debouncedJs]);
+
+
+
+
+
+
 
   const save = async () => {
     setAskLongURL(false);
     setSaving(true);
     var meth = "PUT";
     if (visitorID) {
-      if (visitorID == userID) {
+      if (visitorID == userID) { // console.log('EQUAL userID YES =  visitor == user: ', userID);
         meth = !id ? "PUT" : "POST";
       } else {
+       // console.log("same Project, but different User");
+        alert("We cloned this Project for you. You can name your own Project in the Project-Name Field! ");
+        setUserID(visitorID)
         meth = "PUT";
       }
     } else {
+     // console.log("new Project");
+      setUserID(visitorID);
       meth = "PUT";
     }
     if (projectName == " ") {
@@ -147,7 +188,6 @@ const Index = () => {
       setAskLongURL(true);
       return false;
     }
-
 
     const requestOptions = {
       method: meth,
@@ -167,7 +207,7 @@ const Index = () => {
     } = await response.json();
 
     setSaving(false);
-    if (!updatedRecord) {
+    if (!updatedRecord) {     //   console.log('userID in save-function in !updatedRecord: ', userID,  updatedRecord)
       await router.push(`?id=${newRecordId}&user_id=${userID}`);
     }
     getProjects();
@@ -221,79 +261,102 @@ const Index = () => {
 
     // controlled States = this is also still unfinished business
     const HandleProjectNameChange = (e) => {
-        console.log('HandleProjectNameChange TEST ')
+       // console.log('HandleProjectNameChange TEST ')
         setProjectName(e.target.value)
     }
     const HandleLongURL_Change = (e) => {
-        console.log('HandleLongURL_Change TEST ' )
+       // console.log('HandleLongURL_Change TEST ' )
         // let longurlNewValue = ...longurlValue , e.target.value;
         setLongurlValue(e.target.value)
     }
 
 
+// console.log('userID:  ', userID)
+// console.log('paneValues:  ', paneValues)
 
   return (
     <>
       <div className={styles.header}>
         <div>
+         <span className={`button-group   ${askLongURL ? 'enterLongURLisActive' : '' } `}>
+           <button
+            className={styles.button}
+            onClick={() => {
+               underConstruction();
+            }}
+          >
+            Send Result to friend
+          </button>
            <button
             className={styles.button}
             onClick={() => {
                surflyRender(projectID);
+               underConstruction();
             }}
           >
-            Save & Show new Result
+            Look at Result
           </button>
           <button
             className={styles.button}
             onClick={() => {
-              setProjectID("");
-              setAskLongURL(true);
-              // location.href = "/";
+              NewProject_Start();
             }}
           >
-            New Project / Website (under construction)
+            New Project / change any Website
           </button>
-          <button className={styles.button} onClick={save}>
-            {saving ? "Saving..." : "Save (currently Panes only)"}
+          <button className={styles.button}  onClick={() => {  save(); underConstruction();} } >
+            {saving ? "Saving..." : "Save"}
           </button>
+         </span>
           <input
-            className={`${askLongURL ? 'enterLongURLisActive' : '' }  form-control form-input`}
             value={longurlValue}
+            className={`longURLInput  ${askLongURL ? 'enterLongURLisActive' : '' }  form-control form-input`}
             style={{ display: "none" }}
-            placeholder="Pls. enter any valid Internet-Website-Adress here"
+            placeholder="enter any valid Internet-Website-Adress here (or look at examples)"
             //onChange={(e) => { setLongurlValue(e.target.value) }}
-            onChange={(e) => {HandleLongURL_Change(e)}}
+            onChange={(e) => {
+              HandleLongURL_Change(e);
+               }}
             >
           </input>
+          <span className={`longURLButtons ${askLongURL ? 'enterLongURLisActive' : '' } `} style={{ display: "none" }}>
+             <BsPlay style={{ color: "white", fontSize: 36 }} onClick={() => {  NewProject_onStart(); underConstruction();} }/>
+             <BsX style={{ color: "white", fontSize: 36 }} onClick={() => NewProject_onClose()}/>
+          </span>
+
+
         </div>
-        <div className="custom-select">
+        <div className={`custom-select  ${askLongURL ? 'enterLongURLisActive' : '' } `}>
           <input
-            className="form-control form-input"
+            className="projectName-InputField form-control form-input"
             value={projectName}
-            placeholder="Project name"
-            onChange={(e) => {HandleProjectNameChange(e)}}
+            placeholder="provide Project Name"
+            onChange={(e) => {
+              // setUserID(visitorID);
+              HandleProjectNameChange(e)}}
             >
            </input>
+
+          {project && project.length > 0 && <BsTrash style={{ color: "white", fontSize: 36 }} onClick={() => onDelete(projectID)}/>}
+
           {project && project.length > 0 && (
             <select
-              className="form-control form-input"
+              className="projectName-DropdownField  form-control form-input"
               style={{ width: 240 }}
               value={projectID ? projectID : ""}
-              onChange={onChange}
+              onChange={ChangeProjectViewForUser}
             >
-              <option value="">ProjectID</option>
+              <option value="">all your projects: </option>
               {project.map((item, i) => {
                 return (
                   <option key={i} value={item._id}>
-                    {item._id}
+                    {item.projectName ? item.projectName : 'needs_a_name '}
                   </option>
                 );
               })}
             </select>
           )}
 
-          {project && project.length > 0 && <BsTrash style={{ color: "white", fontSize: 36 }} onClick={() => onDelete(projectID)}/>}
         </div>
       </div>
       <SplitPane
@@ -309,22 +372,22 @@ const Index = () => {
           <HtmlEditor
             height={heightValue}
             value={htmlValue}
-            onChange={setHtmlValue}
+             onChange={setHtmlValue}
           />
           <SplitPane split="vertical" minSize={"50%"}>
             <CssEditor
               height={heightValue}
               value={cssValue}
-              onChange={setCssValue}
+               onChange={setCssValue}
             />
             <JavascriptEditor
               height={heightValue}
               value={jsValue}
-              onChange={setJsValue}
+                onChange={setJsValue}
             />
           </SplitPane>
         </SplitPane>
-          <iframe key={paneValues} src={paneValues}  id="resultFrame"  name="resultFrame" className={styles.previewIframe} ></iframe>
+          <iframe key={paneValues}       src={paneValues}     id="resultFrame"       name="resultFrame"       className={styles.previewIframe} ></iframe>
       </SplitPane>
     </>
   );

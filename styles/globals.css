@@ -1,14 +1,21 @@
 
 /* INPUT FIELD NEW LONGURL ==> TOGGLE VISIBILITY*/
+ .button-group.enterLongURLisActive,
+ div.enterLongURLisActive
+   {
+    opacity: .2;
+  }
   .enterLongURLisActive.SplitPane.horizontal {
     margin-top: 150px !important;
   }
-  input.enterLongURLisActive {
+  .longURLInput.enterLongURLisActive,
+  .longURLButtons.enterLongURLisActive {
     display: inline-block !important;
     margin: 30px 0;
     max-width: 40vw;
     min-width: 300px;
   }
+
 
 
 
@@ -103,7 +110,7 @@ body {
 
 .custom-select{
     display: flex;
-    align-items: center;
+    align-items: flex-start;
 }
 .form-input{
     height: 36px;
