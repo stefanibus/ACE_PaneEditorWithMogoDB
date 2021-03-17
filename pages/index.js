@@ -45,8 +45,10 @@ const Index = () => {
 // we have 3 env variables: NODE_ENV  and  DEVURL and PRODURL , all in the .env File
 // we are Exposing Environment Variables to the Browser = NEXT_PUBLIC_DEVURL  can be used as it is prefixed by NEXT_PUBLIC_
   const serverURL = process.env.NODE_ENV === "development" ? process.env.NEXT_PUBLIC_DEVURL : process.env.PRODURL;
-  const pensAPI_url  = `${serverURL}/api/pens/${id}` ;  //   console.log('pensAPI_url from index.js: ',  pensAPI_url)
-  const usersAPI_url = `${serverURL}/api/users/${id}`;  //   console.log('usersAPI_url from index.js: ', usersAPI_url)
+  const pensAPI_url  = `${serverURL}/api/pens/${id}` ;  //
+    console.log('pensAPI_url from index.js: ',  pensAPI_url)
+  const usersAPI_url = `${serverURL}/api/users/${id}`;  //
+    console.log('usersAPI_url from index.js: ', usersAPI_url)
 
 
   function ChangeProjectViewForUser(event) {
@@ -110,7 +112,8 @@ const Index = () => {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     };
-    // console.log('IN FUNCTION SCOPE =  usersAPI_url from index.js: ', usersAPI_url)
+    //
+     console.log('IN FUNCTION SCOPE =  usersAPI_url from index.js: ', usersAPI_url)
     const response = await fetch(usersAPI_url, requestOptions);
     const { data } = await response.json();
     setProject(data);
