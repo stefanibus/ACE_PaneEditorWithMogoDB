@@ -45,6 +45,14 @@ const Index = () => {
 // we have 3 env variables: NODE_ENV  and  DEVURL and PRODURL , all in the .env File
 // we are Exposing Environment Variables to the Browser = NEXT_PUBLIC_DEVURL  can be used as it is prefixed by NEXT_PUBLIC_
   const serverURL = process.env.NODE_ENV === "development" ? process.env.NEXT_PUBLIC_DEVURL : process.env.PRODURL;
+
+
+  console.log( 'process.env.PRODURL' , process.env.PRODURL)
+  console.log( 'process.env.NEXT_PUBLIC_DEVURL',  process.env.NEXT_PUBLIC_DEVURL  )
+  console.log( 'process.env.NODE_ENV ',  process.env.NODE_ENV  )
+
+
+
   const pensAPI_url  = `${serverURL}/api/pens/${id}` ;  //
     console.log('pensAPI_url from index.js: ',  pensAPI_url)
   const usersAPI_url = `${serverURL}/api/users/${id}`;  //

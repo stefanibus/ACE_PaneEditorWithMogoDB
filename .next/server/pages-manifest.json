@@ -2,11 +2,5 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/next/dist/pages/_error": "pages/next/dist/pages/_error.js",
-  "/": "pages/index.js",
-  "/api/surfly/longurl/[id]": "pages/api/surfly/longurl/[id].js",
-  "/api/users/[id]": "pages/api/users/[id].js",
-  "/api/pens/[id]": "pages/api/pens/[id].js",
-  "/api/surfly/[id]": "pages/api/surfly/[id].js",
-  "/api/surfly/projectData/[id]": "pages/api/surfly/projectData/[id].js"
+  "/": "pages/index.js"
 }
