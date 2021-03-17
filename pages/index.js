@@ -110,7 +110,7 @@ const Index = () => {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     };
-    console.log('IN FUNCTION SCOPE =  usersAPI_url from index.js: ', usersAPI_url)
+    // console.log('IN FUNCTION SCOPE =  usersAPI_url from index.js: ', usersAPI_url)
     const response = await fetch(usersAPI_url, requestOptions);
     const { data } = await response.json();
     setProject(data);
