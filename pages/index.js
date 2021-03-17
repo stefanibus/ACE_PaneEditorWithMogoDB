@@ -41,6 +41,12 @@ const Index = () => {
   const { id, user_id } = router.query;
 
 
+// ENV Vars in DEV and Production
+// we have 3 env variables: NODE_ENV  and  DEVURL and PRODURL , all in the .env File
+// we are Exposing Environment Variables to the Browser = NEXT_PUBLIC_DEVURL  can be used as it is prefixed by NEXT_PUBLIC_
+  const serverURL = process.env.NODE_ENV === "development" ? process.env.NEXT_PUBLIC_DEVURL : process.env.PRODURL;
+  const pensAPI_url  = `${serverURL}/api/pens/${id}` ;  //   console.log('pensAPI_url from index.js: ',  pensAPI_url)
+  const usersAPI_url = `${serverURL}/api/users/${id}`;  //   console.log('usersAPI_url from index.js: ', usersAPI_url)
 
 
   function ChangeProjectViewForUser(event) {
@@ -56,19 +62,20 @@ const Index = () => {
     }
   }
 
+
+
   async function onDelete(id) {
     const requestOptions = {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
     };
-    const response = await fetch(`../api/pens/${id}`, requestOptions);
+    const response = await fetch(pensAPI_url, requestOptions);
     const { success, data } = await response.json();
     if (success) {
       location.href = "/";
       setProjectID("");
     }
   }
-
 
 
   const NewProject_Start =  () => {  // console.log('toggle visibility ');
@@ -90,6 +97,7 @@ const Index = () => {
   }
 
 
+
 // getProjects  = get all  data for all projects for this specific user only
   async function getProjects() {
     const fp = await FingerprintJS.load();
@@ -102,7 +110,8 @@ const Index = () => {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     };
-    const response = await fetch(`../api/users/${visitorIentification}`, requestOptions);
+    console.log('IN FUNCTION SCOPE =  usersAPI_url from index.js: ', usersAPI_url)
+    const response = await fetch(usersAPI_url, requestOptions);
     const { data } = await response.json();
     setProject(data);
   }
@@ -111,7 +120,8 @@ const Index = () => {
   useEffect(() => {
     // console.log("api Pens  ")
     async function fetchData() {
-      const response = await fetch(`../api/pens/${id}`);
+
+      const response = await fetch(pensAPI_url);
       const { data } = await response.json();
       if (response.status !== 200) {
         alert("there is no page for this ProjectID");
@@ -201,7 +211,7 @@ const Index = () => {
         projectName: projectName
       }),
     };
-    const response = await fetch(`../api/pens/${id}`, requestOptions);
+    const response = await fetch(pensAPI_url, requestOptions);
     const {
       data: { updatedRecord, newRecordId },
     } = await response.json();
@@ -219,19 +229,20 @@ const Index = () => {
 
 
 
+// Surfly Libary cannot be loaded inside of app.js like so:       <script>!function(e,t,n,r,s,c){e[r]=e[r]||{init:function(){e[r].q=arguments}},s=t.createElement(n),c=t.getElementsByTagName(n)[0],s.async=1,s.src="https://surfly.com/surfly.js",c.parentNode.insertBefore(s,c)}(window,document,"script","Surfly");</script>
 
-(function (s, u, r, f, l, y) {
-  s[f] = s[f] || {
-    init: function () {
-      s[f].q = arguments;
-    }
-  };
-  l = u.createElement(r);
-  y = u.getElementsByTagName(r)[0];
-  l.async = 1;
-  l.src = "https://surfly.com/surfly.js";
-  y.parentNode.insertBefore(l, y);
-})(window, document, "script", "Surfly");
+    (function (s, u, r, f, l, y) {
+      s[f] = s[f] || {
+        init: function () {
+          s[f].q = arguments;
+        }
+      };
+      l = u.createElement(r);
+      y = u.getElementsByTagName(r)[0];
+      l.async = 1;
+      l.src = "https://surfly.com/surfly.js";
+      y.parentNode.insertBefore(l, y);
+    })(window, document, "script", "Surfly");
 
 
 
@@ -247,7 +258,7 @@ const Index = () => {
               if (projectID == "" || projectID == " " ) {
                   alert('Please create a project before you click on SAVE (or work already existing projects) ');
               } else {
-                  const SurflyAPIstring = `https://guarded-anchorage-85319.herokuapp.com/api/surfly/${projectID}/?timestamp=`+timestamp;
+                  const SurflyAPIstring = `${serverURL}/api/surfly/${projectID}/?timestamp=`+timestamp;
                   // console.log('SurflyAPIstring with projectID and TimeStamp: ',SurflyAPIstring);
                   const fetchRequestOptions = { method: "GET", headers: { "Content-Type": "application/json; charset=utf-8" } };
                   const getSurflyURL = await fetch(SurflyAPIstring, fetchRequestOptions);

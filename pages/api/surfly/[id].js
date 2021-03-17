@@ -8,12 +8,19 @@
      const projectID = id;
      const requestOptions   = { method: "GET", headers: { "Content-Type": "application/json" }, };
 
-  // API LongURL for this ProjectID
-     const response = await fetch(`https://guarded-anchorage-85319.herokuapp.com/api/surfly/longurl/${projectID}`, requestOptions);
-     const { longUrlResponse } = await response.json();
 
-  // API ProjectData for this ProjectID
-     const projectDataURL = `https://guarded-anchorage-85319.herokuapp.com/api/surfly/projectData/${projectID}?time=`+timestamp ;
+
+// ENV Vars in DEV and Production
+// we have 3 env variables: NODE_ENV  and  DEVURL and PRODURL , all in the .env File
+  const serverURL      = process.env.NODE_ENV === "development" ? process.env.DEVURL : process.env.PRODURL;
+  const longurlAPI     = `${serverURL}/api/surfly/longurl/${projectID}` ;  //   console.log('longurlAPI from index.js: ',  longurlAPI)
+  const projectDataURL = `${serverURL}/api/surfly/projectData/${projectID}?time=`+timestamp;  //   console.log('projectDataURL from index.js: ', projectDataURL)
+
+
+
+  // API LongURL for this ProjectID
+     const response = await fetch(longurlAPI, requestOptions);
+     const { longUrlResponse } = await response.json();
 
   // Surfly-API receives projectDataURL and longUrlResponse
      fetch(surflyFetchURL, {
