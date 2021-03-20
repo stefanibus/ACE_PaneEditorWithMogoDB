@@ -1,12 +1,458 @@
-
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import SplitPane from "react-split-pane";
+import { CssEditor, HtmlEditor, JavascriptEditor } from "../components/Editors";
+import { useDebounce } from "../utils/useDebounce";
 import styles from "./index.module.css";
+import { BsTrash, BsPlay, BsX, BsPencil } from "react-icons/bs";
+import FingerprintJS from "@fingerprintjs/fingerprintjs";
 
 const Index = () => {
 
+
+
+
+
+
+
+
+  const serverURL = process.env.NODE_ENV === "development" ? process.env.NEXT_PUBLIC_DEVURL : process.env.PRODURL;
+  // console.log( 'process.env.NODE_ENV ',  process.env.NODE_ENV  )
+  // console.log( 'process.env.PRODURL' , process.env.PRODURL)
+  // console.log( 'process.env.NEXT_PUBLIC_DEVURL',  process.env.NEXT_PUBLIC_DEVURL  )
+  // console.log( 'serverURL: ', serverURL)
+
+
+
+
+  const [heightValue, setHeightValue] = useState("485px");
+
+  const [askLongURL, setAskLongURL] = useState(false);
+
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [provideProjName, setProvideProjName] = useState(false);
+
+  const [htmlValue, setHtmlValue] = useState("");
+  const [jsValue, setJsValue] = useState("");
+  const [cssValue, setCssValue] = useState("");
+  const [longurlValue, setLongurlValue] = useState("")
+  const [shorturlValue, setLShorturlValue] = useState(" ")
+  const [paneValues, setpaneValues] = useState("startpage.html");
+  const [project, setProject] = useState([]);
+  const [projectID, setProjectID] = useState("");
+  const [projectName, setProjectName] = useState("")
+
+  const debouncedHtml = useDebounce(htmlValue, 1000);
+  const debouncedJs = useDebounce(jsValue, 1000);
+  const debouncedCss = useDebounce(cssValue, 1000);
+
+  const router = useRouter();
+  const [visitorID, setVisitorID] = useState();
+  const [userIDFingerprint, setuserIDFingerprint] = useState("");
+  const { id, user_id } = router.query;
+  // console.log('id: ', id);
+  // console.log('analyse number of rerendering-events')
+
+
+    // This state is tracking whether or not the user is dragging the SplitPane borders to change
+    // its sizing.  If so, then we have to set the child elements to "pointer-events: none" so
+    // the child events don't prevent smooth dragging
+  const  [isDragging, setIsDragging]  = useState(false);
+
+
+
+
+
+  // on useEffect run getAllUserProjects (in user_id changes in the Adressbar or on PAgeload)
+  useEffect(() => {
+          console.log('useEffect to call getAllUserProjects-Function')
+          getAllUserProjects();
+
+
+          // we set the setVisitorID to the value of the userIDFingerprint in the adressbar )
+          if (router.query) {// console.log('router query does have data ==> ',  router.query )
+            setVisitorID(router.query.user_id);
+            console.log(' userIDFingerprint is set to:  ==> ', router.query.user_id )
+         }
+  }, [user_id]);
+
+
+  // API PENS
+  useEffect(() => {
+    //  console.log("api Pens  ")
+        const fetchData = async () => {
+           const pensAPI_url  = `${serverURL}/api/pens/${id}` ;  //
+           console.log('pensAPI_url from index.js: ',  pensAPI_url)
+           const response = await fetch(pensAPI_url);
+           const { data } = await response.json();
+            if (response.status !== 200) {
+              alert("there is no page for this projectID");
+             // await router.push("/404");  //  create specific 404 for this case
+            }
+            setProjectName(data.projectName)
+            setHtmlValue(data.html);
+            setCssValue(data.css);
+            setJsValue(data.js);
+            setProjectID(id);
+            setLoading(false);
+        }
+    if (id) { //  console.log('projectID EXISTS ==> fetchData for id= ',  id)
+       fetchData();
+      }
+      else {  //  console.log('projectID MISSING' )
+      setLoading(false);
+      }
+
+  }, [id]);
+
+
+  // useEffect( () => {
+  //   const paneOutput = `<html>
+  //                   <style>
+  //                   ${debouncedCss}
+  //                   </style>
+  //                   <body>
+  //                   ${debouncedHtml}
+  //                   <script type="text/javascript">
+  //                   ${debouncedJs}
+  //                   </script>
+  //                   </body>
+  //                 </html>`;
+  //   // setpaneValues(paneOutput);
+
+  //   if (projectID === "" || projectID === " " ) {
+  //       console.log('UseEffect: projectID = NO ==>   so we will NOT get the ProjectData for projectID= ', projectID);
+  //   } else {
+  //       console.log('UseEffect: projectID = YES ==>  so we will get the ProjectData now for projectID= ', projectID);
+  //       getAllUserProjects();
+  //   }
+  // }, [debouncedHtml, debouncedCss, debouncedJs]);
+
+
+
+
+// EXTERNAL SURFLY LIBARY is loaded here and not in app.js in the head
+// in order to minimize unnessesary reloading
+  useEffect( () => { // console.log('surfly Libary will be loaded ');
+          (function (s, u, r, f, l, y) {
+            s[f] = s[f] || {
+              init: function () {
+                s[f].q = arguments;
+              }
+            };
+            l = u.createElement(r);
+            y = u.getElementsByTagName(r)[0];
+            l.async = 1;
+            l.src = "https://surfly.com/surfly.js";
+            y.parentNode.insertBefore(l, y);
+          })(window, document, "script", "Surfly");
+  }, []);
+
+
+
+
+  // User-DROPDOWN for all Projects of this user
+  function ChangeProjectViewForUser(event) {
+    // console.log('  Dropdown changed: ',event.target.value,  userIDFingerprint);
+    if (event.target.value != "") {
+      // console.log('userIDFingerprint ', userIDFingerprint)
+      // console.log('event.target.value ', event.target.value )
+       router.push(`?id=${event.target.value}&user_id=${userIDFingerprint}`);
+       setProjectID(event.target.value);
+    } else {
+      location.href = "/";
+      setProjectID("");
+    }
+  }
+
+ const onDelete =  async (id) => {
+    const requestOptions = {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    };
+
+    const pensAPI_url  = `${serverURL}/api/pens/${id}` ;  //
+    console.log('pensAPI_url from index.js: ',  pensAPI_url)
+    const response = await fetch(pensAPI_url, requestOptions);
+    const { success, data } = await response.json();
+    if (success) {
+      location.href = "/";
+      setProjectID("");
+    }
+  }
+
+  const NewProject_Start =  () => {  // console.log('toggle visibility ');
+      setAskLongURL(true);
+  };
+ const NewProject_onClose = () => {  // console.log('toggle visibility ');
+      setAskLongURL(false);
+  }
+
+ const NewProject_onStart = async () => { // console.log(' start new project ');
+      setAskLongURL(false);
+      setProjectID("");
+      await router.push(``);  // location.href = "/";
+      save()
+  }
+
+ const underConstruction = () => {
+      // alert('this is still unfinished work:  under construction ' )
+         console.log('this is still unfinished work:  under construction ' )
+  }
+
+// getAllUserProjects  = get all  data for all projects for this specific user only
+ const  getAllUserProjects =  async  () => { // console.log('getAllUserProjects will start , should be in UseEffect I guess')
+    const fp = await FingerprintJS.load();
+    const result = await fp.get();
+    const visitorIdentification = result.visitorId; //
+    console.log('visitorIdentifier: ==> (from getAllUserProjects-Func): ',  visitorIdentification )
+    setuserIDFingerprint(visitorIdentification);
+    const requestOptions = {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    };
+    const usersAPI_url = `${serverURL}/api/users/${visitorIdentification}`;  // console.log('usersAPI_url from index.js: ', usersAPI_url)
+    const response = await fetch(usersAPI_url, requestOptions);
+    const { data } = await response.json(); // console.log('usersAPI_url DATA is = : ', data)
+    setProject(data);
+  }
+
+  const save = async () => {
+    setAskLongURL(false);
+    setSaving(true);
+    var meth = "PUT";
+    if (visitorID) {
+      if (visitorID == userIDFingerprint) { // console.log('EQUAL userIDFingerprint YES =  visitor == user: ', userIDFingerprint);
+        meth = !id ? "PUT" : "POST";
+      } else {
+       // console.log("same Project, but different User");
+        alert("We cloned this Project for you. You can name your own Project in the Project-Name Field! ");
+        setuserIDFingerprint(visitorID)
+        meth = "PUT";
+      }
+    } else {
+     // console.log("new Project");
+      setuserIDFingerprint(visitorID);
+      meth = "PUT";
+    }
+    if (projectName == " ") {
+      alert("Please input project name");
+      setProvideProjName(true);
+      setSaving(false);
+      setAskLongURL(true);
+      return false;
+    }
+
+    const requestOptions = {
+      method: meth,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        html: htmlValue,
+        css: cssValue,
+        js: jsValue,
+        id: id,
+        userID: userIDFingerprint,
+        projectName: projectName
+      }),
+    };
+
+    const pensAPI_url  = `${serverURL}/api/pens/${id}` ;  //
+    console.log('pensAPI_url from index.js: ',  pensAPI_url)
+    const response = await fetch(pensAPI_url, requestOptions);
+    const {
+      data: { updatedRecord, newRecordId },
+    } = await response.json();
+
+    setSaving(false);
+    if (!updatedRecord) {     //   console.log('userIDFingerprint in save-function in !updatedRecord: ', userIDFingerprint,  updatedRecord)
+      await router.push(`?id=${newRecordId}&user_id=${userIDFingerprint}`);
+    }
+    getAllUserProjects();
+  };
+
+
+
+
+
+
+    // SURFLY Save => CORS-ISSUE on Localhost
+    const  surflyRender = async (projectID) => {
+              const pensAPI_url  = `${serverURL}/api/pens/${id}` ;  //
+              console.log('pensAPI_url from index.js: ',  pensAPI_url)
+              var timestamp = Date.now();
+              if (projectID == "" || projectID == " " ) {
+                  alert('Please create a project before you click on SAVE (or work already existing projects) ');
+              } else {
+
+                  const SurflyAPIstring = `${serverURL}/api/surfly/${projectID}/?timestamp=`+timestamp;
+                  // console.log('SurflyAPIstring with projectID and TimeStamp: ',SurflyAPIstring);
+                  const fetchRequestOptions = { method: "GET", headers: { "Content-Type": "application/json; charset=utf-8" } };
+                  const getSurflyURL = await fetch(SurflyAPIstring, fetchRequestOptions);
+                  const { SurflyResponseURL } = await getSurflyURL.json();
+                  if (getSurflyURL.status !== 200) { await router.push("/404"); }
+                  setpaneValues(SurflyResponseURL);
+              }
+        }
+
+
+    // controlled States = this is also still unfinished business
+    const HandleProjectNameChange = (e) => {
+       // console.log('HandleProjectNameChange TEST ')
+        setProjectName(e.target.value)
+    }
+    const HandleLongURL_Change = (e) => {
+       // console.log('HandleLongURL_Change TEST ' )
+        // let longurlNewValue = ...longurlValue , e.target.value;
+        setLongurlValue(e.target.value)
+    }
+
+
+
+
+
+
+
+
+
+  if (loading) {
+    return <div className={styles.loading}>Loading...</div>;
+  }
+
+
+
+// console.log('userIDFingerprint:  ', userIDFingerprint)
+// console.log('paneValues:  ', paneValues)
+
+
   return (
+    <>
       <div className={styles.header}>
-      Oh my dear
+        <div className={`longURLButtons ${askLongURL ? 'enterLongURLisActive' : '' } `}>
+         <span className={`button-group `}>
+           <button className={styles.button} onClick={() => { underConstruction(); }} > Send Result to friend </button>
+           <button className={styles.button} onClick={() => { surflyRender(projectID); underConstruction(); }} > Look at Result </button>
+           <button className={styles.button} onClick={() => { NewProject_Start(); }} > New Project</button>
+
+
+        {provideProjName ? '' :
+           <button className={styles.button}  onClick={() => {  save(); underConstruction();} } > {saving ? "Saving..." : "Save"} </button>
+        }
+         </span>
+          <input value={longurlValue} className={`longURLInput form-control form-input`}
+          style={{ display: "none" }} placeholder="enter any valid Internet-Website-Adress here (or look at examples)"
+          onChange={(e) => { HandleLongURL_Change(e); }} >
+          </input>
+          <span className={`longURLButtons  `} style={{ display: "none" }}>
+             <BsPlay className="bootstrapButton" style={{ color: "white", fontSize: 36 }} onClick={() => {  NewProject_onStart(); underConstruction();} }/>
+             <BsX className="bootstrapButton" style={{ color: "white", fontSize: 36 }} onClick={() => NewProject_onClose()}/>
+          </span>
+           <p className={`slogan ${askLongURL ? 'enterLongURLisActive' : '' }  `} style={{ display: "none" }}>you change any Website!</p>
+        </div>
+        <div className="custom-URL ">
+          URL sonntag 13 00 - Schnelltest
+        </div>
+        <div className={`custom-select  ${askLongURL ? 'enterLongURLisActive' : '' } `}>
+                        <>
+                          <input
+                            className={`projectName-InputField form-control form-input ${provideProjName ? 'provideProjName' : '' } `}
+                            style={{ visibility: "hidden" }}
+                            value={projectName}
+                            placeholder="provide Project Name"
+                            onChange={(e) => {
+                              HandleProjectNameChange(e)}}
+                            >
+                           </input>
+                          <button
+                              style={{ visibility: "hidden" }}
+                              className={styles.button + ` SaveButton-for-ProjName form-control form-input ${provideProjName ? 'provideProjName yes' : 'nix' } ` }
+                              onClick={() => {  save(); setProvideProjName(false);} } >Save
+                          </button>
+                        </>
+
+
+
+                {provideProjName ? '' :
+                <BsPencil style={{ color: "white", fontSize: 36 }} onClick={() => { setProvideProjName(true) } } />
+                }
+
+                {project && project.length > 0 &&
+                  <BsTrash style={{ color: "white", fontSize: 36 }}
+                  onClick={() => {
+                                      if (window.confirm('Are you sure you wish to delete this Website-Manipulation-Project?')) { onDelete(projectID) }
+                                  }
+                          }
+                  />
+                }
+
+                {project && project.length > 0 && (
+                  <select
+                    className="projectName-DropdownField  form-control form-input"
+                    style={{ width: 240 }}
+                    value={projectID ? projectID : ""}
+                    onChange={ChangeProjectViewForUser}
+                  >
+                    <option value="">all your projects: </option>
+                    {project.map((item, i) => {
+                      return (
+                        <option key={i} value={item._id}>
+                          {item.projectName ? item.projectName : 'needs_a_name '}
+                        </option>
+                      );
+                    })}
+                  </select>
+                )}
+
+        </div>
       </div>
+      <SplitPane
+        style={{ marginTop: "60px" }}
+        split="horizontal"
+        className={askLongURL ? 'enterLongURLisActive' : '' }
+        minSize={"50%"}
+        onDragStarted={() => {
+             console.log('start');
+             setIsDragging(true)
+           }
+         }
+        onDragFinished={(height) => {
+            console.log('Ende');
+            setIsDragging(false)
+            setHeightValue(`${height - 40}px`);
+          }
+        }
+      >
+        <SplitPane split="vertical" minSize={"33%"}>
+          <HtmlEditor
+            height={heightValue}
+            value={htmlValue}
+             onChange={setHtmlValue}
+          />
+          <SplitPane split="vertical" minSize={"50%"}>
+            <CssEditor
+              height={heightValue}
+              value={cssValue}
+              onChange={setCssValue}
+            />
+            <JavascriptEditor
+              height={heightValue}
+              value={jsValue}
+              onChange={setJsValue}
+            />
+          </SplitPane>
+        </SplitPane>
+          <iframe
+              key={paneValues}
+              src={paneValues}
+              id="resultFrame"
+              name="resultFrame"
+              // we toggle the boolean Value for the useState-Hook called: IsDragging
+              // see index.module.css for an in depth explanation: selector = .isInteractive!
+              className={styles.previewIframe + ` resultFrame ${isDragging ? styles.isInteractive  :  ' '  } ` }
+               >
+         </iframe>
+      </SplitPane>
+    </>
   );
 };
 
