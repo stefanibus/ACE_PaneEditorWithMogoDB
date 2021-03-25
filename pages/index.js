@@ -6,7 +6,8 @@ import { useDebounce } from "../utils/useDebounce";
 import styles from "./index.module.css";
 import { BsTrash, BsPlay, BsX, BsPencil } from "react-icons/bs";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
-import Auslagerung from "../utils/mongo_communication"
+import Auslagerung from "../utils/mongo_communication";
+import Splitpane from "../utils/splitpane";
 
 const Index = () => {
 
@@ -64,36 +65,36 @@ const Index = () => {
  const pensAPI_url  = `${serverURL}/api/pens/${id}` ;  //
 
 
-const closeSlide = () => {
-  var i = 40;                  //  set your counter to 40
-function myLoop() {         //  create a loop function
-  setTimeout(function() {   //  call a setTimeout when the loop is called
-    console.log('hello'+i);   //  your code here
-    setCodePenSizeValue(i)
-    i= i-4;                    //  decrement the counter by 4
-    if (i > -1) {           //  if the counter > -1, call the loop function
-      myLoop();             //  ..  again which will trigger another
-    }                       //  ..  setTimeout()
-  }, 80)
-}
-myLoop();                   //  start the loop
-}
+// const closeSlide = () => {
+//   var i = 40;                  //  set your counter to 40
+// function myLoop() {         //  create a loop function
+//   setTimeout(function() {   //  call a setTimeout when the loop is called
+//     console.log('hello'+i);   //  your code here
+//     setCodePenSizeValue(i)
+//     i= i-4;                    //  decrement the counter by 4
+//     if (i > -1) {           //  if the counter > -1, call the loop function
+//       myLoop();             //  ..  again which will trigger another
+//     }                       //  ..  setTimeout()
+//   }, 80)
+// }
+// myLoop();                   //  start the loop
+// }
 
 
-const openSlide = () => {
-  var i = 0;                  //  set your counter to 40
-function myLoop() {         //  create a loop function
-  setTimeout(function() {   //  call a setTimeout when the loop is called
-    console.log('hello'+i);   //  your code here
-    setCodePenSizeValue(i)
-    i= i+4;                    //  decrement the counter by 4
-    if (i < 41) {           //  if the counter > -1, call the loop function
-      myLoop();             //  ..  again which will trigger another
-    }                       //  ..  setTimeout()
-  }, 80)
-}
-myLoop();                   //  start the loop
-}
+// const openSlide = () => {
+//   var i = 0;                  //  set your counter to 40
+// function myLoop() {         //  create a loop function
+//   setTimeout(function() {   //  call a setTimeout when the loop is called
+//     console.log('hello'+i);   //  your code here
+//     setCodePenSizeValue(i)
+//     i= i+4;                    //  decrement the counter by 4
+//     if (i < 41) {           //  if the counter > -1, call the loop function
+//       myLoop();             //  ..  again which will trigger another
+//     }                       //  ..  setTimeout()
+//   }, 80)
+// }
+// myLoop();                   //  start the loop
+// }
 
 
 
@@ -417,7 +418,7 @@ myLoop();                   //  start the loop
            <button className={styles.button} onClick={() => { TestDerAuslagerung(); }} >ex func </button>
            {/*<button className={styles.button} onClick={() => {   }} > Send Result to friend </button>*/}
            <button className={styles.button} onClick={() => { surflyRender(projectID);   }} > Look at Result </button>
-           <button className={styles.button} onClick={() => { NewProject_Start(); closeSlide(); }} > New Project</button>
+           <button className={styles.button} onClick={() => { NewProject_Start(); Splitpane.closeSlide(setCodePenSizeValue); }} > New Project</button>
 
 
         {provideProjName ? '' :
@@ -436,7 +437,7 @@ myLoop();                   //  start the loop
             {/* <BsPlay className="bootstrapButton" style={{ color: "white", fontSize: 36 }}
                      onClick={() => {  NewProject_Save();  } }/>*/}
              <BsX    className="bootstrapButton" style={{ color: "white", fontSize: 36 }}
-                     onClick={() => {NewProject_onClose(); openSlide();}}/>
+                     onClick={() => {NewProject_onClose(); Splitpane.openSlide(setCodePenSizeValue);}}/>
           </span>
            <p className={` slogan ${askLongURL ? ' enterLongURLisActive ' : '' }  `} style={{ display: "none" }}>You can change any static Website!</p>
         </div>
