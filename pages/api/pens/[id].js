@@ -23,7 +23,7 @@ export default async (req, res) => {
       break;
     case "PUT":
       try {
-        const { html, css, js, userID, projectName } = req.body;
+        const { html, css, js, userID, projectName, longurl } = req.body;
         const { db } = await connect();
 
         const result = await db.collection(collectionName).insertOne({
@@ -31,7 +31,8 @@ export default async (req, res) => {
           css,
           js,
           userID,
-          projectName
+          projectName,
+          longurl
         });
         res
           .status(200)
@@ -43,14 +44,14 @@ export default async (req, res) => {
       break;
     case "POST":
       try {
-        const { html, css, js, id, userID, projectName } = req.body;
+        const { html, css, js, id, userID, projectName, longurl } = req.body;
         const { db } = await connect();
 
         await db
           .collection(collectionName)
           .updateOne(
             { _id: ObjectId(id) },
-            { $set: { html: html, css: css, js: js, userID: userID, projectName: projectName } }
+            { $set: { html: html, css: css, js: js, userID: userID, projectName: projectName, longurl: longurl } }
           );
           //  SEE LOADING INTERFACE by LONG-LOADING-TIME FAKED:    // await  new Promise((resolve) => {  setTimeout(() => resolve(), 4000);  });
         res

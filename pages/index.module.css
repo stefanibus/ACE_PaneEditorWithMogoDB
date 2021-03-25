@@ -23,6 +23,41 @@
 }
 
 
+@media only screen and (min-width: 1350px) {
+
+  .customSelect,
+  .longURLButtons {
+    width: 40vw;
+  }
+}
+
+@media only screen and (max-width: 1350px) {
+
+  .customURL {
+    display: none;
+  }
+}
+
+
+.customURL {
+    color: white;
+    padding: 3px;
+    border: 3px;
+    opacity: .5;
+    width: 10vw;
+}
+
+.customURL span {
+    font-size: 0.8vw;
+    word-break: break-all;
+}
+
+.customURL span span {
+    /*display: none;*/
+    position: absolute;
+}
+
+
 .loading {
   width: 100vw;
   height: 100vh;

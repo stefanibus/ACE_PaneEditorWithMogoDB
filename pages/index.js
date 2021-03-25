@@ -6,14 +6,9 @@ import { useDebounce } from "../utils/useDebounce";
 import styles from "./index.module.css";
 import { BsTrash, BsPlay, BsX, BsPencil } from "react-icons/bs";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
+import Auslagerung from "../utils/mongo_communication"
 
 const Index = () => {
-
-
-
-
-
-
 
 
   const serverURL = process.env.NODE_ENV === "development" ? process.env.NEXT_PUBLIC_DEVURL : process.env.PRODURL;
@@ -26,6 +21,8 @@ const Index = () => {
 
 
   const [heightValue, setHeightValue] = useState("485px");
+  const [codePenSizeValue, setCodePenSizeValue] = useState(40);
+
 
   const [askLongURL, setAskLongURL] = useState(false);
 
@@ -49,7 +46,7 @@ const Index = () => {
 
   const router = useRouter();
   const [visitorID, setVisitorID] = useState();
-  const [userIDFingerprint, setuserIDFingerprint] = useState("");
+  const [userID_from_Fingerprint, setUserID_from_Fingerprint] = useState("");
   const { id, user_id } = router.query;
   // console.log('id: ', id);
   // console.log('analyse number of rerendering-events')
@@ -64,26 +61,63 @@ const Index = () => {
 
 
 
+ const pensAPI_url  = `${serverURL}/api/pens/${id}` ;  //
+
+
+const closeSlide = () => {
+  var i = 40;                  //  set your counter to 40
+function myLoop() {         //  create a loop function
+  setTimeout(function() {   //  call a setTimeout when the loop is called
+    console.log('hello'+i);   //  your code here
+    setCodePenSizeValue(i)
+    i= i-4;                    //  decrement the counter by 4
+    if (i > -1) {           //  if the counter > -1, call the loop function
+      myLoop();             //  ..  again which will trigger another
+    }                       //  ..  setTimeout()
+  }, 80)
+}
+myLoop();                   //  start the loop
+}
+
+
+const openSlide = () => {
+  var i = 0;                  //  set your counter to 40
+function myLoop() {         //  create a loop function
+  setTimeout(function() {   //  call a setTimeout when the loop is called
+    console.log('hello'+i);   //  your code here
+    setCodePenSizeValue(i)
+    i= i+4;                    //  decrement the counter by 4
+    if (i < 41) {           //  if the counter > -1, call the loop function
+      myLoop();             //  ..  again which will trigger another
+    }                       //  ..  setTimeout()
+  }, 80)
+}
+myLoop();                   //  start the loop
+}
+
+
+
+
+
+
   // on useEffect run getAllUserProjects (in user_id changes in the Adressbar or on PAgeload)
-  useEffect(() => {
-          console.log('useEffect to call getAllUserProjects-Function')
+  useEffect(() => { // console.log('useEffect to call getAllUserProjects-Function')
           getAllUserProjects();
 
-
-          // we set the setVisitorID to the value of the userIDFingerprint in the adressbar )
+          // we set the setVisitorID to the value of the userID_from_Fingerprint in the adressbar )
           if (router.query) {// console.log('router query does have data ==> ',  router.query )
-            setVisitorID(router.query.user_id);
-            console.log(' userIDFingerprint is set to:  ==> ', router.query.user_id )
+            setVisitorID(router.query.user_id); //  console.log(' userID_from_Fingerprint is set to:  ==> ', router.query.user_id )
+            console.log('visitorID was set to ', router.query.user_id)
          }
   }, [user_id]);
+
+
 
 
   // API PENS
   useEffect(() => {
     //  console.log("api Pens  ")
-        const fetchData = async () => {
-           const pensAPI_url  = `${serverURL}/api/pens/${id}` ;  //
-           console.log('pensAPI_url from index.js: ',  pensAPI_url)
+        const fetchData = async () => { // console.log('pensAPI_url from index.js: ',  pensAPI_url)
            const response = await fetch(pensAPI_url);
            const { data } = await response.json();
             if (response.status !== 200) {
@@ -91,6 +125,7 @@ const Index = () => {
              // await router.push("/404");  //  create specific 404 for this case
             }
             setProjectName(data.projectName)
+            setLongurlValue(data.longurl)
             setHtmlValue(data.html);
             setCssValue(data.css);
             setJsValue(data.js);
@@ -154,11 +189,11 @@ const Index = () => {
 
   // User-DROPDOWN for all Projects of this user
   function ChangeProjectViewForUser(event) {
-    // console.log('  Dropdown changed: ',event.target.value,  userIDFingerprint);
+    // console.log('  Dropdown changed: ',event.target.value,  userID_from_Fingerprint);
     if (event.target.value != "") {
-      // console.log('userIDFingerprint ', userIDFingerprint)
+      // console.log('userID_from_Fingerprint ', userID_from_Fingerprint)
       // console.log('event.target.value ', event.target.value )
-       router.push(`?id=${event.target.value}&user_id=${userIDFingerprint}`);
+       router.push(`?id=${event.target.value}&user_id=${userID_from_Fingerprint}`);
        setProjectID(event.target.value);
     } else {
       location.href = "/";
@@ -172,8 +207,7 @@ const Index = () => {
       headers: { "Content-Type": "application/json" },
     };
 
-    const pensAPI_url  = `${serverURL}/api/pens/${id}` ;  //
-    console.log('pensAPI_url from index.js: ',  pensAPI_url)
+     // console.log('pensAPI_url from index.js: ',  pensAPI_url)
     const response = await fetch(pensAPI_url, requestOptions);
     const { success, data } = await response.json();
     if (success) {
@@ -182,67 +216,89 @@ const Index = () => {
     }
   }
 
-  const NewProject_Start =  () => {  // console.log('toggle visibility ');
-      setAskLongURL(true);
-  };
- const NewProject_onClose = () => {  // console.log('toggle visibility ');
-      setAskLongURL(false);
-  }
-
- const NewProject_onStart = async () => { // console.log(' start new project ');
-      setAskLongURL(false);
-      setProjectID("");
-      await router.push(``);  // location.href = "/";
-      save()
-  }
-
- const underConstruction = () => {
-      // alert('this is still unfinished work:  under construction ' )
-         console.log('this is still unfinished work:  under construction ' )
-  }
-
 // getAllUserProjects  = get all  data for all projects for this specific user only
  const  getAllUserProjects =  async  () => { // console.log('getAllUserProjects will start , should be in UseEffect I guess')
     const fp = await FingerprintJS.load();
     const result = await fp.get();
-    const visitorIdentification = result.visitorId; //
-    console.log('visitorIdentifier: ==> (from getAllUserProjects-Func): ',  visitorIdentification )
-    setuserIDFingerprint(visitorIdentification);
+    const visitorIdentification = result.visitorId; //  console.log('visitorIdentifier: ==> (from getAllUserProjects-Func): ',  visitorIdentification )
+    setUserID_from_Fingerprint(visitorIdentification);
     const requestOptions = {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     };
-    const usersAPI_url = `${serverURL}/api/users/${visitorIdentification}`;  // console.log('usersAPI_url from index.js: ', usersAPI_url)
+    const usersAPI_url = `${serverURL}/api/users/${visitorIdentification}`;  //  console.log('usersAPI_url from index.js: ', usersAPI_url)
     const response = await fetch(usersAPI_url, requestOptions);
     const { data } = await response.json(); // console.log('usersAPI_url DATA is = : ', data)
     setProject(data);
   }
 
-  const save = async () => {
+
+
+  const save = async (saveNewProject) => {
+
     setAskLongURL(false);
     setSaving(true);
     var meth = "PUT";
     if (visitorID) {
-      if (visitorID == userIDFingerprint) { // console.log('EQUAL userIDFingerprint YES =  visitor == user: ', userIDFingerprint);
-        meth = !id ? "PUT" : "POST";
-      } else {
-       // console.log("same Project, but different User");
-        alert("We cloned this Project for you. You can name your own Project in the Project-Name Field! ");
-        setuserIDFingerprint(visitorID)
-        meth = "PUT";
-      }
+                      if (visitorID == userID_from_Fingerprint) { //
+                        alert('visitor and  user are EQUAL to one another ( value is userID_from_Fingerprint) = so we EITHER Update (overrite) OR Clone the Project ((IF there is a PORJECTID )   ' );
+                        console.log('next we check for the Existance of a ProjectID via the Params-Value  ' );
+                        console.log('id = Param aus der window adress bar:  ', id);
+                        //  POST = (overwrite) updatedRecord, Put = newRecordId (create new)
+                        meth = id ? "POST" : "PUT";
+                      } else {
+                       //
+                        alert("same Project, but different User");
+                          meth = "PUT";
+                          // console.log('visitorID soll existieren, zeig her: ' , visitorID )
+                          // console.log('userID_from_Fingerprint soll existieren ABER UNGLEICH SEIN , zeig her: ' , userID_from_Fingerprint )
+                        // alert("We cloned this Project for you. You can re-name the Project-Name  for your own Project if you prefer a different ProjectName ! ");
+                        // setUserID_from_Fingerprint(visitorID) // seems to be disregarded too
+                        //  setProjectName(" "); // setProvideProjName(true); // setting the Project Name here takes no effect because .... What the heck is actually happening here?!
+                        //  Comment: Put , that means  newRecordId, we create a new Project
+                        // setHtmlValue('NewProject_Save test string ')
+                          // console.log('before wait')
+                                                // check if save(true) was called ==> if true then it is a new Project and we will empty the potentially pre-existing data (exept for the longurl )
+                                                if (saveNewProject) {
+
+                                                      console.log('we will create a new project. We will want to overwrite several values by empty strings');
+                                                        // requestOptions.headers = { "Content-Type": "application/json" };
+                                                      console.log('requestOptions before ', requestOptions)
+                                                      requestOptions.body = JSON.stringify({
+                                                                            html: ' ',
+                                                                            css: ' ',
+                                                                            js: ' ',
+                                                                            id: id,
+                                                                            userID: userID_from_Fingerprint ,
+                                                                            projectName: ' ',
+                                                                            longurl:  longurlValue
+                                                                          })
+                                                      console.log('requestOptions AFTER ', requestOptions)
+                                                  } else {
+                                                      console.log('Existing Project: ==> we will not reset the data for MongoDB: we do nothing (and keep the Project data)  ')
+                                                  }
+                      }
     } else {
-     // console.log("new Project");
-      setuserIDFingerprint(visitorID);
+     //
+      alert("new Project for a new user (either with or without existing data)");
+      setUserID_from_Fingerprint(visitorID);
+        // Put = newRecordId
       meth = "PUT";
     }
-    if (projectName == " ") {
+
+
+
+
+
+    if (projectName == " " || projectName == "") {
       alert("Please input project name");
       setProvideProjName(true);
       setSaving(false);
       setAskLongURL(true);
       return false;
     }
+
+
 
     const requestOptions = {
       method: meth,
@@ -252,25 +308,55 @@ const Index = () => {
         css: cssValue,
         js: jsValue,
         id: id,
-        userID: userIDFingerprint,
-        projectName: projectName
+        userID: userID_from_Fingerprint,
+        projectName: projectName,
+        longurl: longurlValue
       }),
     };
+  console.log('requestOptions', requestOptions)
 
-    const pensAPI_url  = `${serverURL}/api/pens/${id}` ;  //
+
+
+
     console.log('pensAPI_url from index.js: ',  pensAPI_url)
     const response = await fetch(pensAPI_url, requestOptions);
     const {
       data: { updatedRecord, newRecordId },
     } = await response.json();
+    console.log('The Result is stored to the DB now: we have  either updatedRecord (true undefined), or created a newRecordId  (undefined 000000001 ): ',  updatedRecord, newRecordId )
 
     setSaving(false);
-    if (!updatedRecord) {     //   console.log('userIDFingerprint in save-function in !updatedRecord: ', userIDFingerprint,  updatedRecord)
-      await router.push(`?id=${newRecordId}&user_id=${userIDFingerprint}`);
+    if (!updatedRecord) {
+     console.log('Only if updatedRecord is FALSE (meaning: POST is false =  meaning we do not have same user and same project = (thus not OVERWRITE ), ==>we will clone and then update both Params in the adress bar: ', updatedRecord, newRecordId , userID_from_Fingerprint,    )   //
+
+          //  SEE LOADING INTERFACE by LONG-LOADING-TIME FAKED:    // await  new Promise((resolve) => {  setTimeout(() => resolve(), 4000);  });
+
+      await router.push(`?id=${newRecordId}&user_id=${userID_from_Fingerprint}`);
     }
-    getAllUserProjects();
+  //  getAllUserProjects(); // stefano, we may get rid of this line as it will be executed via uesEffect again. (still need to check if it is the case in all nessesary cases though)
   };
 
+
+
+
+
+  const NewProject_Start =  () => {  // console.log('toggle visibility ');
+      setAskLongURL(true);
+  };
+ const NewProject_onClose = () => {  // console.log('toggle visibility ');
+      setAskLongURL(false);
+  }
+
+ const NewProject_Save = async () => { // console.log(' start new project ');
+     // await router.push(``);  // location.href = "/";
+      setAskLongURL(false);
+      // setUserID_from_Fingerprint("fakeValue") // this will make sure a new project will be created also if the user is known and already is on an existing project
+     //  SEE LOADING INTERFACE by LONG-LOADING-TIME FAKED:    //  await  new Promise((resolve) => {  setTimeout(() => resolve(), 4000);  });
+
+
+      // setProjectID(" ");  // this takes no effect whatsoever
+      save(true);
+  }
 
 
 
@@ -278,13 +364,11 @@ const Index = () => {
 
     // SURFLY Save => CORS-ISSUE on Localhost
     const  surflyRender = async (projectID) => {
-              const pensAPI_url  = `${serverURL}/api/pens/${id}` ;  //
-              console.log('pensAPI_url from index.js: ',  pensAPI_url)
+          // console.log('pensAPI_url from index.js: ',  pensAPI_url)
               var timestamp = Date.now();
               if (projectID == "" || projectID == " " ) {
                   alert('Please create a project before you click on SAVE (or work already existing projects) ');
               } else {
-
                   const SurflyAPIstring = `${serverURL}/api/surfly/${projectID}/?timestamp=`+timestamp;
                   // console.log('SurflyAPIstring with projectID and TimeStamp: ',SurflyAPIstring);
                   const fetchRequestOptions = { method: "GET", headers: { "Content-Type": "application/json; charset=utf-8" } };
@@ -296,21 +380,18 @@ const Index = () => {
         }
 
 
-    // controlled States = this is also still unfinished business
-    const HandleProjectNameChange = (e) => {
-       // console.log('HandleProjectNameChange TEST ')
+    const HandleProjectNameChange = (e) => {     // Stefano: controlled States = this is also still unfinished business
         setProjectName(e.target.value)
     }
-    const HandleLongURL_Change = (e) => {
-       // console.log('HandleLongURL_Change TEST ' )
-        // let longurlNewValue = ...longurlValue , e.target.value;
+    const HandleLongURL_Change = (e) => { // console.log('HandleLongURL_Change:  ' , e.target.value ) ;
         setLongurlValue(e.target.value)
     }
 
 
 
-
-
+   const TestDerAuslagerung = () => {
+     Auslagerung.test();
+    }
 
 
 
@@ -321,41 +402,51 @@ const Index = () => {
 
 
 
-// console.log('userIDFingerprint:  ', userIDFingerprint)
+// console.log('userID_from_Fingerprint:  ', userID_from_Fingerprint)
 // console.log('paneValues:  ', paneValues)
+// console.log('longurlValue: ',longurlValue)
+
+
 
 
   return (
     <>
       <div className={styles.header}>
-        <div className={`longURLButtons ${askLongURL ? 'enterLongURLisActive' : '' } `}>
-         <span className={`button-group `}>
-           <button className={styles.button} onClick={() => { underConstruction(); }} > Send Result to friend </button>
-           <button className={styles.button} onClick={() => { surflyRender(projectID); underConstruction(); }} > Look at Result </button>
-           <button className={styles.button} onClick={() => { NewProject_Start(); }} > New Project</button>
+        <div className={styles.longURLButtons + ` longURLButtons  ${askLongURL ? ' enterLongURLisActive ' : '' } `}>
+         <span className={` button-group `}>
+           <button className={styles.button} onClick={() => { TestDerAuslagerung(); }} >ex func </button>
+           {/*<button className={styles.button} onClick={() => {   }} > Send Result to friend </button>*/}
+           <button className={styles.button} onClick={() => { surflyRender(projectID);   }} > Look at Result </button>
+           <button className={styles.button} onClick={() => { NewProject_Start(); closeSlide(); }} > New Project</button>
 
 
         {provideProjName ? '' :
-           <button className={styles.button}  onClick={() => {  save(); underConstruction();} } > {saving ? "Saving..." : "Save"} </button>
+           <button className={styles.button}  onClick={() => {  save();  } } > {saving ? "Saving..." : "Save"} </button>
         }
          </span>
-          <input value={longurlValue} className={`longURLInput form-control form-input`}
+          <br/>
+          <input value={longurlValue} className={` longURLInput form-control form-input `}
           style={{ display: "none" }} placeholder="enter any valid Internet-Website-Adress here (or look at examples)"
           onChange={(e) => { HandleLongURL_Change(e); }} >
           </input>
-          <span className={`longURLButtons  `} style={{ display: "none" }}>
-             <BsPlay className="bootstrapButton" style={{ color: "white", fontSize: 36 }} onClick={() => {  NewProject_onStart(); underConstruction();} }/>
-             <BsX className="bootstrapButton" style={{ color: "white", fontSize: 36 }} onClick={() => NewProject_onClose()}/>
+          <span className={` longURLButtons  `} style={{ display: "none" }}>
+
+
+           <button className={styles.button + ' createNewProject'} onClick={() => { NewProject_Save(); }} >create new project</button>
+            {/* <BsPlay className="bootstrapButton" style={{ color: "white", fontSize: 36 }}
+                     onClick={() => {  NewProject_Save();  } }/>*/}
+             <BsX    className="bootstrapButton" style={{ color: "white", fontSize: 36 }}
+                     onClick={() => {NewProject_onClose(); openSlide();}}/>
           </span>
-           <p className={`slogan ${askLongURL ? 'enterLongURLisActive' : '' }  `} style={{ display: "none" }}>you change any Website!</p>
+           <p className={` slogan ${askLongURL ? ' enterLongURLisActive ' : '' }  `} style={{ display: "none" }}>You can change any static Website!</p>
         </div>
-        <div className="custom-URL ">
-          URL sonntag 13 00 - Schnelltest
+        <div className={styles.customURL + ` customURL   ${askLongURL ? ' enterLongURLisActive ' : '' } `}>
+           {longurlValue ? <span> :<span> {longurlValue}</span></span>  : ''}  {/*Change this Website*/}
         </div>
-        <div className={`custom-select  ${askLongURL ? 'enterLongURLisActive' : '' } `}>
+        <div className={styles.customSelect + ` customSelect custom-select  ${askLongURL ? ' enterLongURLisActive ' : '' } `}>
                         <>
                           <input
-                            className={`projectName-InputField form-control form-input ${provideProjName ? 'provideProjName' : '' } `}
+                            className={` projectName-InputField form-control form-input ${provideProjName ? ' provideProjName ' : '' } `}
                             style={{ visibility: "hidden" }}
                             value={projectName}
                             placeholder="provide Project Name"
@@ -365,7 +456,7 @@ const Index = () => {
                            </input>
                           <button
                               style={{ visibility: "hidden" }}
-                              className={styles.button + ` SaveButton-for-ProjName form-control form-input ${provideProjName ? 'provideProjName yes' : 'nix' } ` }
+                              className={ styles.button + ` SaveButton-for-ProjName form-control form-input ${provideProjName ? ' provideProjName ' : '' } ` }
                               onClick={() => {  save(); setProvideProjName(false);} } >Save
                           </button>
                         </>
@@ -408,15 +499,14 @@ const Index = () => {
       <SplitPane
         style={{ marginTop: "60px" }}
         split="horizontal"
-        className={askLongURL ? 'enterLongURLisActive' : '' }
+        size={`${codePenSizeValue}%`}
+        className={askLongURL ? ' enterLongURLisActive ' : '' }
         minSize={"50%"}
-        onDragStarted={() => {
-             console.log('start');
-             setIsDragging(true)
+        onDragStarted={() => { //console.log('onDragStarted')
+              setIsDragging(true)
            }
          }
         onDragFinished={(height) => {
-            console.log('Ende');
             setIsDragging(false)
             setHeightValue(`${height - 40}px`);
           }
@@ -448,7 +538,7 @@ const Index = () => {
               name="resultFrame"
               // we toggle the boolean Value for the useState-Hook called: IsDragging
               // see index.module.css for an in depth explanation: selector = .isInteractive!
-              className={styles.previewIframe + ` resultFrame ${isDragging ? styles.isInteractive  :  ' '  } ` }
+              className={styles.previewIframe + `    resultFrame ${isDragging ?   styles.isInteractive    :  ' '  } ` }
                >
          </iframe>
       </SplitPane>

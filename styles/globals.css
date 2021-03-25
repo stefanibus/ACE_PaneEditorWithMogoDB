@@ -14,12 +14,16 @@
   .enterLongURLisActive .longURLButtons  {
     display: inline-block !important;
     margin: 30px 0;
-    max-width: 78vw;
+    max-width: 56vw;
   }
 
   .projectName-InputField.provideProjName,
   .SaveButton-for-ProjName.provideProjName {
     visibility: visible !important;
+    }
+
+    .createNewProject {
+       margin: 0 1em;
     }
 
 
@@ -32,7 +36,7 @@
 }
 
 .SaveButton-for-ProjName {
-    width: 4vw !important;
+    width: 5vw !important;
 }
 
 .bootstrapButton {
@@ -62,9 +66,10 @@ div.custom-select > svg  {
 }
 
 .longURLButtons.enterLongURLisActive {
-  width: 100vw;
+  width: 100vw !important;
 }
 
+.customURL.enterLongURLisActive,
 .custom-select.enterLongURLisActive {
   display: none;
 }
