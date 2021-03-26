@@ -411,7 +411,8 @@ const Index = () => {
 
 
   return (
-    <div  className={`toggleView ${askLongURL ? ' createNewProjectNow ' : '' }  `} >
+    <div  className={`toggleView ${askLongURL && ' createNewProjectNow ' }  `} >
+
       <div className={styles.header}>
         <div className={styles.longURLButtons + ` longURLButtons  `}>
          <span className={` button-group `}>
@@ -442,12 +443,12 @@ const Index = () => {
            <p className={` slogan  `} style={{ display: "none" }}>You can change any static Website!</p>
         </div>
         <div className={styles.customURL + ` customURL   `}>
-           {longurlValue ? <span> :<span> {longurlValue}</span></span>  : ''}  {/*Change this Website*/}
+           {longurlValue && <span> :<span> {longurlValue}</span></span> }  {/*Change this Website*/}
         </div>
         <div className={styles.customSelect + ` customSelect custom-select `}>
                         <>
                           <input
-                            className={` projectName-InputField form-control form-input ${provideProjName ? ' provideProjName ' : '' } `}
+                            className={` projectName-InputField form-control form-input ${provideProjName && ' provideProjName '  } `}
                             style={{ visibility: "hidden" }}
                             value={projectName}
                             placeholder="provide Project Name"
@@ -463,10 +464,7 @@ const Index = () => {
                         </>
 
 
-
-                {provideProjName ? '' :
-                <BsPencil style={{ color: "white", fontSize: 36 }} onClick={() => { setProvideProjName(true) } } />
-                }
+                {!provideProjName && <BsPencil style={{ color: "white", fontSize: 36 }} onClick={() => { setProvideProjName(true) } } /> }
 
                 {project && project.length > 0 &&
                   <BsTrash style={{ color: "white", fontSize: 36 }}
@@ -481,7 +479,7 @@ const Index = () => {
                   <select
                     className="projectName-DropdownField  form-control form-input"
                     style={{ width: 240 }}
-                    value={projectID ? projectID : ""}
+                    value={projectID && projectID }
                     onChange={ChangeProjectViewForUser}
                   >
                     <option value="">all your projects: </option>
@@ -538,7 +536,7 @@ const Index = () => {
               name="resultFrame"
               // we toggle the boolean Value for the useState-Hook called: IsDragging
               // see index.module.css for an in depth explanation: selector = .isInteractive!
-              className={styles.previewIframe + `    resultFrame ${isDragging ?   styles.isInteractive    :  ' '  } ` }
+              className={styles.previewIframe + `    resultFrame ${isDragging &&   styles.isInteractive  } ` }
                >
          </iframe>
       </SplitPane>
