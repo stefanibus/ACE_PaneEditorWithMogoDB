@@ -6,7 +6,7 @@ import { useDebounce } from "../utils/useDebounce";
 import styles from "./index.module.css";
 import { BsTrash, BsPlay, BsX, BsPencil } from "react-icons/bs";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
-import Auslagerung from "../utils/mongo_communication";
+// import Auslagerung from "../utils/mongo_communication";
 import Splitpane from "../utils/splitpane";
 
 const Index = () => {
@@ -229,7 +229,7 @@ const Index = () => {
     };
     const usersAPI_url = `${serverURL}/api/users/${visitorIdentification}`;  //  console.log('usersAPI_url from index.js: ', usersAPI_url)
     const response = await fetch(usersAPI_url, requestOptions);
-    const { data } = await response.json(); // console.log('usersAPI_url DATA is = : ', data)
+    const { data } = await response.json(); // console.log('usersAPI_url DATA is =: ', data)
     setProject(data);
   }
 
@@ -390,9 +390,9 @@ const Index = () => {
 
 
 
-   const TestDerAuslagerung = () => {
-     Auslagerung.test();
-    }
+   // const TestDerAuslagerung = () => {
+   //   Auslagerung.test();
+   //  }
 
 
 
@@ -411,12 +411,12 @@ const Index = () => {
 
 
   return (
-    <>
+    <div  className={`toggleView ${askLongURL ? ' createNewProjectNow ' : '' }  `} >
       <div className={styles.header}>
-        <div className={styles.longURLButtons + ` longURLButtons  ${askLongURL ? ' enterLongURLisActive ' : '' } `}>
+        <div className={styles.longURLButtons + ` longURLButtons  `}>
          <span className={` button-group `}>
-           <button className={styles.button} onClick={() => { TestDerAuslagerung(); }} >ex func </button>
-           {/*<button className={styles.button} onClick={() => {   }} > Send Result to friend </button>*/}
+{/*           <button className={styles.button} onClick={() => { TestDerAuslagerung(); }} >ex func </button>*/}
+           <button className={styles.button} onClick={() => {alert('This is still work in Progress. Nothing happens here: As of yet! ')   }} > Send Result to friend </button>
            <button className={styles.button} onClick={() => { surflyRender(projectID);   }} > Look at Result </button>
            <button className={styles.button} onClick={() => { NewProject_Start(); Splitpane.closeSlide(setCodePenSizeValue); }} > New Project</button>
 
@@ -430,7 +430,7 @@ const Index = () => {
           style={{ display: "none" }} placeholder="enter any valid Internet-Website-Adress here (or look at examples)"
           onChange={(e) => { HandleLongURL_Change(e); }} >
           </input>
-          <span className={` longURLButtons  `} style={{ display: "none" }}>
+          <span className={` newProjectButtons  `} style={{ display: "none" }}>
 
 
            <button className={styles.button + ' createNewProject'} onClick={() => { NewProject_Save(); }} >create new project</button>
@@ -439,12 +439,12 @@ const Index = () => {
              <BsX    className="bootstrapButton" style={{ color: "white", fontSize: 36 }}
                      onClick={() => {NewProject_onClose(); Splitpane.openSlide(setCodePenSizeValue);}}/>
           </span>
-           <p className={` slogan ${askLongURL ? ' enterLongURLisActive ' : '' }  `} style={{ display: "none" }}>You can change any static Website!</p>
+           <p className={` slogan  `} style={{ display: "none" }}>You can change any static Website!</p>
         </div>
-        <div className={styles.customURL + ` customURL   ${askLongURL ? ' enterLongURLisActive ' : '' } `}>
+        <div className={styles.customURL + ` customURL   `}>
            {longurlValue ? <span> :<span> {longurlValue}</span></span>  : ''}  {/*Change this Website*/}
         </div>
-        <div className={styles.customSelect + ` customSelect custom-select  ${askLongURL ? ' enterLongURLisActive ' : '' } `}>
+        <div className={styles.customSelect + ` customSelect custom-select `}>
                         <>
                           <input
                             className={` projectName-InputField form-control form-input ${provideProjName ? ' provideProjName ' : '' } `}
@@ -501,7 +501,6 @@ const Index = () => {
         style={{ marginTop: "60px" }}
         split="horizontal"
         size={`${codePenSizeValue}%`}
-        className={askLongURL ? ' enterLongURLisActive ' : '' }
         minSize={"50%"}
         onDragStarted={() => { //console.log('onDragStarted')
               setIsDragging(true)
@@ -543,7 +542,7 @@ const Index = () => {
                >
          </iframe>
       </SplitPane>
-    </>
+    </div>
   );
 };
 

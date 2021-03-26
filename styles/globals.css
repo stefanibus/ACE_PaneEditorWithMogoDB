@@ -1,39 +1,50 @@
 
-/* INPUT FIELD NEW LONGURL ==> TOGGLE VISIBILITY*/
- .enterLongURLisActive .button-group ,
- .custom-select.enterLongURLisActive,
- .SplitPane.enterLongURLisActive
+/* START TOGGLE NEW PROJECT LAYOUT  ==> TOGGLE VISIBILITY */
+ .toggleView.createNewProjectNow .button-group ,
+ .toggleView.createNewProjectNow .Pane.horizontal.Pane2
    {
     opacity: .2;
   }
-
-  .enterLongURLisActive.SplitPane.horizontal {
+  .toggleView.createNewProjectNow .SplitPane.horizontal {
     margin-top: 150px !important;
   }
-  .enterLongURLisActive  .longURLInput,
-  .enterLongURLisActive .longURLButtons  {
+.toggleView.createNewProjectNow .longURLInput {
     display: inline-block !important;
     margin: 30px 0;
     max-width: 56vw;
   }
-
-  .projectName-InputField.provideProjName,
-  .SaveButton-for-ProjName.provideProjName {
-    visibility: visible !important;
-    }
-
-    .createNewProject {
-       margin: 0 1em;
-    }
-
-
-.slogan.enterLongURLisActive {
+.toggleView.createNewProjectNow .longURLButtons {
+  width: 100vw !important;
+}
+.toggleView.createNewProjectNow .slogan  {
   color: white;
   display: inline-block !important;
   right: 1vw;
   position: absolute;
   top: 8vh;
 }
+.toggleView.createNewProjectNow .customURL ,
+.toggleView.createNewProjectNow .custom-select  {
+  display: none;
+}
+.toggleView.createNewProjectNow .newProjectButtons {
+  display: inline-block !important;
+}
+/* END TOGGLE NEW PROJECT LAYOUT */
+
+
+
+
+
+.projectName-InputField.provideProjName,
+.SaveButton-for-ProjName.provideProjName {
+  visibility: visible !important;
+  }
+
+  .createNewProject {
+     margin: 0 1em;
+  }
+
 
 .SaveButton-for-ProjName {
     width: 5vw !important;
@@ -56,23 +67,15 @@ div.custom-select > svg  {
 }
 
 
- span.longURLButtons > svg {
+ span.newProjectButtons > svg {
     margin: 0 .2em;
     cursor: pointer;
 }
 
- span.longURLButtons > svg:nth-child(1) {
+ span.newProjectButtons > svg:nth-child(1) {
     color: red !important;
 }
 
-.longURLButtons.enterLongURLisActive {
-  width: 100vw !important;
-}
-
-.customURL.enterLongURLisActive,
-.custom-select.enterLongURLisActive {
-  display: none;
-}
 
 
 
