@@ -381,10 +381,10 @@ const Index = () => {
         }
 
 
-    const HandleProjectNameChange = (e) => {     // Stefano: controlled States = this is also still unfinished business
+    const HandleProjectNameChange = e => {     // Stefano: controlled States = this is also still unfinished business
         setProjectName(e.target.value)
     }
-    const HandleLongURL_Change = (e) => { // console.log('HandleLongURL_Change:  ' , e.target.value ) ;
+    const HandleLongURL_Change = e => { // console.log('HandleLongURL_Change:  ' , e.target.value ) ;
         setLongurlValue(e.target.value)
     }
 
@@ -429,7 +429,7 @@ const Index = () => {
           <br/>
           <input value={longurlValue} className={` longURLInput form-control form-input `}
           style={{ display: "none" }} placeholder="enter any valid Internet-Website-Adress here (or look at examples)"
-          onChange={(e) => { HandleLongURL_Change(e); }} >
+          onChange={HandleLongURL_Change} >
           </input>
           <span className={` newProjectButtons  `} style={{ display: "none" }}>
 
@@ -452,8 +452,7 @@ const Index = () => {
                             style={{ visibility: "hidden" }}
                             value={projectName}
                             placeholder="provide Project Name"
-                            onChange={(e) => {
-                              HandleProjectNameChange(e)}}
+                            onChange={ HandleProjectNameChange }
                             >
                            </input>
                           <button
