@@ -235,19 +235,69 @@ const Index = () => {
 
 
 
-  const save = async (saveNewProject) => {
+  const saveNewProject =  (saveNewProject) => {
 
-    setAskLongURL(false);
+      setSaving(true);
+
+        // STEFANO CLEAN THIS UP
+        // await router.push(``);  // location.href = "/";
+        // setUserID_from_Fingerprint("fakeValue") // this will make sure a new project will be created also if the user is known and already is on an existing project
+        // SEE LOADING INTERFACE by LONG-LOADING-TIME FAKED:    //  await  new Promise((resolve) => {  setTimeout(() => resolve(), 4000);  });
+      setUserID_from_Fingerprint(visitorID);
+      var meth = "PUT";
+
+   // check if save(true) was called ==> if true then it is a new Project and we will empty the potentially pre-existing data (exept for the longurl )
+  if (saveNewProject) {
+
+        console.log('we will create a new project. We will want to overwrite several values by empty strings');
+          // requestOptions.headers = { "Content-Type": "application/json" };
+        console.log('requestOptions before ', requestOptions)
+        const requestOptions = {
+            method: meth,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              html: ' ',
+              css: ' ',
+              js: ' ',
+              id: id,
+              userID: userID_from_Fingerprint,
+              projectName: '',
+              longurl: longurlValue
+            }),
+        };
+        console.log('requestOptions AFTER ', requestOptions)
+
+        sendDB_Request(requestOptions);
+
+
+    }
+    // Stefano:  Existing Project (should never happen in this function)
+    else {
+        console.log('Existing Project: ==> we will not reset the data for MongoDB: we do nothing (and keep the Project data)  ')
+    }
+}
+
+
+
+
+  const save = async () => {
+
     setSaving(true);
+
     var meth = "PUT";
+
+    // almost always there will be an existing VisitorID (fingerPrint)
     if (visitorID) {
+                      // visitor and  user are EQUAL to one another
                       if (visitorID == userID_from_Fingerprint) { //
                         alert('visitor and  user are EQUAL to one another ( value is userID_from_Fingerprint) = so we EITHER Update (overrite) OR Clone the Project ((IF there is a PORJECTID )   ' );
                         console.log('next we check for the Existance of a ProjectID via the Params-Value  ' );
                         console.log('id = Param aus der window adress bar:  ', id);
                         //  POST = (overwrite) updatedRecord, Put = newRecordId (create new)
                         meth = id ? "POST" : "PUT";
-                      } else {
+                      }
+                      // same Project, but different User
+                      else {
                        //
                         alert("same Project, but different User");
                           meth = "PUT";
@@ -259,27 +309,10 @@ const Index = () => {
                         //  Comment: Put , that means  newRecordId, we create a new Project
                         // setHtmlValue('NewProject_Save test string ')
                           // console.log('before wait')
-                                                // check if save(true) was called ==> if true then it is a new Project and we will empty the potentially pre-existing data (exept for the longurl )
-                                                if (saveNewProject) {
-
-                                                      console.log('we will create a new project. We will want to overwrite several values by empty strings');
-                                                        // requestOptions.headers = { "Content-Type": "application/json" };
-                                                      console.log('requestOptions before ', requestOptions)
-                                                      requestOptions.body = JSON.stringify({
-                                                                            html: ' ',
-                                                                            css: ' ',
-                                                                            js: ' ',
-                                                                            id: id,
-                                                                            userID: userID_from_Fingerprint ,
-                                                                            projectName: ' ',
-                                                                            longurl:  longurlValue
-                                                                          })
-                                                      console.log('requestOptions AFTER ', requestOptions)
-                                                  } else {
-                                                      console.log('Existing Project: ==> we will not reset the data for MongoDB: we do nothing (and keep the Project data)  ')
-                                                  }
                       }
-    } else {
+    }
+    // this must be a new Project for a new user (Stefano, is this else statement really required at all? )
+    else {
      //
       alert("new Project for a new user (either with or without existing data)");
       setUserID_from_Fingerprint(visitorID);
@@ -290,7 +323,7 @@ const Index = () => {
 
 
 
-
+    // do I want this? this should be overhauwled
     if (projectName == " " || projectName == "") {
       alert("Please input project name");
       setProvideProjName(true);
@@ -317,6 +350,17 @@ const Index = () => {
   console.log('requestOptions', requestOptions)
 
 
+    sendDB_Request(requestOptions);
+
+  //  getAllUserProjects(); // stefano, we may get rid of this line as it will be executed via uesEffect again. (still need to check if it is the case in all nessesary cases though)
+  };
+
+
+
+
+
+const sendDB_Request = async (requestOptions)  => {
+  console.log('requestOptions from new Function with the very same name: ', requestOptions);
 
 
     console.log('pensAPI_url from index.js: ',  pensAPI_url)
@@ -327,37 +371,38 @@ const Index = () => {
     console.log('The Result is stored to the DB now: we have  either updatedRecord (true undefined), or created a newRecordId  (undefined 000000001 ): ',  updatedRecord, newRecordId )
 
     setSaving(false);
+
     if (!updatedRecord) {
-     console.log('Only if updatedRecord is FALSE (meaning: POST is false =  meaning we do not have same user and same project = (thus not OVERWRITE ), ==>we will clone and then update both Params in the adress bar: ', updatedRecord, newRecordId , userID_from_Fingerprint,    )   //
+     console.log('CLONE CONTENT NOW ==> Only if updatedRecord is FALSE (meaning: POST is false =  meaning we do not have same user AND same project = (thus not OVERWRITE ), ==>we will clone and then update both Params in the adress bar: ', updatedRecord, newRecordId , userID_from_Fingerprint,    )   //
+
 
           //  SEE LOADING INTERFACE by LONG-LOADING-TIME FAKED:    // await  new Promise((resolve) => {  setTimeout(() => resolve(), 4000);  });
 
       await router.push(`?id=${newRecordId}&user_id=${userID_from_Fingerprint}`);
     }
-  //  getAllUserProjects(); // stefano, we may get rid of this line as it will be executed via uesEffect again. (still need to check if it is the case in all nessesary cases though)
-  };
 
 
-
+}
 
 
   const NewProject_Start =  () => {  // console.log('toggle visibility ');
       setAskLongURL(true);
+      Splitpane.closeSlide(setCodePenSizeValue);
   };
  const NewProject_onClose = () => {  // console.log('toggle visibility ');
       setAskLongURL(false);
+      Splitpane.openSlide(setCodePenSizeValue);
   }
 
+// STEFANO , you can use saveNewProject directly here
  const NewProject_Save = async () => { // console.log(' start new project ');
-     // await router.push(``);  // location.href = "/";
-      setAskLongURL(false);
-      // setUserID_from_Fingerprint("fakeValue") // this will make sure a new project will be created also if the user is known and already is on an existing project
-     //  SEE LOADING INTERFACE by LONG-LOADING-TIME FAKED:    //  await  new Promise((resolve) => {  setTimeout(() => resolve(), 4000);  });
-
-
       // setProjectID(" ");  // this takes no effect whatsoever
-      save(true);
+      saveNewProject(true);
+
+      NewProject_onClose()
+
   }
+
 
 
 
@@ -419,7 +464,7 @@ const Index = () => {
 {/*           <button className={styles.button} onClick={() => { TestDerAuslagerung(); }} >ex func </button>*/}
            <button className={styles.button} onClick={() => {alert('This is still work in Progress. Nothing happens here: As of yet! ')   }} > Send Result to friend </button>
            <button className={styles.button} onClick={() => { surflyRender(projectID);   }} > Look at Result </button>
-           <button className={styles.button} onClick={() => { NewProject_Start(); Splitpane.closeSlide(setCodePenSizeValue); }} > New Project</button>
+           <button className={styles.button} onClick={() => { NewProject_Start(); }} > New Project</button>
 
 
         {provideProjName ? '' :
@@ -434,11 +479,15 @@ const Index = () => {
           <span className={` newProjectButtons  `} style={{ display: "none" }}>
 
 
-           <button className={styles.button + ' createNewProject'} onClick={() => { NewProject_Save(); }} >create new project</button>
+           <button
+             className={styles.button + ' createNewProject'}
+             onClick={() => { NewProject_Save(); }} >
+             create new project
+           </button>
             {/* <BsPlay className="bootstrapButton" style={{ color: "white", fontSize: 36 }}
                      onClick={() => {  NewProject_Save();  } }/>*/}
              <BsX    className="bootstrapButton" style={{ color: "white", fontSize: 36 }}
-                     onClick={() => {NewProject_onClose(); Splitpane.openSlide(setCodePenSizeValue);}}/>
+                     onClick={() => {NewProject_onClose(); }}/>
           </span>
            <p className={` slogan  `} style={{ display: "none" }}>You can change any static Website!</p>
         </div>
