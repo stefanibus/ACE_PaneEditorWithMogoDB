@@ -348,12 +348,9 @@ const Index = () => {
         longurl: longurlValue
       }),
     };
-  console.log('requestOptions', requestOptions)
-
-
+    console.log('requestOptions', requestOptions)
     sendDB_Request(requestOptions);
-
-  //  getAllUserProjects(); // stefano, we may get rid of this line as it will be executed via uesEffect again. (still need to check if it is the case in all nessesary cases though)
+    getAllUserProjects();
   };
 
 
