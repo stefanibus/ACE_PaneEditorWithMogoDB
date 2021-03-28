@@ -400,10 +400,28 @@ const sendDB_Request = async (requestOptions)  => {
 
 // STEFANO , you can use saveNewProject directly here
  const NewProject_Save = async () => { // console.log(' start new project ');
-      // setProjectID(" ");  // this takes no effect whatsoever
+ const UrlCheck = validateURL(longurlValue) ;
+     if (UrlCheck) {
       saveNewProject(true);
       NewProject_onClose();
+     }
+     else {
+       alert('I assume you did not type in a valid Website-Adress?')
+     }
+
   }
+
+
+const validateURL = (str) => {
+  var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+  return !!pattern.test(str);
+}
+
 
 
     // SURFLY Save => CORS-ISSUE on Localhost
