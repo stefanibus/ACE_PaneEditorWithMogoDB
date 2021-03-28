@@ -402,7 +402,7 @@ const sendDB_Request = async (requestOptions)  => {
  const NewProject_Save = async () => { // console.log(' start new project ');
       // setProjectID(" ");  // this takes no effect whatsoever
       saveNewProject(true);
-      NewProject_onClose()
+      NewProject_onClose();
   }
 
 
