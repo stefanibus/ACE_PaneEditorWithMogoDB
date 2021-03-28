@@ -34,8 +34,9 @@ const Index = () => {
   const [htmlValue, setHtmlValue] = useState("");
   const [jsValue, setJsValue] = useState("");
   const [cssValue, setCssValue] = useState("");
-  const [longurlValue, setLongurlValue] = useState("")
-  const [shorturlValue, setLShorturlValue] = useState(" ")
+  const [longurlValue, setLongurlValue] = useState("");
+  const [longurlValueTempoary, setLongurlValueTempoary] = useState("");
+  const [shorturlValue, setLShorturlValue] = useState(" ");
   const [paneValues, setpaneValues] = useState("startpage.html");
   const [project, setProject] = useState([]);
   const [projectID, setProjectID] = useState("");
@@ -257,8 +258,8 @@ const Index = () => {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               html: ' ',
-              css: ' ',
-              js: ' ',
+              css: '/* your additional CSS Code wil be proxied into: \n   ' + longurlValue + ' */\n\n/* start coding here */\n\n' ,
+              js: '// your additional JS Code wil be proxied into: \n// ' + longurlValue  +'\n\n // start coding here \n\n',
               id: id,
               userID: userID_from_Fingerprint,
               projectName: '',
@@ -388,24 +389,21 @@ const sendDB_Request = async (requestOptions)  => {
   const NewProject_Start =  () => {  // console.log('toggle visibility ');
       setAskLongURL(true);
       Splitpane.closeSlide(setCodePenSizeValue);
+      setLongurlValueTempoary(longurlValue)
+      setLongurlValue('')
   };
  const NewProject_onClose = () => {  // console.log('toggle visibility ');
       setAskLongURL(false);
       Splitpane.openSlide(setCodePenSizeValue);
+      setLongurlValue(longurlValueTempoary) // back to old value
   }
 
 // STEFANO , you can use saveNewProject directly here
  const NewProject_Save = async () => { // console.log(' start new project ');
       // setProjectID(" ");  // this takes no effect whatsoever
       saveNewProject(true);
-
       NewProject_onClose()
-
   }
-
-
-
-
 
 
     // SURFLY Save => CORS-ISSUE on Localhost
@@ -472,7 +470,7 @@ const sendDB_Request = async (requestOptions)  => {
         }
          </span>
           <br/>
-          <input value={longurlValue} className={` longURLInput form-control form-input `}
+          <input  type="url"  value={longurlValue} className={` longURLInput form-control form-input `}
           style={{ display: "none" }} placeholder="enter any valid Internet-Website-Adress here (or look at examples)"
           onChange={HandleLongURL_Change} >
           </input>

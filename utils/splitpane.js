@@ -9,7 +9,7 @@ const Splitpane = {
 		    if (i > -1) {           //  if the counter > -1, call the loop function
 		      myLoop();             //  ..  again which will trigger another
 		    }                       //  ..  setTimeout()
-		  }, 20)
+		  }, 10)
 		}
   	    myLoop();                   //  start the loop
  	},
@@ -23,7 +23,7 @@ const Splitpane = {
 		    if (i < 41) {           //  if the counter > 41, call the loop function
 		      myLoop();             //  ..  again which will trigger another
 		    }                       //  ..  setTimeout()
-		  }, 20)
+		  }, 10)
 		}
 		myLoop();                   //  start the loop
  	}
