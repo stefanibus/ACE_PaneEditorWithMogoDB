@@ -1,4 +1,4 @@
-const Splitpane = {
+const sliderSplitPane = {
  	closeSlide:  (setCodePenSizeValue) => {
 		var i = 40;                  //  set your counter to 40
 		function myLoop() {         //  create a loop function
@@ -29,4 +29,4 @@ const Splitpane = {
  	}
 }
 
-export default Splitpane
+export default sliderSplitPane

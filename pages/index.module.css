@@ -4,12 +4,21 @@
   border: 0;
   pointer-events: auto;
 }
+
+
+/* .isInteractive: */
   /* 1: IF pointer-events is NOT set to none for the Iframe, then SplitPane will have issues  onDragFinished */
   /* 2: BUT IF the pointer-events rule IS set to NONE for the Iframe, then the Irfame-Content cannot be clicked anymore.
    ==>  To prevent the second issue we will toggle the state on Drag, also see: https://github.com/tomkp/react-split-pane/issues/30  */
+/* //  useState-Hook "IsDragging" will toggle as a boolean Value  */
 .isInteractive {
   pointer-events: none !important ;
 }
+
+
+
+
+
 @media only screen and (min-width: 1350px) {
   .customSelect,
   .longURLButtons {

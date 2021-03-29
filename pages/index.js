@@ -2,35 +2,24 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import SplitPane from "react-split-pane";
 import { CssEditor, HtmlEditor, JavascriptEditor } from "../components/Editors";
-import { useDebounce } from "../utils/useDebounce";
 import styles from "./index.module.css";
-import { BsTrash, BsPlay, BsX, BsPencil } from "react-icons/bs";
+import { BsTrash, BsX, BsPencil } from "react-icons/bs";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
+import sliderSplitPane from "../utils/splitpane";
+import surflyProxy from "../utils/surflyLibary";
 // import Auslagerung from "../utils/mongo_communication";
-import Splitpane from "../utils/splitpane";
+
+
 
 const Index = () => {
 
-
-  const serverURL = process.env.NODE_ENV === "development" ? process.env.NEXT_PUBLIC_DEVURL : process.env.PRODURL;
-  // console.log( 'process.env.NODE_ENV ',  process.env.NODE_ENV  )
-  // console.log( 'process.env.PRODURL' , process.env.PRODURL)
-  // console.log( 'process.env.NEXT_PUBLIC_DEVURL',  process.env.NEXT_PUBLIC_DEVURL  )
-  // console.log( 'serverURL: ', serverURL)
-
-
-
-
+  // 18 useStates
   const [heightValue, setHeightValue] = useState("485px");
   const [codePenSizeValue, setCodePenSizeValue] = useState(40);
-
-
   const [askLongURL, setAskLongURL] = useState(false);
-
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [provideProjName, setProvideProjName] = useState(false);
-
   const [htmlValue, setHtmlValue] = useState("");
   const [jsValue, setJsValue] = useState("");
   const [cssValue, setCssValue] = useState("");
@@ -41,165 +30,71 @@ const Index = () => {
   const [project, setProject] = useState([]);
   const [projectID, setProjectID] = useState("");
   const [projectName, setProjectName] = useState("")
-
-  const debouncedHtml = useDebounce(htmlValue, 1000);
-  const debouncedJs = useDebounce(jsValue, 1000);
-  const debouncedCss = useDebounce(cssValue, 1000);
+  const [currentlyDragged, setCurrentlyDragged]  = useState(false);
+  const [userID_from_Fingerprint, setUserID_from_Fingerprint] = useState("");
+  const [visitorID, setVisitorID] = useState();
 
   const router = useRouter();
-  const [visitorID, setVisitorID] = useState();
-  const [userID_from_Fingerprint, setUserID_from_Fingerprint] = useState("");
   const { id, user_id } = router.query;
-  // console.log('id: ', id);
-  // console.log('analyse number of rerendering-events')
 
 
-    // This state is tracking whether or not the user is dragging the SplitPane borders to change
-    // its sizing.  If so, then we have to set the child elements to "pointer-events: none" so
-    // the child events don't prevent smooth dragging
-  const  [isDragging, setIsDragging]  = useState(false);
+  const serverURL = process.env.NODE_ENV === "development" ? process.env.NEXT_PUBLIC_DEVURL : process.env.PRODURL;
 
 
+  const pensAPI_url  = `${serverURL}/api/pens/${id}` ;  //
 
 
+  // Proxy Surfly API
+  useEffect( () => {
+          surflyProxy.embedLibary();
+  }, []);
 
- const pensAPI_url  = `${serverURL}/api/pens/${id}` ;  //
-
-
-// const closeSlide = () => {
-//   var i = 40;                  //  set your counter to 40
-// function myLoop() {         //  create a loop function
-//   setTimeout(function() {   //  call a setTimeout when the loop is called
-//     console.log('hello'+i);   //  your code here
-//     setCodePenSizeValue(i)
-//     i= i-4;                    //  decrement the counter by 4
-//     if (i > -1) {           //  if the counter > -1, call the loop function
-//       myLoop();             //  ..  again which will trigger another
-//     }                       //  ..  setTimeout()
-//   }, 80)
-// }
-// myLoop();                   //  start the loop
-// }
-
-
-// const openSlide = () => {
-//   var i = 0;                  //  set your counter to 40
-// function myLoop() {         //  create a loop function
-//   setTimeout(function() {   //  call a setTimeout when the loop is called
-//     console.log('hello'+i);   //  your code here
-//     setCodePenSizeValue(i)
-//     i= i+4;                    //  decrement the counter by 4
-//     if (i < 41) {           //  if the counter > -1, call the loop function
-//       myLoop();             //  ..  again which will trigger another
-//     }                       //  ..  setTimeout()
-//   }, 80)
-// }
-// myLoop();                   //  start the loop
-// }
-
-
-
-
-
-
-  // on useEffect run getAllUserProjects (in user_id changes in the Adressbar or on PAgeload)
-  useEffect(() => { // console.log('useEffect to call getAllUserProjects-Function')
-          getAllUserProjects();
-
-          // we set the setVisitorID to the value of the userID_from_Fingerprint in the adressbar )
-          if (router.query) {// console.log('router query does have data ==> ',  router.query )
-            setVisitorID(router.query.user_id); //  console.log(' userID_from_Fingerprint is set to:  ==> ', router.query.user_id )
-            console.log('visitorID was set to ', router.query.user_id)
+  // store visitorID from router.query-Parameter
+  useEffect(() => {
+          getProjectListForUser();
+          if (router.query) {
+            setVisitorID(router.query.user_id); //
          }
   }, [user_id]);
 
-
-
-
-  // API PENS
+  // fetchProjectData
   useEffect(() => {
-    //  console.log("api Pens  ")
-        const fetchData = async () => { // console.log('pensAPI_url from index.js: ',  pensAPI_url)
-           const response = await fetch(pensAPI_url);
-           const { data } = await response.json();
-            if (response.status !== 200) {
-              alert("there is no page for this projectID");
-             // await router.push("/404");  //  create specific 404 for this case
-            }
-            setProjectName(data.projectName)
-            setLongurlValue(data.longurl)
-            setHtmlValue(data.html);
-            setCssValue(data.css);
-            setJsValue(data.js);
-            setProjectID(id);
-            setLoading(false);
-        }
-    if (id) { //  console.log('projectID EXISTS ==> fetchData for id= ',  id)
-       fetchData();
+    if (id) {
+          const fetchProjectData = async () => {
+             const response = await fetch(pensAPI_url);
+             const { data } = await response.json();
+              if (response.status !== 200) {
+                alert("there is no ProjectData for this projectID");
+              }
+              setProjectName(data.projectName)
+              setLongurlValue(data.longurl)
+              setHtmlValue(data.html);
+              setCssValue(data.css);
+              setJsValue(data.js);
+              setProjectID(id);
+          }
+       fetchProjectData();
+       setLoading(false);
       }
-      else {  //  console.log('projectID MISSING' )
+      else {
+       // console.log('ProjectData is not available')
       setLoading(false);
       }
-
   }, [id]);
 
 
-  // useEffect( () => {
-  //   const paneOutput = `<html>
-  //                   <style>
-  //                   ${debouncedCss}
-  //                   </style>
-  //                   <body>
-  //                   ${debouncedHtml}
-  //                   <script type="text/javascript">
-  //                   ${debouncedJs}
-  //                   </script>
-  //                   </body>
-  //                 </html>`;
-  //   // setpaneValues(paneOutput);
-
-  //   if (projectID === "" || projectID === " " ) {
-  //       console.log('UseEffect: projectID = NO ==>   so we will NOT get the ProjectData for projectID= ', projectID);
-  //   } else {
-  //       console.log('UseEffect: projectID = YES ==>  so we will get the ProjectData now for projectID= ', projectID);
-  //       getAllUserProjects();
-  //   }
-  // }, [debouncedHtml, debouncedCss, debouncedJs]);
 
 
 
 
-// EXTERNAL SURFLY LIBARY is loaded here and not in app.js in the head
-// in order to minimize unnessesary reloading
-  useEffect( () => { // console.log('surfly Libary will be loaded ');
-          (function (s, u, r, f, l, y) {
-            s[f] = s[f] || {
-              init: function () {
-                s[f].q = arguments;
-              }
-            };
-            l = u.createElement(r);
-            y = u.getElementsByTagName(r)[0];
-            l.async = 1;
-            l.src = "https://surfly.com/surfly.js";
-            y.parentNode.insertBefore(l, y);
-          })(window, document, "script", "Surfly");
-  }, []);
-
-
-
-
-  // User-DROPDOWN for all Projects of this user
-  function ChangeProjectViewForUser(event) {
-    // console.log('  Dropdown changed: ',event.target.value,  userID_from_Fingerprint);
-    if (event.target.value != "") {
-      // console.log('userID_from_Fingerprint ', userID_from_Fingerprint)
-      // console.log('event.target.value ', event.target.value )
+  function DropDown_Selection_ProjectList(event) {
+    if (event.target.value != "") { // console.log('dropdown was clicked => refresh Params in Query:  ',event.target.value,  userID_from_Fingerprint);
        router.push(`?id=${event.target.value}&user_id=${userID_from_Fingerprint}`);
        setProjectID(event.target.value);
-    } else {
-      location.href = "/";
-      setProjectID("");
+    } else { //   console.log('option-item has no value, thus nothing shall happen I guess , stefano, delete later ');
+      // prevent default !!  das wäre besser, bzw einfach die Funktionen gekillt für's erste
+      // location.href = "/";
+      // setProjectID("");
     }
   }
 
@@ -209,7 +104,6 @@ const Index = () => {
       headers: { "Content-Type": "application/json" },
     };
 
-     // console.log('pensAPI_url from index.js: ',  pensAPI_url)
     const response = await fetch(pensAPI_url, requestOptions);
     const { success, data } = await response.json();
     if (success) {
@@ -218,11 +112,11 @@ const Index = () => {
     }
   }
 
-// getAllUserProjects  = get all  data for all projects for this specific user only
- const  getAllUserProjects =  async  () => { // console.log('getAllUserProjects will start , should be in UseEffect I guess')
+
+ const  getProjectListForUser =  async  () => {
     const fp = await FingerprintJS.load();
     const result = await fp.get();
-    const visitorIdentification = result.visitorId; //  console.log('visitorIdentifier: ==> (from getAllUserProjects-Func): ',  visitorIdentification )
+    const visitorIdentification = result.visitorId; //  console.log('visitorIdentifier: ==> (from getProjectListForUser-Func): ',  visitorIdentification )
     setUserID_from_Fingerprint(visitorIdentification);
     const requestOptions = {
       method: "GET",
@@ -258,8 +152,8 @@ const Index = () => {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               html: ' ',
-              css: '/* your additional CSS Code wil be proxied into: \n   ' + longurlValue + ' */\n\n/* start coding here */\n\n' ,
-              js: '// your additional JS Code wil be proxied into: \n// ' + longurlValue  +'\n\n // start coding here \n\n',
+              css: '/* your additional CSS Code wil be proxied into: \n   ' + longurlValue + ' */\n\n/* start coding here   (and click on "look at result") */\n\n' ,
+              js: '// your additional JS Code wil be proxied into: \n// ' + longurlValue  +'\n\n // start coding here   (and click on "look at result")  \n\n',
               id: id,
               userID: userID_from_Fingerprint,
               projectName: '',
@@ -326,7 +220,7 @@ const Index = () => {
 
     // do I want this? this should be overhauwled
     if (projectName == " " || projectName == "") {
-      alert("Please input project name");
+      alert("Please input a new project name");
       setProvideProjName(true);
       setSaving(false);
       setAskLongURL(true);
@@ -350,7 +244,7 @@ const Index = () => {
     };
     console.log('requestOptions', requestOptions)
     sendDB_Request(requestOptions);
-    getAllUserProjects();
+    getProjectListForUser();
   };
 
 
@@ -385,13 +279,13 @@ const sendDB_Request = async (requestOptions)  => {
 
   const NewProject_Start =  () => {  // console.log('toggle visibility ');
       setAskLongURL(true);
-      Splitpane.closeSlide(setCodePenSizeValue);
+      sliderSplitPane.closeSlide(setCodePenSizeValue);
       setLongurlValueTempoary(longurlValue)
       setLongurlValue('')
   };
  const NewProject_onClose = () => {  // console.log('toggle visibility ');
       setAskLongURL(false);
-      Splitpane.openSlide(setCodePenSizeValue);
+      sliderSplitPane.openSlide(setCodePenSizeValue);
       setLongurlValue(longurlValueTempoary) // back to old value
   }
 
@@ -469,19 +363,25 @@ const validateURL = (str) => {
 
 
   return (
-    <div  className={`toggleView ${askLongURL && ' createNewProjectNow ' }  `} >
+    <div
+        className={`toggleView
+                ${askLongURL && ' isVisible_TheCreateNewProjectField ' } `+`
+                ${!longurlValue &&  ' isVisible_NoActiveProject ' }
+            `}
+        >
 
       <div className={styles.header}>
         <div className={styles.longURLButtons + ` longURLButtons  `}>
          <span className={` button-group `}>
 {/*           <button className={styles.button} onClick={() => { TestDerAuslagerung(); }} >ex func </button>*/}
-           <button className={styles.button} onClick={() => {alert('This is still work in Progress. Nothing happens here: As of yet! ')   }} > Send Result to friend </button>
-           <button className={styles.button} onClick={() => { surflyRender(projectID);   }} > Look at Result </button>
+
+           <button className={styles.button + ' toggleOnlongURLValue ' } onClick={() => {alert('This is still work in Progress. Nothing happens here: As of yet! ')   }} > Send Result to friend </button>
+           <button className={styles.button + ' toggleOnlongURLValue ' } onClick={() => { surflyRender(projectID);   }} > Look at Result </button>
            <button className={styles.button} onClick={() => { NewProject_Start(); }} > New Project</button>
 
 
-        {provideProjName ? '' :
-           <button className={styles.button}  onClick={() => {  save();  } } > {saving ? "Saving..." : "Save"} </button>
+        {(provideProjName)  ? '' :
+           <button className={styles.button + ' toggleOnlongURLValue ' }  onClick={() => {  save();  } } > {saving ? "Saving..." : "Save"} </button>
         }
          </span>
           <br/>
@@ -493,12 +393,10 @@ const validateURL = (str) => {
 
 
            <button
-             className={styles.button + ' createNewProject'}
+             className={styles.button + ' isVisible_TheCreateNewProjectField'}
              onClick={() => { NewProject_Save(); }} >
              create new project
            </button>
-            {/* <BsPlay className="bootstrapButton" style={{ color: "white", fontSize: 36 }}
-                     onClick={() => {  NewProject_Save();  } }/>*/}
              <BsX    className="bootstrapButton" style={{ color: "white", fontSize: 36 }}
                      onClick={() => {NewProject_onClose(); }}/>
           </span>
@@ -525,7 +423,11 @@ const validateURL = (str) => {
                         </>
 
 
-                {!provideProjName && <BsPencil style={{ color: "white", fontSize: 36 }} onClick={() => { setProvideProjName(true) } } /> }
+                {!provideProjName && <BsPencil
+                      style={{ color: "white", fontSize: 36 }}
+                      onClick={() => { setProvideProjName(true) } }
+                      className=' toggleOnlongURLValue '
+                       /> }
 
                 {project && project.length > 0 &&
                   <BsTrash style={{ color: "white", fontSize: 36 }}
@@ -541,7 +443,7 @@ const validateURL = (str) => {
                     className="projectName-DropdownField  form-control form-input"
                     style={{ width: 240 }}
                     value={projectID && projectID }
-                    onChange={ChangeProjectViewForUser}
+                    onChange={DropDown_Selection_ProjectList}
                   >
                     <option value="">all your projects: </option>
                     {project.map((item, i) => {
@@ -562,11 +464,11 @@ const validateURL = (str) => {
         size={`${codePenSizeValue}%`}
         minSize={"50%"}
         onDragStarted={() => { //console.log('onDragStarted')
-              setIsDragging(true)
+              setCurrentlyDragged(true)
            }
          }
         onDragFinished={(height) => {
-            setIsDragging(false)
+            setCurrentlyDragged(false)
             setHeightValue(`${height - 40}px`);
           }
         }
@@ -595,9 +497,7 @@ const validateURL = (str) => {
               src={paneValues}
               id="resultFrame"
               name="resultFrame"
-              // we toggle the boolean Value for the useState-Hook called: IsDragging
-              // see index.module.css for an in depth explanation: selector = .isInteractive!
-              className={styles.previewIframe + `    resultFrame ${isDragging &&   styles.isInteractive  } ` }
+              className={styles.previewIframe + `    resultFrame ${currentlyDragged &&   styles.isInteractive  } ` }
                >
          </iframe>
       </SplitPane>
