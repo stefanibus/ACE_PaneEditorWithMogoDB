@@ -44,8 +44,8 @@ const Index = () => {
   const pensAPI_url  = `${serverURL}/api/pens/${id}` ;  //
 
 
-  // Proxy Surfly API
-  useEffect( () => {
+
+  useEffect( () => {// call external Libary => Surfly.com API Proxy
           surflyProxy.embedLibary();
   }, []);
 
@@ -57,7 +57,7 @@ const Index = () => {
          }
   }, [user_id]);
 
-  // fetchProjectData
+  // fetchProjectData from MongoDB
   useEffect(() => {
     if (id) {
           const fetchProjectData = async () => {
@@ -66,6 +66,10 @@ const Index = () => {
               if (response.status !== 200) {
                 alert("there is no ProjectData for this projectID");
               }
+              if (data.id !== id) {
+                  alert('we have an issue we should analyse => the ID in the router query does probably not exist in the MongoDB, desa dev: please replace this alert with sth better ;)' )
+              }
+
               setProjectName(data.projectName)
               setLongurlValue(data.longurl)
               setHtmlValue(data.html);
@@ -76,28 +80,26 @@ const Index = () => {
        fetchProjectData();
        setLoading(false);
       }
-      else {
-       // console.log('ProjectData is not available')
+      else { // console.log('ProjectData is not available')
       setLoading(false);
       }
   }, [id]);
 
 
 
-
-
-
-  function DropDown_Selection_ProjectList(event) {
+  // DropDown-Element Eventhandler  (onClick for Option-Elements)
+  const   DropDown_Selection_ProjectList = (event) => {
     if (event.target.value != "") { // console.log('dropdown was clicked => refresh Params in Query:  ',event.target.value,  userID_from_Fingerprint);
        router.push(`?id=${event.target.value}&user_id=${userID_from_Fingerprint}`);
        setProjectID(event.target.value);
-    } else { //   console.log('option-item has no value, thus nothing shall happen I guess , stefano, delete later ');
-      // prevent default !!  das wäre besser, bzw einfach die Funktionen gekillt für's erste
+    } else { // console.log('option-item has no value, thus nothing shall happen, stefano: delete this else-Statement later ');
+      // prevent default !!  das wäre besser, bzw am einfachsten: die Funktionen werden  für's Erste gekillt
       // location.href = "/";
       // setProjectID("");
     }
   }
 
+  // Delete from MongoDB
  const onDelete =  async (id) => {
     const requestOptions = {
       method: "DELETE",
@@ -113,6 +115,7 @@ const Index = () => {
   }
 
 
+  // get ProjectList from MongoDB
  const  getProjectListForUser =  async  () => {
     const fp = await FingerprintJS.load();
     const result = await fp.get();
@@ -130,104 +133,62 @@ const Index = () => {
 
 
 
+  // Save to MongoDB (New Project)
   const saveNewProject =  (saveNewProject) => {
-
       setSaving(true);
-
-        // STEFANO CLEAN THIS UP
-        // await router.push(``);  // location.href = "/";
-        // setUserID_from_Fingerprint("fakeValue") // this will make sure a new project will be created also if the user is known and already is on an existing project
-        // SEE LOADING INTERFACE by LONG-LOADING-TIME FAKED:    //  await  new Promise((resolve) => {  setTimeout(() => resolve(), 4000);  });
       setUserID_from_Fingerprint(visitorID);
       var meth = "PUT";
-
-   // check if save(true) was called ==> if true then it is a new Project and we will empty the potentially pre-existing data (exept for the longurl )
-  if (saveNewProject) {
-
-        console.log('we will create a new project. We will want to overwrite several values by empty strings');
-          // requestOptions.headers = { "Content-Type": "application/json" };
-        console.log('requestOptions before ', requestOptions)
-        const requestOptions = {
-            method: meth,
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              html: ' ',
-              css: '/* your additional CSS Code wil be proxied into: \n   ' + longurlValue + ' */\n\n/* start coding here   (and click on "look at result") */\n\n' ,
-              js: '// your additional JS Code wil be proxied into: \n// ' + longurlValue  +'\n\n // start coding here   (and click on "look at result")  \n\n',
-              id: id,
-              userID: userID_from_Fingerprint,
-              projectName: '',
-              longurl: longurlValue
-            }),
-        };
-        console.log('requestOptions AFTER ', requestOptions)
-
-        sendDB_Request(requestOptions);
-
-
-    }
-    // Stefano:  Existing Project (should never happen in this function)
-    else {
-        console.log('Existing Project: ==> we will not reset the data for MongoDB: we do nothing (and keep the Project data)  ')
-    }
+         // if save(true) ==> this is a new Project! => we will empty the pre-existing data (exept for the longurl )
+        if (saveNewProject) {
+              const requestOptions = {
+                  method: meth,
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    html: ' ',
+                    css: '/* your additional CSS Code wil be proxied into: \n   ' + longurlValue + ' */\n\n/* start coding here   (and click on "look at result") */\n\n' ,
+                    js: '// your additional JS Code wil be proxied into: \n// ' + longurlValue  +'\n\n // start coding here   (and click on "look at result")  \n\n',
+                    id: id,
+                    userID: userID_from_Fingerprint,
+                    projectName: '',
+                    longurl: longurlValue
+                  }),
+              };
+              sendDB_Request(requestOptions);
+          }
+          else {
+              alert('// Stefano:  Existing Project (should never happen in this function) : ==> we will not reset the data for MongoDB: we do nothing (and keep the Project data) in this unlikely case. I still want to test on this.   ')
+          }
 }
 
 
-
-
+  // Save to MongoDB (existing User)
   const save = async () => {
-
     setSaving(true);
-
-    var meth = "PUT";
-
-    // almost always there will be an existing VisitorID (fingerPrint)
+    var meth ;
     if (visitorID) {
                       // visitor and  user are EQUAL to one another
-                      if (visitorID == userID_from_Fingerprint) { //
-                        alert('visitor and  user are EQUAL to one another ( value is userID_from_Fingerprint) = so we EITHER Update (overrite) OR Clone the Project ((IF there is a PORJECTID )   ' );
-                        console.log('next we check for the Existance of a ProjectID via the Params-Value  ' );
-                        console.log('id = Param aus der window adress bar:  ', id);
-                        //  POST = (overwrite) updatedRecord, Put = newRecordId (create new)
-                        meth = id ? "POST" : "PUT";
+                      if (visitorID == userID_from_Fingerprint) {  // alert('visitor and  user are EQUAL to one another ( value is userID_from_Fingerprint) = so we EITHER Update (overrite) OR Clone the Project  ' );                         console.log('id = Param aus der window adress bar:  ', id);
+                        meth = id ? "POST" : "PUT"; //  POST = (overwrite) updatedRecord, Put = newRecordId (create new)
                       }
-                      // same Project, but different User
-                      else {
-                       //
-                        alert("same Project, but different User");
-                          meth = "PUT";
-                          // console.log('visitorID soll existieren, zeig her: ' , visitorID )
-                          // console.log('userID_from_Fingerprint soll existieren ABER UNGLEICH SEIN , zeig her: ' , userID_from_Fingerprint )
-                        // alert("We cloned this Project for you. You can re-name the Project-Name  for your own Project if you prefer a different ProjectName ! ");
-                        // setUserID_from_Fingerprint(visitorID) // seems to be disregarded too
-                        //  setProjectName(" "); // setProvideProjName(true); // setting the Project Name here takes no effect because .... What the heck is actually happening here?!
-                        //  Comment: Put , that means  newRecordId, we create a new Project
-                        // setHtmlValue('NewProject_Save test string ')
-                          // console.log('before wait')
+                      else { // alert("same Project, but different User");
+                        meth = "PUT";
+                        alert("We cloned this Project for you. You can re-name the Project-Name if you prefer a different ProjectName than:  " + projectName);
                       }
     }
-    // this must be a new Project for a new user (Stefano, is this else statement really required at all? )
     else {
-     //
-      alert("new Project for a new user (either with or without existing data)");
+      alert("STEFANO:  This alert should never come up! We want to handle this via saveNewProject() ");
       setUserID_from_Fingerprint(visitorID);
-        // Put = newRecordId
       meth = "PUT";
     }
 
-
-
-
-    // do I want this? this should be overhauwled
-    if (projectName == " " || projectName == "") {
+    // STEFANO dwell on this more
+    if (projectName == " " || projectName == "" || projectName == "needs_a_name") {
       alert("Please input a new project name");
       setProvideProjName(true);
       setSaving(false);
-      setAskLongURL(true);
+      // setAskLongURL(true);
       return false;
     }
-
-
 
     const requestOptions = {
       method: meth,
@@ -242,7 +203,7 @@ const Index = () => {
         longurl: longurlValue
       }),
     };
-    console.log('requestOptions', requestOptions)
+    // console.log('requestOptions', requestOptions)
     sendDB_Request(requestOptions);
     getProjectListForUser();
   };
@@ -251,55 +212,45 @@ const Index = () => {
 
 
 
-const sendDB_Request = async (requestOptions)  => {
-  console.log('requestOptions from new Function with the very same name: ', requestOptions);
+// sendDB_Request to MongoDB
+const sendDB_Request = async (requestOptions)  => {   // console.log('Result stored in MongoDB: either updatedRecord (true undefined), or we created a newRecordId  (undefined 000000001 ): ',  updatedRecord, newRecordId )
 
-
-    console.log('pensAPI_url from index.js: ',  pensAPI_url)
     const response = await fetch(pensAPI_url, requestOptions);
     const {
       data: { updatedRecord, newRecordId },
     } = await response.json();
-    console.log('The Result is stored to the DB now: we have  either updatedRecord (true undefined), or created a newRecordId  (undefined 000000001 ): ',  updatedRecord, newRecordId )
-
     setSaving(false);
-
-    if (!updatedRecord) {
-     console.log('CLONE CONTENT NOW ==> Only if updatedRecord is FALSE (meaning: POST is false =  meaning we do not have same user AND same project = (thus not OVERWRITE ), ==>we will clone and then update both Params in the adress bar: ', updatedRecord, newRecordId , userID_from_Fingerprint,    )   //
-
-
-          //  SEE LOADING INTERFACE by LONG-LOADING-TIME FAKED:    // await  new Promise((resolve) => {  setTimeout(() => resolve(), 4000);  });
-
-      await router.push(`?id=${newRecordId}&user_id=${userID_from_Fingerprint}`);
+    setProvideProjName(false);
+    if (!updatedRecord) {  // console.log('CLONE CONTENT NOW ==> Only if updatedRecord is FALSE (meaning: POST is false =  meaning we do not have same user AND same project = (thus not OVERWRITE ), ==>we will clone and then update both Params in the adress bar: ', updatedRecord, newRecordId , userID_from_Fingerprint,    )   //
+       await router.push(`?id=${newRecordId}&user_id=${userID_from_Fingerprint}`);
     }
-
-
 }
 
-
-  const NewProject_Start =  () => {  // console.log('toggle visibility ');
-      setAskLongURL(true);
+// open NewProject-Area
+  const NewProject_Show =  () => {  // console.log('toggle visibility ');
       sliderSplitPane.closeSlide(setCodePenSizeValue);
+      setAskLongURL(true);
       setLongurlValueTempoary(longurlValue)
       setLongurlValue('')
   };
- const NewProject_onClose = () => {  // console.log('toggle visibility ');
-      setAskLongURL(false);
+
+ // close NewProject-Area
+ const NewProject_Hide = () => {  // console.log('toggle visibility ');
       sliderSplitPane.openSlide(setCodePenSizeValue);
+      setAskLongURL(false);
       setLongurlValue(longurlValueTempoary) // back to old value
   }
 
-// STEFANO , you can use saveNewProject directly here
- const NewProject_Save = async () => { // console.log(' start new project ');
+// Save the NewProject
+ const NewProject_Save = async () => {
  const UrlCheck = validateURL(longurlValue) ;
      if (UrlCheck) {
       saveNewProject(true);
-      NewProject_onClose();
+      NewProject_Hide();
      }
      else {
        alert('I assume you did not type in a valid Website-Adress?')
      }
-
   }
 
 
@@ -339,6 +290,16 @@ const validateURL = (str) => {
     const HandleLongURL_Change = e => { // console.log('HandleLongURL_Change:  ' , e.target.value ) ;
         setLongurlValue(e.target.value)
     }
+    const HandleReturnkey = (e, howToSave) => {     // Stefano: controlled States = this is also still unfinished business
+            if (e.key === "Enter") {
+                if (howToSave === "NewProject") {
+                   NewProject_Save();
+                } else {
+                   save();
+                }
+            }
+    }
+
 
 
 
@@ -353,11 +314,6 @@ const validateURL = (str) => {
     return <div className={styles.loading}>Loading...</div>;
   }
 
-
-
-// console.log('userID_from_Fingerprint:  ', userID_from_Fingerprint)
-// console.log('paneValues:  ', paneValues)
-// console.log('longurlValue: ',longurlValue)
 
 
 
@@ -377,7 +333,7 @@ const validateURL = (str) => {
 
            <button className={styles.button + ' toggleOnlongURLValue ' } onClick={() => {alert('This is still work in Progress. Nothing happens here: As of yet! ')   }} > Send Result to friend </button>
            <button className={styles.button + ' toggleOnlongURLValue ' } onClick={() => { surflyRender(projectID);   }} > Look at Result </button>
-           <button className={styles.button} onClick={() => { NewProject_Start(); }} > New Project</button>
+           <button className={styles.button} onClick={() => { NewProject_Show(); }} > New Project</button>
 
 
         {(provideProjName)  ? '' :
@@ -387,7 +343,9 @@ const validateURL = (str) => {
           <br/>
           <input  type="url"  value={longurlValue} className={` longURLInput form-control form-input `}
           style={{ display: "none" }} placeholder="enter any valid Internet-Website-Adress here (or look at examples)"
-          onChange={HandleLongURL_Change} >
+          onChange={HandleLongURL_Change}
+          onKeyUp={() => { HandleReturnkey(event,'NewProject')} }
+          >
           </input>
           <span className={` newProjectButtons  `} style={{ display: "none" }}>
 
@@ -398,27 +356,33 @@ const validateURL = (str) => {
              create new project
            </button>
              <BsX    className="bootstrapButton" style={{ color: "white", fontSize: 36 }}
-                     onClick={() => {NewProject_onClose(); }}/>
+                     onClick={() => {NewProject_Hide(); }}/>
           </span>
            <p className={` slogan  `} style={{ display: "none" }}>You can change any static Website!</p>
         </div>
         <div className={styles.customURL + ` customURL   `}>
-           {longurlValue && <span> :<span> {longurlValue}</span></span> }  {/*Change this Website*/}
+           {longurlValue && <span> {projectName && projectName } : &nbsp; <span> {longurlValue}</span></span> }  {/*Change this Website*/}
         </div>
         <div className={styles.customSelect + ` customSelect custom-select `}>
                         <>
                           <input
-                            className={` projectName-InputField form-control form-input ${provideProjName && ' provideProjName '  } `}
+                            className={`
+                              projectName-InputField form-control form-input
+                              ${provideProjName && ' provideProjName '  }
+                              ${(projectName == " " || projectName == "" || projectName == "needs_a_name") ? ' doBlink ':' doNotBlink '}
+                             `}
                             style={{ visibility: "hidden" }}
                             value={projectName}
                             placeholder="provide Project Name"
                             onChange={ HandleProjectNameChange }
+                            onKeyUp={() => { HandleReturnkey(event,'saveRegular')} }
                             >
                            </input>
+
                           <button
                               style={{ visibility: "hidden" }}
                               className={ styles.button + ` SaveButton-for-ProjName form-control form-input ${provideProjName ? ' provideProjName ' : '' } ` }
-                              onClick={() => {  save(); setProvideProjName(false);} } >Save
+                              onClick={() => { save(); } } >Save
                           </button>
                         </>
 
@@ -449,7 +413,7 @@ const validateURL = (str) => {
                     {project.map((item, i) => {
                       return (
                         <option key={i} value={item._id}>
-                          {item.projectName ? item.projectName : 'needs_a_name '}
+                          {item.projectName ? item.projectName : 'needs_a_name'}
                         </option>
                       );
                     })}

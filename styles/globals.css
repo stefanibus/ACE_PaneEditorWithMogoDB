@@ -40,8 +40,24 @@
 
 
 
-
-
+/*https://css-tricks.com/snippets/css/glowing-blue-input-highlights/*/
+.doBlink {
+  -webkit-transition: all 1.19s ease-in-out !important;
+  -moz-transition: all 1.19s ease-in-out !important;
+  -ms-transition: all 1.19s ease-in-out !important;
+  -o-transition: all 1.19s ease-in-out !important;
+  outline: none !important;
+  padding: 3px 0px 3px 3px !important;
+  margin: 0px 1px 3px 0px !important;
+  border: 2px solid rgba(8,221,50,.7) !important;
+}
+.doBlink:focus  {
+  box-shadow: 0 0 5px rgba(81, 203, 238, 1) !important;
+  padding: 3px 0px 3px 3px !important;
+  margin: 0px 1px 3px 0px !important;
+  border: 2px solid rgba(8,221,50,1) !important;
+  text-align: center ;
+}
 
 
 

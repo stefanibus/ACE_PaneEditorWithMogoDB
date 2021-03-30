@@ -43,7 +43,7 @@
 }
 .customURL span span {
     /*display: none;*/
-    position: absolute;
+    /*position: absolute;*/
 }
 .loading {
   width: 100vw;
