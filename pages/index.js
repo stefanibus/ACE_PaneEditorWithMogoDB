@@ -38,7 +38,8 @@ const Index = () => {
   const { id, user_id } = router.query;
 
 
-  const serverURL = process.env.NODE_ENV === "development" ? process.env.NEXT_PUBLIC_DEVURL : process.env.PRODURL;
+  // const serverURL = process.env.NODE_ENV === "development" ? process.env.NEXT_PUBLIC_DEVURL : process.env.PRODURL;
+  const serverURL = 'http://localhost:3000';
 
 
   const pensAPI_url  = `${serverURL}/api/pens/${id}` ;  //
@@ -60,27 +61,35 @@ const Index = () => {
   // fetchProjectData from MongoDB
   useEffect(() => {
     if (id) {
-          const fetchProjectData = async () => {
-             const response = await fetch(pensAPI_url);
-             const { data } = await response.json();
-              if (response.status !== 200) {
-                alert("there is no ProjectData for this projectID");
-              }
-              if (data.id !== id) {
-                  alert('we have an issue we should analyse => the ID in the router query does probably not exist in the MongoDB, desa dev: please replace this alert with sth better ;)' )
-              }
+       const fetchProjectData = async () => {
+            const response = await fetch(pensAPI_url);
+            const { data } = await response.json();
+                  if (response.status !== 200) {
+                    alert("there is no ProjectData for this projectID");
+                  }
+             // STEFANO work with the below some further
+             if (data._id !== id || undefined === id   ) {
+               console.log('id : ' ,id )
+               console.log('data._id : ' ,data._id )
+                 alert('we have an issue we should analyse => the ID in the router query does probably not exist in the MongoDB, desa dev: please replace this alert with sth better ;)' )
+             }
+            setProjectName(data.projectName)
+            setLongurlValue(data.longurl)
+            setHtmlValue(data.html);
+            setCssValue(data.css);
+            setJsValue(data.js);
+            setProjectID(id);
+        }
+      fetchProjectData();
+      setLoading(false);
+    }
+    else {
 
-              setProjectName(data.projectName)
-              setLongurlValue(data.longurl)
-              setHtmlValue(data.html);
-              setCssValue(data.css);
-              setJsValue(data.js);
-              setProjectID(id);
-          }
-       fetchProjectData();
-       setLoading(false);
-      }
-      else { // console.log('ProjectData is not available')
+       // STEFANO work with the below some further
+      // console.log('ProjectData is not available')
+      // if (data._id !== id || undefined === id   ) {
+      //     alert('we have an issue we should analyse => the ID in the router query does probably not exist in the MongoDB, desa dev: please replace this alert with sth better ;)' )
+      // }
       setLoading(false);
       }
   }, [id]);
