@@ -10,6 +10,8 @@ export default async (req, res) => {
           .findOne({ _id: ObjectId(id) });
         if (!data) {
           res.status(404).json({ success: false });
+          // stop further execution in this callback
+          return;
         }
         const jsResult    = ` ${data.js} ` ;
         const cssUserResult   = "  var cssUserResult =    ` "+ data.css  +"  `     ; var head = document.head || document.getElementsByTagName('head')[0]; var scrollBarStyle = document.createElement('style');  head.appendChild(scrollBarStyle);  scrollBarStyle.type = 'text/css';  scrollBarStyle.appendChild(document.createTextNode(cssUserResult)); ";
@@ -24,6 +26,8 @@ export default async (req, res) => {
       } catch (error) {
         res.
         status(500).json({ success: false });
+        // stop further execution in this callback
+        return;
       }
 };
 

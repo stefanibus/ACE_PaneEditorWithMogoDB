@@ -10,6 +10,8 @@ export default async (req, res) => {
           .findOne({ _id: ObjectId(id) });
         if (!data) {
           res.status(404).json({ success: false });
+          // stop further execution in this callback
+          return;
         }
          res.setHeader('Content-Type', 'application/javascript') ;
         let longUrlResponse = data.longurl
@@ -17,5 +19,7 @@ export default async (req, res) => {
       } catch (error) {
         res.
         status(500).json({ success: false });
+        // stop further execution in this callback
+        return;
       }
 };

@@ -19,8 +19,10 @@ export default async (req, res) => {
           return;
         }
         res.status(200).json({ data });
+        return;
       } catch (error) {
           res.status(500).json({ success: false });
+          return;
       }
       break;
 
@@ -41,9 +43,11 @@ export default async (req, res) => {
         res
           .status(200)
           .json({ success: true, data: { newRecordId: result.insertedId } });
+        return;
       } catch (error) {
         console.log(error);
         res.status(400).json({ success: false });
+        return;
       }
       break;
     case "POST":
@@ -61,9 +65,11 @@ export default async (req, res) => {
         res
           .status(200)
           .json({ success: true, data: { updatedRecord: true } });
+          return;
       } catch (error) {
         console.log(error);
         res.status(400).json({ success: false });
+        return;
       }
       break;
     default:
@@ -75,8 +81,10 @@ export default async (req, res) => {
         const data = await db
           .collection(collectionName).deleteOne({ _id: ObjectId(id) });
         res.status(200).json({ success: true, data });
+        return;
       } catch (error) {
         res.status(500).json({ success: false });
+        return;
       }
       break;
   }
