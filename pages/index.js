@@ -69,8 +69,8 @@ const Index = () => {
                   }
              // STEFANO work with the below some further
              if (data._id !== id || undefined === id   ) {
-               console.log('id : ' ,id )
-               console.log('data._id : ' ,data._id )
+               // console.log('id : ' ,id )
+               // console.log('data._id : ' ,data._id )
                  alert('we have an issue we should analyse => the ID in the router query does probably not exist in the MongoDB, desa dev: please replace this alert with sth better ;)' )
              }
             setProjectName(data.projectName)

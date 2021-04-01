@@ -15,12 +15,16 @@ export default async (req, res) => {
           .findOne({ _id: ObjectId(id) });
         if (!data) {
           res.status(404).json({ success: false });
+          // stop further execution in this callback
+          return;
         }
         res.status(200).json({ data });
       } catch (error) {
-        res.status(500).json({ success: false });
+          res.status(500).json({ success: false });
       }
       break;
+
+
     case "PUT":
       try {
         const { html, css, js, userID, projectName, longurl } = req.body;
