@@ -25,7 +25,7 @@ const Index = () => {
   const [cssValue, setCssValue] = useState("");
   const [longurlValue, setLongurlValue] = useState("");
   const [longurlValueTempoary, setLongurlValueTempoary] = useState("");
-  const [shorturlValue, setLShorturlValue] = useState(" ");
+  const [shorturlValue, setLShorturlValue] = useState("");
   const [paneValues, setpaneValues] = useState("startpage.html");
   const [project, setProject] = useState([]);
   const [projectID, setProjectID] = useState("");
@@ -69,8 +69,6 @@ const Index = () => {
                     NewProject_Show();
                     router.push("/");
                   } else {
-                 console.log('id : ' ,id )
-                 console.log('data._id : ' ,data._id )
                 setProjectName(data.projectName)
                 setLongurlValue(data.longurl)
                 setHtmlValue(data.html);
@@ -84,7 +82,7 @@ const Index = () => {
     }
     else {
 
-       // STEFANO work with the below some further
+       // STEFANO work fswith the below some further
       // console.log('ProjectData is not available')
       // if (data._id !== id || undefined === id   ) {
       //     alert('we have an issue we should analyse => the ID in the router query does probably not exist in the MongoDB, desa dev: please replace this alert with sth better ;)' )
@@ -92,7 +90,6 @@ const Index = () => {
       setLoading(false);
       }
   }, [id]);
-
 
 
   // DropDown-Element Eventhandler  (onClick for Option-Elements)
@@ -142,13 +139,35 @@ const Index = () => {
 
 
   // Save to MongoDB (New Project)
-  const saveNewProject =  (saveNewProject) => {
+  const saveNewProject =  (isNewProject) => {
       setSaving(true);
       setUserID_from_Fingerprint(visitorID);
       var meth = "PUT";
          // if save(true) ==> this is a new Project! => we will empty the pre-existing data (exept for the longurl )
-        if (saveNewProject) {
-              const requestOptions = {
+        if (isNewProject) {
+
+
+              console.log('longurlValue; ', longurlValue  );
+              var str = longurlValue;
+              //
+              str.replace(/\/$/, '');
+
+              // ES6+
+              str.endsWith('/') ? str.slice(0, -1) : str;
+              str.endsWith('/') ? str.substr(0, str.length - 1) : str;
+
+              // https://www.designcise.com/web/tutorial/how-to-remove-a-trailing-slash-from-a-string-in-javascript
+              // https://www.google.com/search?q=url+erase+trailing+slash+javascript
+              // https://dmitripavlutin.com/parse-url-javascript/
+              (str.substr(-1) === '/') ? str.slice(0, -1) : str;
+              (str.substr(-1) === '/') ? str.substr(0, str.length - 1) : str;
+
+
+              var noTrialingSlash = str ;
+              console.log('noTrialingSlash ', noTrialingSlash)
+
+
+               const requestOptions = {
                   method: meth,
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({
@@ -157,7 +176,7 @@ const Index = () => {
                     js: '// your additional JS Code wil be proxied into: \n// ' + longurlValue  +'\n\n // start coding here   (and click on "look at result")  \n\n',
                     id: id,
                     userID: userID_from_Fingerprint,
-                    projectName: '',
+                    projectName: noTrialingSlash,
                     longurl: longurlValue
                   }),
               };
@@ -180,7 +199,7 @@ const Index = () => {
                       }
                       else { // alert("same Project, but different User");
                         meth = "PUT";
-                        alert("We cloned this Project for you. You can re-name the Project-Name if you prefer a different ProjectName than:  " + projectName);
+                        alert("We cloned this Project for you. You can re-name the Project-Name later if you wish.   " );
                       }
     }
     else {

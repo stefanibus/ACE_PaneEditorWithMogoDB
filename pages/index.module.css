@@ -40,9 +40,10 @@
 .customURL span {
     font-size: 0.8vw;
     word-break: break-all;
+    position: absolute;
 }
 .customURL span span {
-    /*display: none;*/
+    /**/display: none;
     /*position: absolute;*/
 }
 .loading {

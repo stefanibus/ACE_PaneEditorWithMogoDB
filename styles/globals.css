@@ -68,6 +68,8 @@
 .projectName-InputField.provideProjName,
 .SaveButton-for-ProjName.provideProjName {
 visibility: visible !important;
+position: relative;
+z-index: 1;
 }
 
 .createNewProject {

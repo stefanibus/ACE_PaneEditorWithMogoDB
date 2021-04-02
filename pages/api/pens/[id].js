@@ -19,6 +19,7 @@ export default async (req, res) => {
           return;
         }
         res.status(200).json({ data });
+        console.log('WEBAPP-DISPLAY: GET Project-Data successfully');
         return;
       } catch (error) {
           res.status(500).json({ success: false });
@@ -43,6 +44,7 @@ export default async (req, res) => {
         res
           .status(200)
           .json({ success: true, data: { newRecordId: result.insertedId } });
+          console.log('WEBAPP-DISPLAY: PUT Project-Data successfully');
         return;
       } catch (error) {
         console.log(error);
@@ -65,6 +67,7 @@ export default async (req, res) => {
         res
           .status(200)
           .json({ success: true, data: { updatedRecord: true } });
+        console.log('WEBAPP-DISPLAY: POST Project-Data successfully');
           return;
       } catch (error) {
         console.log(error);
@@ -81,6 +84,7 @@ export default async (req, res) => {
         const data = await db
           .collection(collectionName).deleteOne({ _id: ObjectId(id) });
         res.status(200).json({ success: true, data });
+        console.log('WEBAPP-DISPLAY:  DELETE Project-Data successfully');
         return;
       } catch (error) {
         res.status(500).json({ success: false });

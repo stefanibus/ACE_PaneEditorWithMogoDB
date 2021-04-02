@@ -16,6 +16,7 @@ export default async (req, res) => {
          res.setHeader('Content-Type', 'application/javascript') ;
         let longUrlResponse = data.longurl
         res.send(  {longUrlResponse}  );
+        console.log('SURFLY GET LongURL-STRING successfully');
       } catch (error) {
         res.
         status(500).json({ success: false });
