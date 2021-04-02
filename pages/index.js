@@ -139,35 +139,19 @@ const Index = () => {
 
 
   // Save to MongoDB (New Project)
-  const saveNewProject =  (isNewProject) => {
+  const saveNewProject = (isNewProject) => {
       setSaving(true);
       setUserID_from_Fingerprint(visitorID);
       var meth = "PUT";
-         // if save(true) ==> this is a new Project! => we will empty the pre-existing data (exept for the longurl )
+         // ==> this is a new Project!
+         // ==> we will empty the pre-existing data (exept for the longurl )
         if (isNewProject) {
-
-
-              console.log('longurlValue; ', longurlValue  );
-              var str = longurlValue;
-              //
-              str.replace(/\/$/, '');
-
-              // ES6+
-              str.endsWith('/') ? str.slice(0, -1) : str;
-              str.endsWith('/') ? str.substr(0, str.length - 1) : str;
-
-              // https://www.designcise.com/web/tutorial/how-to-remove-a-trailing-slash-from-a-string-in-javascript
-              // https://www.google.com/search?q=url+erase+trailing+slash+javascript
-              // https://dmitripavlutin.com/parse-url-javascript/
-              (str.substr(-1) === '/') ? str.slice(0, -1) : str;
-              (str.substr(-1) === '/') ? str.substr(0, str.length - 1) : str;
-
-
-              var noTrialingSlash = str ;
-              console.log('noTrialingSlash ', noTrialingSlash)
-
-
-               const requestOptions = {
+                const AutoCreateFileName = (URLstring) => {
+                    const StringNoTrialingSlash = URLstring.replace(/\/$/, '');
+                    var filename = StringNoTrialingSlash.substring(StringNoTrialingSlash.lastIndexOf('/')+1);
+                    return filename;
+                }
+                const requestOptions = {
                   method: meth,
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({
@@ -176,7 +160,7 @@ const Index = () => {
                     js: '// your additional JS Code wil be proxied into: \n// ' + longurlValue  +'\n\n // start coding here   (and click on "look at result")  \n\n',
                     id: id,
                     userID: userID_from_Fingerprint,
-                    projectName: noTrialingSlash,
+                    projectName: AutoCreateFileName(longurlValue),
                     longurl: longurlValue
                   }),
               };
