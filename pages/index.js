@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import SplitPane from "react-split-pane";
-import { CssEditor, HtmlEditor, JavascriptEditor } from "../components/Editors";
+import { CssEditor, JavascriptEditor } from "../components/Editors";
 import styles from "./index.module.css";
 import { BsTrash, BsX, BsPencil } from "react-icons/bs";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
@@ -20,7 +20,7 @@ const Index = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [provideProjName, setProvideProjName] = useState(false);
-  const [htmlValue, setHtmlValue] = useState("");
+  // const [htmlValue, setHtmlValue] = useState("");
   const [jsValue, setJsValue] = useState("");
   const [cssValue, setCssValue] = useState("");
   const [longurlValue, setLongurlValue] = useState("");
@@ -71,7 +71,7 @@ const Index = () => {
                   } else {
                 setProjectName(data.projectName)
                 setLongurlValue(data.longurl)
-                setHtmlValue(data.html);
+                // setHtmlValue(data.html);
                 setCssValue(data.css);
                 setJsValue(data.js);
                 setProjectID(id);
@@ -155,7 +155,7 @@ const Index = () => {
                   method: meth,
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({
-                    html: ' ',
+                    // html: ' ',
                     css: '/* your additional CSS Code wil be proxied into: \n   ' + longurlValue + ' */\n\n/* start coding here   (and click on "look at result") */\n\n' ,
                     js: '// your additional JS Code wil be proxied into: \n// ' + longurlValue  +'\n\n // start coding here   (and click on "look at result")  \n\n',
                     id: id,
@@ -209,7 +209,7 @@ const Index = () => {
           const replaceWith = 'console.log(';
           const result = jsValue.replaceAll(search, replaceWith);
           setJsValue(result)
-          alert("You have used an ALERT inside of your JS-Code! The Alert-method cannot be used within the proxied result-page! We changed your codeon your behalf: PLEASE LOOK AT YOUR CODE AGAIN TO ACKNOWLEDGE THE CHANGE we did: We replaced all your 'Alert('-methods with the 'Console.log('  -method. Please take a look at the change, then you may want to hit the save button again. ", result);
+          alert("You have used an ALERT inside of your JS-Code! The Alert-method cannot be used within the proxied result-page! Therefore We changed your code on your behalf: PLEASE LOOK AT YOUR CODE AGAIN TO ACKNOWLEDGE THE CHANGE we did: We replaced all your 'Alert('-methods with the 'Console.log('  -method. Please take a look at the change. Afterwards you may want to hit the save button again. You will then be able to save your work. ", result);
       return false;
     }
 
@@ -217,7 +217,7 @@ const Index = () => {
       method: meth,
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        html: htmlValue,
+        // html: htmlValue,
         css: cssValue,
         js: jsValue,
         id: id,
@@ -460,13 +460,11 @@ const validateURL = (str) => {
           }
         }
       >
-        <SplitPane split="vertical" minSize={"33%"}>
-          <HtmlEditor
-            height={heightValue}
-            value={htmlValue}
-             onChange={setHtmlValue}
-          />
-          <SplitPane split="vertical" minSize={"50%"}>
+
+          <SplitPane
+              split="vertical"
+              minSize="50%"
+          >
             <CssEditor
               height={heightValue}
               value={cssValue}
@@ -478,7 +476,6 @@ const validateURL = (str) => {
               onChange={setJsValue}
             />
           </SplitPane>
-        </SplitPane>
           <iframe
               key={paneValues}
               src={paneValues}
