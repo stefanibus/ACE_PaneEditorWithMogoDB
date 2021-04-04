@@ -187,7 +187,7 @@ const Index = () => {
                       }
     }
     else {
-      alert("STEFANO:  This alert should never come up! We want to handle this via saveNewProject() ");
+      alert("STEFANO:  This alert should only come up if you are OFFLINE! Take care:  Your result has probably not been stored!");
       setUserID_from_Fingerprint(visitorID);
       meth = "PUT";
     }
@@ -198,6 +198,18 @@ const Index = () => {
       setProvideProjName(true);
       setSaving(false);
       // setAskLongURL(true);
+      return false;
+    }
+
+
+    // inside JS-Pane ==> Replace all alert functions
+    if (jsValue) {
+          setSaving(false);
+          const search = 'alert(';
+          const replaceWith = 'console.log(';
+          const result = jsValue.replaceAll(search, replaceWith);
+          setJsValue(result)
+          alert("You have used an ALERT inside of your JS-Code! The Alert-method cannot be used within the proxied result-page! We changed your codeon your behalf: PLEASE LOOK AT YOUR CODE AGAIN TO ACKNOWLEDGE THE CHANGE we did: We replaced all your 'Alert('-methods with the 'Console.log('  -method. Please take a look at the change, then you may want to hit the save button again. ", result);
       return false;
     }
 
@@ -341,15 +353,15 @@ const validateURL = (str) => {
         <div className={styles.longURLButtons + ` longURLButtons  `}>
          <span className={` button-group `}>
 {/*           <button className={styles.button} onClick={() => { TestDerAuslagerung(); }} >ex func </button>*/}
-
-           <button className={styles.button + ' toggleOnlongURLValue ' } onClick={() => {alert('This is still work in Progress. Nothing happens here: As of yet! ')   }} > Send Result to friend </button>
-           <button className={styles.button + ' toggleOnlongURLValue ' } onClick={() => { surflyRender(projectID);   }} > Look at Result </button>
            <button className={styles.button} onClick={() => { NewProject_Show(); }} > New Project</button>
 
 
-        {(provideProjName)  ? '' :
+           <button className={styles.button + ' toggleOnlongURLValue ' } onClick={() => {alert('This is still work in Progress. Nothing happens here: As of yet! ')   }} >Forward Result to a friend</button>
+           <button className={styles.button + ' toggleOnlongURLValue ' } onClick={() => { surflyRender(projectID);   }} >Look at Result</button>
+
+           {(provideProjName)  ? '' :
            <button className={styles.button + ' toggleOnlongURLValue ' }  onClick={() => {  save();  } } > {saving ? "Saving..." : "Save"} </button>
-        }
+           }
          </span>
           <br/>
           <input  type="url"  value={longurlValue} className={` longURLInput form-control form-input `}
