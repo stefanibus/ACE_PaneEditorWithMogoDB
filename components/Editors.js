@@ -44,7 +44,7 @@ const AcerEditor = dynamic(
 
 
 
-const Editor = ({ mode, onChange, value, title, height, setVerticalSize, setHorizontalSize }) => {
+const Editor = ({ mode, onChange, value, title, editorHeightValue, setverticalPaneSize, setHorizontalSize, setEditorHeightValue }) => {
 
 
 
@@ -52,7 +52,7 @@ const Editor = ({ mode, onChange, value, title, height, setVerticalSize, setHori
 
         const [fullScreen, setFullScreen] = useState(false);
 
-        const ToggleJS = ({mode, setVerticalSize, setHorizontalSize}) => {
+        const ToggleJS = ({mode, setverticalPaneSize, setHorizontalSize, setEditorHeightValue}) => {
                 const toggleFullScreen = () => {
                             //
                              setFullScreen(fullScreen => !fullScreen);
@@ -62,19 +62,19 @@ const Editor = ({ mode, onChange, value, title, height, setVerticalSize, setHori
                     console.log('this is the CSS Pane');
                      if (fullScreen) {
                       console.log('CSS-fullScreen should be true: ', fullScreen);
-                      sliderSplitPane.cssRegularScreenView(setVerticalSize, setHorizontalSize);
+                      sliderSplitPane.cssRegularScreenView(setverticalPaneSize, setHorizontalSize, setEditorHeightValue);
                     } else {
                       console.log('CSS-fullScreen should be false: ', fullScreen);
-                      sliderSplitPane.cssFullscreen(setVerticalSize, setHorizontalSize);
+                      sliderSplitPane.cssFullscreen(setverticalPaneSize, setHorizontalSize, setEditorHeightValue);
                     }
                   } else {
                     console.log('this is the  JS Pane')
                     if (fullScreen) {
                       console.log('JS-fullScreen should be true: ', fullScreen);
-                      sliderSplitPane.jsRegularScreenView(setVerticalSize, setHorizontalSize);
+                      sliderSplitPane.jsRegularScreenView(setverticalPaneSize, setHorizontalSize, setEditorHeightValue);
                     } else {
                       console.log('JS-fullScreen should be false: ', fullScreen);
-                      sliderSplitPane.jsFullscreen(setVerticalSize, setHorizontalSize);
+                      sliderSplitPane.jsFullscreen(setverticalPaneSize, setHorizontalSize, setEditorHeightValue);
                     }
 
 
@@ -90,7 +90,11 @@ const Editor = ({ mode, onChange, value, title, height, setVerticalSize, setHori
     <div className={editorStyles.editorContainer}>
       <div className={editorStyles.editorTitle}>
         {title}
-        <ToggleJS  mode={mode}  setVerticalSize={setVerticalSize} setHorizontalSize={setHorizontalSize} />
+        <ToggleJS mode={mode}
+                  setverticalPaneSize={setverticalPaneSize}
+                  setHorizontalSize={setHorizontalSize}
+                  setEditorHeightValue={setEditorHeightValue}
+                  />
       </div>
       <AcerEditor
         mode={mode}
@@ -99,12 +103,12 @@ const Editor = ({ mode, onChange, value, title, height, setVerticalSize, setHori
         onChange={onChange}
         fontSize={18}
         width={"100%"}
-        height={height}
+        height={editorHeightValue}
         value={value}
         showPrintMargin={true}
         showGutter={true}
         tabSize={2}
-        showPrintMargin={false} // ace_print-margin.
+        showPrintMargin={false} // ace_print-margin
         setOptions={{ useWorker: false }}
       />
     </div>

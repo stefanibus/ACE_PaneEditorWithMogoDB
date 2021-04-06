@@ -14,8 +14,8 @@ import surflyProxy from "../utils/surflyLibary";
 const Index = () => {
 
   // 18 useStates
-  const [heightValue, setHeightValue] = useState("485px");
-  const [verticalSize, setVerticalSize] = useState(40);
+  const [editorHeightValue, setEditorHeightValue] = useState("350px");
+  const [verticalPaneSize, setverticalPaneSize] = useState(40);
   const [horizontalSize, setHorizontalSize] = useState(50);
   const [askLongURL, setAskLongURL] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -252,7 +252,7 @@ const sendDB_Request = async (requestOptions)  => {   // console.log('Result sto
 
 // open NewProject-Area
   const NewProject_Show =  () => {  // console.log('toggle visibility ');
-      sliderSplitPane.closeSlide(setVerticalSize);
+      sliderSplitPane.closeSlide(setverticalPaneSize);
       setAskLongURL(true);
       setLongurlValueTempoary(longurlValue)
       setLongurlValue('')
@@ -260,7 +260,7 @@ const sendDB_Request = async (requestOptions)  => {   // console.log('Result sto
 
  // close NewProject-Area
  const NewProject_Hide = () => {  // console.log('toggle visibility ');
-      sliderSplitPane.openSlide(setVerticalSize);
+      sliderSplitPane.openSlide(setverticalPaneSize);
       setAskLongURL(false);
       setLongurlValue(longurlValueTempoary) // back to old value
   }
@@ -339,8 +339,8 @@ const validateURL = (str) => {
   }
 
 
-console.log('heightValue: ', heightValue)
-console.log('verticalSize: ', verticalSize)
+console.log('editorHeightValue: ', editorHeightValue)
+console.log('verticalPaneSize: ', verticalPaneSize)
 console.log('horizontalSize: ', horizontalSize)
 
 
@@ -451,7 +451,7 @@ console.log('horizontalSize: ', horizontalSize)
       <SplitPane
         style={{ marginTop: "60px" }}
         split="horizontal"
-        size={`${verticalSize}%`}
+        size={`${verticalPaneSize}%`}
         minSize={"50%"}
         onDragStarted={() => { //console.log('onDragStarted')
               setCurrentlyDragged(true)
@@ -459,7 +459,7 @@ console.log('horizontalSize: ', horizontalSize)
          }
         onDragFinished={(heightFromDragEvent) => {
             setCurrentlyDragged(false)
-            setHeightValue(`${heightFromDragEvent - 40}px`);
+            setEditorHeightValue(`${heightFromDragEvent - 40}px`);
           }
         }
       >
@@ -470,20 +470,22 @@ console.log('horizontalSize: ', horizontalSize)
               size={`${horizontalSize}%`}
           >
             <CssEditor
-              height={heightValue}
+              editorHeightValue={editorHeightValue}
+              setEditorHeightValue={setEditorHeightValue}
               horizontalSize={horizontalSize}
-              value={cssValue}
               onChange={setCssValue}
-              setVerticalSize={setVerticalSize}
+              value={cssValue}
+              setverticalPaneSize={setverticalPaneSize}
               setHorizontalSize={setHorizontalSize}
             />
             <JavascriptEditor
-              height={heightValue}
+              editorHeightValue={editorHeightValue}
               horizontalSize={horizontalSize}
               value={jsValue}
               onChange={setJsValue}
-              setVerticalSize={setVerticalSize}
+              setverticalPaneSize={setverticalPaneSize}
               setHorizontalSize={setHorizontalSize}
+              setEditorHeightValue={setEditorHeightValue}
             />
           </SplitPane>
           <iframe
