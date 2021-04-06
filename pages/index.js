@@ -15,7 +15,8 @@ const Index = () => {
 
   // 18 useStates
   const [heightValue, setHeightValue] = useState("485px");
-  const [codePenSizeValue, setCodePenSizeValue] = useState(40);
+  const [verticalSize, setVerticalSize] = useState(40);
+  const [horizontalSize, setHorizontalSize] = useState(50);
   const [askLongURL, setAskLongURL] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -203,7 +204,7 @@ const Index = () => {
 
 
     // inside JS-Pane ==> Replace all alert functions
-    if (jsValue) {
+    if (jsValue.includes("alert(")) {
           setSaving(false);
           const search = 'alert(';
           const replaceWith = 'console.log(';
@@ -251,7 +252,7 @@ const sendDB_Request = async (requestOptions)  => {   // console.log('Result sto
 
 // open NewProject-Area
   const NewProject_Show =  () => {  // console.log('toggle visibility ');
-      sliderSplitPane.closeSlide(setCodePenSizeValue);
+      sliderSplitPane.closeSlide(setVerticalSize);
       setAskLongURL(true);
       setLongurlValueTempoary(longurlValue)
       setLongurlValue('')
@@ -259,7 +260,7 @@ const sendDB_Request = async (requestOptions)  => {   // console.log('Result sto
 
  // close NewProject-Area
  const NewProject_Hide = () => {  // console.log('toggle visibility ');
-      sliderSplitPane.openSlide(setCodePenSizeValue);
+      sliderSplitPane.openSlide(setVerticalSize);
       setAskLongURL(false);
       setLongurlValue(longurlValueTempoary) // back to old value
   }
@@ -338,7 +339,10 @@ const validateURL = (str) => {
   }
 
 
-
+// console.log('height: ', height)
+console.log('heightValue: ', heightValue)
+console.log('verticalSize: ', verticalSize)
+console.log('horizontalSize: ', horizontalSize)
 
 
   return (
@@ -448,15 +452,15 @@ const validateURL = (str) => {
       <SplitPane
         style={{ marginTop: "60px" }}
         split="horizontal"
-        size={`${codePenSizeValue}%`}
+        size={`${verticalSize}%`}
         minSize={"50%"}
         onDragStarted={() => { //console.log('onDragStarted')
               setCurrentlyDragged(true)
            }
          }
-        onDragFinished={(height) => {
+        onDragFinished={(heightFromDragEvent) => {
             setCurrentlyDragged(false)
-            setHeightValue(`${height - 40}px`);
+            setHeightValue(`${heightFromDragEvent - 40}px`);
           }
         }
       >
@@ -464,16 +468,23 @@ const validateURL = (str) => {
           <SplitPane
               split="vertical"
               minSize="50%"
+              size={`${horizontalSize}%`}
           >
             <CssEditor
               height={heightValue}
+              horizontalSize={horizontalSize}
               value={cssValue}
               onChange={setCssValue}
+              setVerticalSize={setVerticalSize}
+              setHorizontalSize={setHorizontalSize}
             />
             <JavascriptEditor
               height={heightValue}
+              horizontalSize={horizontalSize}
               value={jsValue}
               onChange={setJsValue}
+              setVerticalSize={setVerticalSize}
+              setHorizontalSize={setHorizontalSize}
             />
           </SplitPane>
           <iframe
