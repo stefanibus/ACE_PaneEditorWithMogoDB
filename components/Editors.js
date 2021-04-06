@@ -104,7 +104,7 @@ const Editor = ({ mode, onChange, value, title, height, setVerticalSize, setHori
         showPrintMargin={true}
         showGutter={true}
         tabSize={2}
-        showPrintMargin={false} // ace_print-margin
+        showPrintMargin={false} // ace_print-margin.
         setOptions={{ useWorker: false }}
       />
     </div>

@@ -59,7 +59,7 @@ const sliderSplitPane = {
 		    // setVerticalSize(90);
    	    	setHorizontalSize(w);
 		    // setHorizontalSize(10);
-		    i= i+2;                    //  increment the counter by 4
+		    i= i+2;                    //  increment the counter
 		    w= 50-i/2;
 		    if (i < 91) {           //  if the counter > 41, call the loop function
 		      myLoop();             //  ..  again which will trigger another

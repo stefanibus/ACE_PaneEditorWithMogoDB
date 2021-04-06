@@ -339,7 +339,6 @@ const validateURL = (str) => {
   }
 
 
-// console.log('height: ', height)
 console.log('heightValue: ', heightValue)
 console.log('verticalSize: ', verticalSize)
 console.log('horizontalSize: ', horizontalSize)
