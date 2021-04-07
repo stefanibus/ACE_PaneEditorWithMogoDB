@@ -14,7 +14,8 @@
 
 .toggle {
 	margin: -1px 1em;
-    font-size: .61em !important;
+    font-size: .561em !important;
     border: 1px solid #444857 !important;
     border-radius: 5px !important;
+    padding: 3px 5px !important;
 }

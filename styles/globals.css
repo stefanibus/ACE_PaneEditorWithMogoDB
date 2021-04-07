@@ -7,13 +7,11 @@
   }
   .toggleView.isVisible_TheCreateNewProjectField .SplitPane.horizontal {
     margin-top: 150px !important;
-
     /*Compensate for the Margin-Top: */
     height: 90% !important;   /*FALLBACK*/
     height: calc(100% - 150px) !important;
     min-height: 90% !important;   /*FALLBACK*/
     min-height: calc(100% - 150px) !important;
-
   }
 .toggleView.isVisible_TheCreateNewProjectField .longURLInput {
     display: inline-block !important;

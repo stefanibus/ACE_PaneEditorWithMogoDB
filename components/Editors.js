@@ -1,40 +1,17 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import dynamic from "next/dynamic";
 import editorStyles from "./Editors.module.css";
-import ResizeButton from "./ResizeButton";
+import TogglePaneView from "./TogglePaneView";
 
 
-
-
-export const CssEditor = (props) => {
-
-  return <Editor mode="css" title={"CSS"} {...props} />;
+export const CssEditor          = (props) => {
+    return <Editor {...props} title={"CSS"} mode="css"   />;
 };
-
-export const JavascriptEditor = (props) => {
-  return <Editor mode="javascript" title={"JS"} {...props} />;
+export const JavascriptEditor   = (props) => {
+    return <Editor {...props} title={"JS"}  mode="javascript" />;
 };
 
 
-
-
-
-
-
-
-
-
-
-
-
-// Workaround for  issue:  "window is not defined"
-// it occurred when trying to run the  render on the Heroku server
-// created a so-called NoSSR component:
-// I had to work around an issue with AcerEditor-Component not beeing present while the server wanted to render it
-// https://nextjs.org/docs/advanced-features/dynamic-import
-// https://nextjs.org/docs/advanced-features/dynamic-import
-// https://github.com/jaredpalmer/razzle/issues/1193#issuecomment-754596005
-// https://www.npmjs.com/package/@next-tools/dynamic
 const AcerEditor = dynamic(
     async () => {
         const ace = await require("react-ace");
@@ -54,55 +31,75 @@ const AcerEditor = dynamic(
 );
 
 
-
-const Editor = ({ mode, onChange, value, title, editorHeightValue, setverticalPaneSize, verticalPaneSize, setHorizontalSize, horizontalSize, setEditorHeightValue }) => {
-
-
-// console.log('verticalPaneSize TEST IF AVAILABLE: ', verticalPaneSize)
-
-
-
-//   console.log('horizontalSize:: ', horizontalSize);
-//   console.log('let intViewportHeight = window.innerHeight;  ', window.innerHeight );
-//   console.log('dragHandlerPosition;  ', window.innerHeight - horizontalSize );
-
-// console.log('editorHeightValue: ', editorHeightValue)
-// console.log('verticalPaneSize WANTED: ', verticalPaneSize)
-// console.log('horizontalSize: ', horizontalSize)
+const Editor = ({
+  mode,
+  onChange,
+  value,
+  title,
+  editorHeightValue,
+  setverticalPaneSize,
+  verticalPaneSize,
+  setHorizontalSize,
+  horizontalSize,
+  setEditorHeightValue
+  }) => {
 
 
-  return  (
-    <div className={editorStyles.editorContainer}>
-      <div className={editorStyles.editorTitle}>
-        {title}
-{/*        { (verticalPaneSize > 55) ?
-          ' bigger than 55 '
-          :
-          ' smaller than 55 ' }*/}
-        <ResizeButton
-                  mode={mode}
-                  setverticalPaneSize={setverticalPaneSize}
-                  setHorizontalSize={setHorizontalSize}
-                  setEditorHeightValue={setEditorHeightValue}
-                  verticalPaneSize={verticalPaneSize}
-                  horizontalSize={horizontalSize}
-                  />
-      </div>
-      <AcerEditor
-        mode={mode}
-        theme="monokai"
-        name={title}
-        onChange={onChange}
-        fontSize={18}
-        width={"100%"}
-        height={editorHeightValue}
-        value={value}
-        showPrintMargin={true}
-        showGutter={true}
-        tabSize={2}
-        showPrintMargin={false} // ace_print-margin
-        setOptions={{ useWorker: false }}
-      />
-    </div>
-  );
-};
+  const [buttonText, setButtonText] = useState('F11');
+
+  useEffect(() => {
+
+                    if (mode === "css") {
+                           if (horizontalSize > 55) {
+                               setButtonText('Regular View');
+                           } else {
+                               setButtonText('F11');
+                           }
+                  }
+                  if (mode === "javascript")  {
+                          if (horizontalSize < 45) {
+                                 setButtonText('Regular View');
+                           } else {
+                                 setButtonText('F11');
+                           }
+                  }
+ }, [horizontalSize]);
+
+
+
+
+
+
+
+        return  (
+          <div className={editorStyles.editorContainer}>
+            <div className={editorStyles.editorTitle}>
+              {title}
+              <TogglePaneView
+                        mode={mode}
+                        setverticalPaneSize={setverticalPaneSize}
+                        setHorizontalSize={setHorizontalSize}
+                        setEditorHeightValue={setEditorHeightValue}
+                        verticalPaneSize={verticalPaneSize}
+                        horizontalSize={horizontalSize}
+                        buttonText={buttonText}
+                        />
+            </div>
+            <AcerEditor
+              mode={mode}
+              theme="monokai"
+              name={title}
+              onChange={onChange}
+              fontSize={18}
+              width={"100%"}
+              height={editorHeightValue}
+              value={value}
+              showPrintMargin={true}
+              showGutter={true}
+              tabSize={2}
+              showPrintMargin={false} // ace_print-margin
+              setOptions={{ useWorker: false }}
+            />
+          </div>
+        );
+  };
