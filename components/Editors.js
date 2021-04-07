@@ -1,8 +1,8 @@
 import React, {useState} from "react";
 import dynamic from "next/dynamic";
 import editorStyles from "./Editors.module.css";
-import buttonStyles from "../pages/index.module.css";
-import sliderSplitPane from "../utils/splitpane";
+import ResizeButton from "./ResizeButton";
+
 
 
 
@@ -14,6 +14,17 @@ export const CssEditor = (props) => {
 export const JavascriptEditor = (props) => {
   return <Editor mode="javascript" title={"JS"} {...props} />;
 };
+
+
+
+
+
+
+
+
+
+
+
 
 
 // Workaround for  issue:  "window is not defined"
@@ -44,56 +55,37 @@ const AcerEditor = dynamic(
 
 
 
-const Editor = ({ mode, onChange, value, title, editorHeightValue, setverticalPaneSize, setHorizontalSize, setEditorHeightValue }) => {
+const Editor = ({ mode, onChange, value, title, editorHeightValue, setverticalPaneSize, verticalPaneSize, setHorizontalSize, horizontalSize, setEditorHeightValue }) => {
+
+
+// console.log('verticalPaneSize TEST IF AVAILABLE: ', verticalPaneSize)
 
 
 
+//   console.log('horizontalSize:: ', horizontalSize);
+//   console.log('let intViewportHeight = window.innerHeight;  ', window.innerHeight );
+//   console.log('dragHandlerPosition;  ', window.innerHeight - horizontalSize );
+
+// console.log('editorHeightValue: ', editorHeightValue)
+// console.log('verticalPaneSize WANTED: ', verticalPaneSize)
+// console.log('horizontalSize: ', horizontalSize)
 
 
-        const [fullScreen, setFullScreen] = useState(false);
-
-        const ToggleJS = ({mode, setverticalPaneSize, setHorizontalSize, setEditorHeightValue}) => {
-                const toggleFullScreen = () => {
-                            //
-                             setFullScreen(fullScreen => !fullScreen);
-
-
-                  if (mode === "css") {
-                    console.log('this is the CSS Pane');
-                     if (fullScreen) {
-                      console.log('CSS-fullScreen should be true: ', fullScreen);
-                      sliderSplitPane.cssRegularScreenView(setverticalPaneSize, setHorizontalSize, setEditorHeightValue);
-                    } else {
-                      console.log('CSS-fullScreen should be false: ', fullScreen);
-                      sliderSplitPane.cssFullscreen(setverticalPaneSize, setHorizontalSize, setEditorHeightValue);
-                    }
-                  } else {
-                    console.log('this is the  JS Pane')
-                    if (fullScreen) {
-                      console.log('JS-fullScreen should be true: ', fullScreen);
-                      sliderSplitPane.jsRegularScreenView(setverticalPaneSize, setHorizontalSize, setEditorHeightValue);
-                    } else {
-                      console.log('JS-fullScreen should be false: ', fullScreen);
-                      sliderSplitPane.jsFullscreen(setverticalPaneSize, setHorizontalSize, setEditorHeightValue);
-                    }
-
-
-                  }
-                }
-                return (
-                            <button className={editorStyles.toggle + ' ' + buttonStyles.button }
-                                    onClick={toggleFullScreen} >{fullScreen ? ' Regular View ' :' F11 Full Screen ' }
-                            </button>
-                       )
-              } ;
   return  (
     <div className={editorStyles.editorContainer}>
       <div className={editorStyles.editorTitle}>
         {title}
-        <ToggleJS mode={mode}
+{/*        { (verticalPaneSize > 55) ?
+          ' bigger than 55 '
+          :
+          ' smaller than 55 ' }*/}
+        <ResizeButton
+                  mode={mode}
                   setverticalPaneSize={setverticalPaneSize}
                   setHorizontalSize={setHorizontalSize}
                   setEditorHeightValue={setEditorHeightValue}
+                  verticalPaneSize={verticalPaneSize}
+                  horizontalSize={horizontalSize}
                   />
       </div>
       <AcerEditor

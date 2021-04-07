@@ -325,12 +325,21 @@ const validateURL = (str) => {
     }
 
 
+    const CalcWidthPosition = (size) => {
+
+     let intViewportWidth  =  window.innerWidth;
+     let rightPosition     =  (intViewportWidth - size); //  by default: the size-value is counted upwards from the right.
+     let leftPosition      =  (intViewportWidth - rightPosition );  // I toggled that logic here
+     let calcViewPortWidth =  ((leftPosition  /  intViewportWidth ) * 100 ).toFixed(2);
+     return  calcViewPortWidth;
+    }
 
 
+   // STEFANO
    // const TestDerAuslagerung = () => {
    //   Auslagerung.test();
    //  }
-
+   // <button className={styles.button} onClick={() => { TestDerAuslagerung(); }} >ex func </button>
 
 
 
@@ -338,10 +347,6 @@ const validateURL = (str) => {
     return <div className={styles.loading}>Loading...</div>;
   }
 
-
-console.log('editorHeightValue: ', editorHeightValue)
-console.log('verticalPaneSize: ', verticalPaneSize)
-console.log('horizontalSize: ', horizontalSize)
 
 
   return (
@@ -355,7 +360,6 @@ console.log('horizontalSize: ', horizontalSize)
       <div className={styles.header}>
         <div className={styles.longURLButtons + ` longURLButtons  `}>
          <span className={` button-group `}>
-{/*           <button className={styles.button} onClick={() => { TestDerAuslagerung(); }} >ex func </button>*/}
            <button className={styles.button} onClick={() => { NewProject_Show(); }} > New Project</button>
 
 
@@ -460,32 +464,38 @@ console.log('horizontalSize: ', horizontalSize)
         onDragFinished={(heightFromDragEvent) => {
             setCurrentlyDragged(false)
             setEditorHeightValue(`${heightFromDragEvent - 40}px`);
+            setverticalPaneSize(`${heightFromDragEvent - 40}px`)
+            // console.log('verticalPaneSize', verticalPaneSize, 'heightFromDragEvent : ' ,  heightFromDragEvent  )
           }
         }
       >
-
           <SplitPane
               split="vertical"
               minSize="50%"
               size={`${horizontalSize}%`}
+              onDragFinished={(size) => {
+                setHorizontalSize(CalcWidthPosition(size))
+               }}
           >
             <CssEditor
-              editorHeightValue={editorHeightValue}
               setEditorHeightValue={setEditorHeightValue}
-              horizontalSize={horizontalSize}
+              editorHeightValue={editorHeightValue}
               onChange={setCssValue}
               value={cssValue}
-              setverticalPaneSize={setverticalPaneSize}
               setHorizontalSize={setHorizontalSize}
+              horizontalSize={horizontalSize}
+              setverticalPaneSize={setverticalPaneSize}
+              verticalPaneSize= {verticalPaneSize}
             />
             <JavascriptEditor
-              editorHeightValue={editorHeightValue}
-              horizontalSize={horizontalSize}
-              value={jsValue}
-              onChange={setJsValue}
-              setverticalPaneSize={setverticalPaneSize}
-              setHorizontalSize={setHorizontalSize}
               setEditorHeightValue={setEditorHeightValue}
+              editorHeightValue={editorHeightValue}
+              onChange={setJsValue}
+              value={jsValue}
+              setHorizontalSize={setHorizontalSize}
+              horizontalSize={horizontalSize}
+              setverticalPaneSize={setverticalPaneSize}
+              verticalPaneSize= {verticalPaneSize}
             />
           </SplitPane>
           <iframe
