@@ -18,4 +18,10 @@
     border: 1px solid #444857 !important;
     border-radius: 5px !important;
     padding: 3px 5px !important;
+    transition: all 700ms;
+
+}
+
+.toggle.small {
+    margin: -1px 0 -1px .31em;
 }

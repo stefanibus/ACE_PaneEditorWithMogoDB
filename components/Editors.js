@@ -11,7 +11,6 @@ export const JavascriptEditor   = (props) => {
     return <Editor {...props} title={"JS"}  mode="javascript" />;
 };
 
-
 const AcerEditor = dynamic(
     async () => {
         const ace = await require("react-ace");
@@ -22,12 +21,7 @@ const AcerEditor = dynamic(
 
         return ace;
     },
-    {
-        loading: () => (
-            <p>Loading</p>
-        ),
-        ssr: false,
-    },
+    { loading: () => ( <p>Loading</p> ), ssr: false, },
 );
 
 
@@ -44,62 +38,49 @@ const Editor = ({
   setEditorHeightValue
   }) => {
 
-
   const [buttonText, setButtonText] = useState('F11');
 
-  useEffect(() => {
-
-                    if (mode === "css") {
-                           if (horizontalSize > 55) {
-                               setButtonText('Regular View');
-                           } else {
-                               setButtonText('F11');
-                           }
-                  }
-                  if (mode === "javascript")  {
-                          if (horizontalSize < 45) {
-                                 setButtonText('Regular View');
-                           } else {
-                                 setButtonText('F11');
-                           }
-                  }
- }, [horizontalSize]);
+    useEffect(() => {
+        if (mode === "css") {
+               if (horizontalSize > 55) { setButtonText('Regular View'); }
+               else { setButtonText('F11'); }
+        }
+        if (mode === "javascript")  {
+              if (horizontalSize < 45) { setButtonText('Regular View'); }
+              else { setButtonText('F11'); }
+        }
+    }, [horizontalSize]);
 
 
-
-
-
-
-
-        return  (
-          <div className={editorStyles.editorContainer}>
-            <div className={editorStyles.editorTitle}>
-              {title}
-              <TogglePaneView
-                        mode={mode}
-                        setverticalPaneSize={setverticalPaneSize}
-                        setHorizontalSize={setHorizontalSize}
-                        setEditorHeightValue={setEditorHeightValue}
-                        verticalPaneSize={verticalPaneSize}
-                        horizontalSize={horizontalSize}
-                        buttonText={buttonText}
-                        />
-            </div>
-            <AcerEditor
-              mode={mode}
-              theme="monokai"
-              name={title}
-              onChange={onChange}
-              fontSize={18}
-              width={"100%"}
-              height={editorHeightValue}
-              value={value}
-              showPrintMargin={true}
-              showGutter={true}
-              tabSize={2}
-              showPrintMargin={false} // ace_print-margin
-              setOptions={{ useWorker: false }}
-            />
-          </div>
-        );
+    return  (
+      <div className={editorStyles.editorContainer}>
+        <div className={editorStyles.editorTitle}>
+          {title}
+          <TogglePaneView
+                    mode={mode}
+                    setverticalPaneSize={setverticalPaneSize}
+                    setHorizontalSize={setHorizontalSize}
+                    setEditorHeightValue={setEditorHeightValue}
+                    verticalPaneSize={verticalPaneSize}
+                    horizontalSize={horizontalSize}
+                    buttonText={buttonText}
+                    />
+        </div>
+        <AcerEditor
+          mode={mode}
+          theme="monokai"
+          name={title}
+          onChange={onChange}
+          fontSize={18}
+          width={"100%"}
+          height={editorHeightValue}
+          value={value}
+          showPrintMargin={true}
+          showGutter={true}
+          tabSize={2}
+          showPrintMargin={false} // ace_print-margin
+          setOptions={{ useWorker: false }}
+        />
+      </div>
+      );
   };

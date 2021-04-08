@@ -7,13 +7,11 @@ import { BsTrash, BsX, BsPencil } from "react-icons/bs";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import sliderSplitPane from "../utils/splitpane";
 import surflyProxy from "../utils/surflyLibary";
-// import Auslagerung from "../utils/mongo_communication";
 
 
 
 const Index = () => {
 
-  // 18 useStates
   const [editorHeightValue, setEditorHeightValue] = useState("350px");
   const [verticalPaneSize, setverticalPaneSize] = useState(40);
   const [horizontalSize, setHorizontalSize] = useState(50);
@@ -46,8 +44,8 @@ const Index = () => {
   const pensAPI_url  = `${serverURL}/api/pens/${id}` ;  //
 
 
-
-  useEffect( () => {// call external Libary => Surfly.com API Proxy
+//   external Libary => load Surfly.com API Proxy
+  useEffect( () => {
           surflyProxy.embedLibary();
   }, []);
 
@@ -59,7 +57,7 @@ const Index = () => {
          }
   }, [user_id]);
 
-  // fetchProjectData from MongoDB
+//   fetchProjectData from MongoDB
   useEffect(() => {
     if (id) {
        const fetchProjectData = async () => {
@@ -93,8 +91,8 @@ const Index = () => {
   }, [id]);
 
 
-  // DropDown-Element Eventhandler  (onClick for Option-Elements)
-  const   DropDown_Selection_ProjectList = (event) => {
+//   DropDown-Element Eventhandler  (onClick for Option-Elements)
+  const   ProjectList4User_DropDown = (event) => {
     if (event.target.value != "") { // console.log('dropdown was clicked => refresh Params in Query:  ',event.target.value,  userID_from_Fingerprint);
        router.push(`?id=${event.target.value}&user_id=${userID_from_Fingerprint}`);
        setProjectID(event.target.value);
@@ -105,7 +103,7 @@ const Index = () => {
     }
   }
 
-  // Delete from MongoDB
+//   Delete from MongoDB
  const onDelete =  async (id) => {
     const requestOptions = {
       method: "DELETE",
@@ -121,7 +119,7 @@ const Index = () => {
   }
 
 
-  // get ProjectList from MongoDB
+//   get ProjectList from MongoDB
  const  getProjectListForUser =  async  () => {
     const fp = await FingerprintJS.load();
     const result = await fp.get();
@@ -139,7 +137,7 @@ const Index = () => {
 
 
 
-  // Save to MongoDB (New Project)
+//   Save to MongoDB (New Project)
   const saveNewProject = (isNewProject) => {
       setSaving(true);
       setUserID_from_Fingerprint(visitorID);
@@ -157,8 +155,8 @@ const Index = () => {
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({
                     // html: ' ',
-                    css: '/* your additional CSS Code wil be proxied into: \n   ' + longurlValue + ' */\n\n/* start coding here   (and click on "look at result") */\n\n' ,
-                    js: '// your additional JS Code wil be proxied into: \n// ' + longurlValue  +'\n\n // start coding here   (and click on "look at result")  \n\n',
+                    css: '/* your additional CSS Code wil be proxied into: ' + longurlValue + ' */\n/* start coding here   (and click on "look at result") */\n\n' ,
+                    js: '// your additional JS Code wil be proxied into: \n// ' + longurlValue  +'\n// const collapseThisLine = () =>  {\n//console.log( "You can collapse this line --> and manage your space in this js-pane wisely! " } \n\n// start coding here   (and click on "look at result")  \n\n',
                     id: id,
                     userID: userID_from_Fingerprint,
                     projectName: AutoCreateFileName(longurlValue),
@@ -173,19 +171,19 @@ const Index = () => {
 }
 
 
-  // Save to MongoDB (existing User)
+//   Save to MongoDB (existing User)
   const save = async () => {
     setSaving(true);
     var meth ;
     if (visitorID) {
-                      // visitor and  user are EQUAL to one another
-                      if (visitorID == userID_from_Fingerprint) {  // alert('visitor and  user are EQUAL to one another ( value is userID_from_Fingerprint) = so we EITHER Update (overrite) OR Clone the Project  ' );                         console.log('id = Param aus der window adress bar:  ', id);
-                        meth = id ? "POST" : "PUT"; //  POST = (overwrite) updatedRecord, Put = newRecordId (create new)
-                      }
-                      else { // alert("same Project, but different User");
-                        meth = "PUT";
-                        alert("We cloned this Project for you. You can re-name the Project-Name later if you wish.   " );
-                      }
+          // visitor and  user are EQUAL to one another
+          if (visitorID == userID_from_Fingerprint) {  // alert('visitor and  user are EQUAL to one another ( value is userID_from_Fingerprint) = so we EITHER Update (overrite) OR Clone the Project  ' );                         console.log('id = Param aus der window adress bar:  ', id);
+            meth = id ? "POST" : "PUT"; //  POST = (overwrite) updatedRecord, Put = newRecordId (create new)
+          }
+          else { // alert("same Project, but different User");
+            meth = "PUT";
+            alert("We cloned this Project for you. You can re-name the Project-Name later if you wish.   " );
+          }
     }
     else {
       alert("STEFANO:  This alert should only come up if you are OFFLINE! Take care:  Your result has probably not been stored!");
@@ -214,11 +212,11 @@ const Index = () => {
       return false;
     }
 
+  //   define request options towards MongoDB
     const requestOptions = {
       method: meth,
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        // html: htmlValue,
         css: cssValue,
         js: jsValue,
         id: id,
@@ -227,16 +225,13 @@ const Index = () => {
         longurl: longurlValue
       }),
     };
-    // console.log('requestOptions', requestOptions)
+
     sendDB_Request(requestOptions);
     getProjectListForUser();
-  };
+};
 
 
-
-
-
-// sendDB_Request to MongoDB
+//   sendDB_Request to MongoDB
 const sendDB_Request = async (requestOptions)  => {   // console.log('Result stored in MongoDB: either updatedRecord (true undefined), or we created a newRecordId  (undefined 000000001 ): ',  updatedRecord, newRecordId )
 
     const response = await fetch(pensAPI_url, requestOptions);
@@ -250,7 +245,7 @@ const sendDB_Request = async (requestOptions)  => {   // console.log('Result sto
     }
 }
 
-// open NewProject-Area
+//   open NewProject-Area
   const NewProject_Show =  () => {  // console.log('toggle visibility ');
       sliderSplitPane.closeSlide(setverticalPaneSize);
       setAskLongURL(true);
@@ -258,14 +253,14 @@ const sendDB_Request = async (requestOptions)  => {   // console.log('Result sto
       setLongurlValue('')
   };
 
- // close NewProject-Area
+//   close NewProject-Area
  const NewProject_Hide = () => {  // console.log('toggle visibility ');
       sliderSplitPane.openSlide(setverticalPaneSize);
       setAskLongURL(false);
       setLongurlValue(longurlValueTempoary) // back to old value
   }
 
-// Save the NewProject
+//   Save the NewProject
  const NewProject_Save = async () => {
  const UrlCheck = validateURL(longurlValue) ;
      if (UrlCheck) {
@@ -277,77 +272,68 @@ const sendDB_Request = async (requestOptions)  => {   // console.log('Result sto
      }
   }
 
-
-const validateURL = (str) => {
-  var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
-    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
-    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
-    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
-    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
-    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
-  return !!pattern.test(str);
-}
-
-
-
-    // SURFLY Save => CORS-ISSUE on Localhost
-    const  surflyRender = async (projectID) => {
-          // console.log('pensAPI_url from index.js: ',  pensAPI_url)
-              var timestamp = Date.now();
-              if (projectID == "" || projectID == " " ) {
-                  alert('Please create a project before you click on SAVE (or work already existing projects) ');
-              } else {
-                  const SurflyAPIstring = `${serverURL}/api/surfly/${projectID}/?timestamp=`+timestamp;
-                  // console.log('SurflyAPIstring with projectID and TimeStamp: ',SurflyAPIstring);
-                  const fetchRequestOptions = { method: "GET", headers: { "Content-Type": "application/json; charset=utf-8" } };
-                  const getSurflyURL = await fetch(SurflyAPIstring, fetchRequestOptions);
-                  const { SurflyResponseURL } = await getSurflyURL.json();
-                  if (getSurflyURL.status !== 200) { await router.push("/404"); }
-                  setpaneValues(SurflyResponseURL);
-              }
-        }
-
-
-    const HandleProjectNameChange = e => {     // Stefano: controlled States = this is also still unfinished business
-        setProjectName(e.target.value)
-    }
-    const HandleLongURL_Change = e => { // console.log('HandleLongURL_Change:  ' , e.target.value ) ;
-        setLongurlValue(e.target.value)
-    }
-    const HandleReturnkey = (e, howToSave) => {     // Stefano: controlled States = this is also still unfinished business
-            if (e.key === "Enter") {
-                if (howToSave === "NewProject") {
-                   NewProject_Save();
-                } else {
-                   save();
-                }
-            }
-    }
-
-
-    const CalcWidthPosition = (size) => {
-
-     let intViewportWidth  =  window.innerWidth;
-     let rightPosition     =  (intViewportWidth - size); //  by default: the size-value is counted upwards from the right.
-     let leftPosition      =  (intViewportWidth - rightPosition );  // I toggled that logic here
-     let calcViewPortWidth =  ((leftPosition  /  intViewportWidth ) * 100 ).toFixed(2);
-     return  calcViewPortWidth;
-    }
-
-
-   // STEFANO
-   // const TestDerAuslagerung = () => {
-   //   Auslagerung.test();
-   //  }
-   // <button className={styles.button} onClick={() => { TestDerAuslagerung(); }} >ex func </button>
-
-
-
-  if (loading) {
-    return <div className={styles.loading}>Loading...</div>;
+//   URL Validation
+  const validateURL = (str) => {
+    var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+      '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+      '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+      '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+    return !!pattern.test(str);
   }
 
 
+//   SURFLY Save => CORS-ISSUE on Localhost
+  const  surflyRender = async (projectID) => {
+        // console.log('pensAPI_url from index.js: ',  pensAPI_url)
+            var timestamp = Date.now();
+            if (projectID == "" || projectID == " " ) {
+                alert('Please create a project before you click on SAVE (or work already existing projects) ');
+            } else {
+                const SurflyAPIstring = `${serverURL}/api/surfly/${projectID}/?timestamp=`+timestamp;
+                // console.log('SurflyAPIstring with projectID and TimeStamp: ',SurflyAPIstring);
+                const fetchRequestOptions = { method: "GET", headers: { "Content-Type": "application/json; charset=utf-8" } };
+                const getSurflyURL = await fetch(SurflyAPIstring, fetchRequestOptions);
+                const { SurflyResponseURL } = await getSurflyURL.json();
+                if (getSurflyURL.status !== 200) { await router.push("/404"); }
+                setpaneValues(SurflyResponseURL);
+            }
+      }
+
+
+//   ProjectName Input Field
+  const HandleProjectNameChange = e => {
+      setProjectName(e.target.value)
+  }
+//   URL Input Field (LongURL)
+  const HandleLongURL_Change = e => {
+      setLongurlValue(e.target.value)
+  }
+//   ReturnKey for both fields: (ProjectName- & URL-Input)
+  const HandleReturnkey = (e, howToSave) => {
+          if (e.key === "Enter") {
+              if (howToSave === "NewProject") {
+                 NewProject_Save();
+              } else {
+                 save();
+              }
+          }
+  }
+
+//   get Mouse-Position for the Vertical SplitPane-DragHandler
+    const CalcWidthPosition = (size) => {
+     let intViewportWidth =  window.innerWidth;
+     let rightPosition    =  (intViewportWidth - size); // size-value is counted upwards from the right by default:
+     let leftPosition     =  (intViewportWidth - rightPosition );  // we are switching that logic around
+     let ViewPortPosition = ((leftPosition  /  intViewportWidth ) * 100 ).toFixed(2);
+     return ViewPortPosition;
+    }
+
+//   Loading indication while waiting for the initial Response from MongoDB
+  if (loading) {
+    return <div className={styles.loading}>Loading...</div>;
+  }
 
   return (
     <div
@@ -358,16 +344,20 @@ const validateURL = (str) => {
         >
 
       <div className={styles.header}>
+
+    {/* Button to request the proxied result, Button to save work to MongoDB, Button to create new Project, Button to forward result to friend*/}
         <div className={styles.longURLButtons + ` longURLButtons  `}>
          <span className={` button-group `}>
-           <button className={styles.button} onClick={() => { NewProject_Show(); }} > New Project</button>
-
-
-           <button className={styles.button + ' toggleOnlongURLValue ' } onClick={() => {alert('This is still work in Progress. Nothing happens here: As of yet! ')   }} >Forward Result to a friend</button>
-           <button className={styles.button + ' toggleOnlongURLValue ' } onClick={() => { surflyRender(projectID);   }} >Look at Result</button>
+           <button className={styles.button} onClick={() => { NewProject_Show(); }} >
+           New Project</button>
+           <button className={styles.button + ' toggleOnlongURLValue ' } onClick={() => {alert('This is still work in Progress. Nothing happens here: As of yet! ')   }} >
+           Forward Result to a friend</button>
+           <button className={styles.button + ' toggleOnlongURLValue ' } onClick={() => { surflyRender(projectID);   }} >
+           Look at Result</button>
 
            {(provideProjName)  ? '' :
-           <button className={styles.button + ' toggleOnlongURLValue ' }  onClick={() => {  save();  } } > {saving ? "Saving..." : "Save"} </button>
+           <button className={styles.button + ' toggleOnlongURLValue ' }  onClick={() => {  save();  } } >
+           {saving ? "Saving..." : "Save"} </button>
            }
          </span>
           <br/>
@@ -377,22 +367,23 @@ const validateURL = (str) => {
           onKeyUp={() => { HandleReturnkey(event,'NewProject')} }
           >
           </input>
-          <span className={` newProjectButtons  `} style={{ display: "none" }}>
-
-
-           <button
-             className={styles.button + ' isVisible_TheCreateNewProjectField'}
-             onClick={() => { NewProject_Save(); }} >
+          <span className={` newProjectButtons `} style={{ display: "none" }}>
+             <button onClick={() => { NewProject_Save(); }} className={styles.button + ' isVisible_TheCreateNewProjectField'}  >
              create new project
-           </button>
-             <BsX    className="bootstrapButton" style={{ color: "white", fontSize: 36 }}
-                     onClick={() => {NewProject_Hide(); }}/>
+             </button>
+             <BsX onClick={() => {NewProject_Hide(); }} className="bootstrapButton" style={{ color: "white", fontSize: 36 }} />
           </span>
-           <p className={` slogan  `} style={{ display: "none" }}>You can change any static Website!</p>
+           <p className={` slogan  `} style={{ display: "none" }}>
+           You can change any static Website!</p>
         </div>
+
+      {/*display the ProjectName and reveal the Project LongURL (on Hover) */}
         <div className={styles.customURL + ` customURL   `}>
-           {longurlValue && <span> {projectName && projectName } : &nbsp; <span> {longurlValue}</span></span> }  {/*Change this Website*/}
+           {longurlValue && <span> {projectName && projectName } : &nbsp; <span> {longurlValue}</span></span> }
         </div>
+
+
+      {/*User can Manage his/her "account" & "Projects": Delete a Project, Save a Name for a Project, Dropdown to toggle through all Projects of the current User */}
         <div className={styles.customSelect + ` customSelect custom-select `}>
                         <>
                           <input
@@ -416,7 +407,6 @@ const validateURL = (str) => {
                           </button>
                         </>
 
-
                 {!provideProjName && <BsPencil
                       style={{ color: "white", fontSize: 36 }}
                       onClick={() => { setProvideProjName(true) } }
@@ -437,7 +427,7 @@ const validateURL = (str) => {
                     className="projectName-DropdownField  form-control form-input"
                     style={{ width: 240 }}
                     value={projectID && projectID }
-                    onChange={DropDown_Selection_ProjectList}
+                    onChange={ProjectList4User_DropDown}
                   >
                     <option value="">all your projects: </option>
                     {project.map((item, i) => {
@@ -457,25 +447,18 @@ const validateURL = (str) => {
         split="horizontal"
         size={`${verticalPaneSize}%`}
         minSize={"50%"}
-        onDragStarted={() => { //console.log('onDragStarted')
-              setCurrentlyDragged(true)
-           }
-         }
+        onDragStarted={() => { setCurrentlyDragged(true) } }
         onDragFinished={(heightFromDragEvent) => {
-            setCurrentlyDragged(false)
-            setEditorHeightValue(`${heightFromDragEvent - 40}px`);
-            setverticalPaneSize(`${heightFromDragEvent - 40}px`)
-            // console.log('verticalPaneSize', verticalPaneSize, 'heightFromDragEvent : ' ,  heightFromDragEvent  )
-          }
-        }
+                              setCurrentlyDragged(false)
+                              setEditorHeightValue(`${heightFromDragEvent - 40}px`);
+                              setverticalPaneSize(`${heightFromDragEvent - 40}px`)
+                              }}
       >
           <SplitPane
               split="vertical"
               minSize="50%"
               size={`${horizontalSize}%`}
-              onDragFinished={(size) => {
-                setHorizontalSize(CalcWidthPosition(size))
-               }}
+              onDragFinished={(size) => { setHorizontalSize(CalcWidthPosition(size)) }}
           >
             <CssEditor
               setEditorHeightValue={setEditorHeightValue}
@@ -503,7 +486,7 @@ const validateURL = (str) => {
               src={paneValues}
               id="resultFrame"
               name="resultFrame"
-              className={styles.previewIframe + `    resultFrame ${currentlyDragged &&   styles.isInteractive  } ` }
+              className={styles.previewIframe + ` resultFrame ${currentlyDragged && styles.isInteractive }`}
                >
          </iframe>
       </SplitPane>
