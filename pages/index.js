@@ -19,7 +19,6 @@ const Index = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [provideProjName, setProvideProjName] = useState(false);
-  // const [htmlValue, setHtmlValue] = useState("");
   const [jsValue, setJsValue] = useState("");
   const [cssValue, setCssValue] = useState("");
   const [longurlValue, setLongurlValue] = useState("");
@@ -35,7 +34,6 @@ const Index = () => {
 
   const router = useRouter();
   const { id, user_id } = router.query;
-
 
   // const serverURL = process.env.NODE_ENV === "development" ? process.env.NEXT_PUBLIC_DEVURL : process.env.PRODURL;
   const serverURL = 'http://localhost:3000';
@@ -59,35 +57,33 @@ const Index = () => {
 
 //   fetchProjectData from MongoDB
   useEffect(() => {
-    if (id) {
-       const fetchProjectData = async () => {
-            const response = await fetch(pensAPI_url);
-            const { data } = await response.json();
-                  if (response.status !== 200) {
-                    alert("The Project you are trying to access was deleted! There is no ProjectData available anymore. We cannot deliver this projectID. We will forward you to the startpage instead. We hope you are fine with that. ");
-                    NewProject_Show();
-                    router.push("/");
-                  } else {
-                setProjectName(data.projectName)
-                setLongurlValue(data.longurl)
-                // setHtmlValue(data.html);
-                setCssValue(data.css);
-                setJsValue(data.js);
-                setProjectID(id);
+     if(router.isReady) {
+        // console.log('ProjectData is now certainly available because of router.isReady:' , router.isReady ,  '. Only if  the "id" Value does not exists in the widows location query, then our id value will remain undefined . Otherwise it will be:  ', id,  )
+        if(typeof id !== "undefined")  {
+           const fetchProjectData = async () => {
+                const response = await fetch(pensAPI_url);
+                const { data } = await response.json();
+                      if (response.status !== 200) {
+                        alert("The Project you are trying to access was deleted! There is no ProjectData available anymore. We cannot deliver this projectID. We will forward you to the startpage instead. We hope you are fine with that. ");
+                        NewProject_Show();
+                        router.push("/");
+                      } else {
+                    setProjectName(data.projectName)
+                    setLongurlValue(data.longurl)
+                    setCssValue(data.css);
+                    setJsValue(data.js);
+                    setProjectID(id);
+                }
             }
+          fetchProjectData();
+          setLoading(false);
         }
-      fetchProjectData();
-      setLoading(false);
-    }
-    else {
+        else {
+          // console.log(' no  ProjectData is  available   ', id)
+          setLoading(false);
+          }
+     }
 
-       // STEFANO work fswith the below some further
-      // console.log('ProjectData is not available')
-      // if (data._id !== id || undefined === id   ) {
-      //     alert('we have an issue we should analyse => the ID in the router query does probably not exist in the MongoDB, desa dev: please replace this alert with sth better ;)' )
-      // }
-      setLoading(false);
-      }
   }, [id]);
 
 
@@ -154,7 +150,6 @@ const Index = () => {
                   method: meth,
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({
-                    // html: ' ',
                     css: '/* your additional CSS Code wil be proxied into: ' + longurlValue + ' */\n/* start coding here   (and click on "look at result") */\n\n' ,
                     js: '// your additional JS Code wil be proxied into: \n// ' + longurlValue  +'\n// const collapseThisLine = () =>  {\n//console.log( "You can collapse this line --> and manage your space in this js-pane wisely! " } \n\n// start coding here   (and click on "look at result")  \n\n',
                     id: id,
@@ -282,24 +277,6 @@ const sendDB_Request = async (requestOptions)  => {   // console.log('Result sto
       '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
     return !!pattern.test(str);
   }
-
-
-//   SURFLY Save => CORS-ISSUE on Localhost
-  // const  surflyRender = async (projectID, setpaneValues) => {
-  //       // console.log('pensAPI_url from index.js: ',  pensAPI_url)
-  //           var timestamp = Date.now();
-  //           if (projectID == "" || projectID == " " ) {
-  //               alert('Please create a project before you click on SAVE (or work already existing projects) ');
-  //           } else {
-  //               const SurflyAPIstring = `${serverURL}/api/surfly/${projectID}/?timestamp=`+timestamp;
-  //               // console.log('SurflyAPIstring with projectID and TimeStamp: ',SurflyAPIstring);
-  //               const fetchRequestOptions = { method: "GET", headers: { "Content-Type": "application/json; charset=utf-8" } };
-  //               const getSurflyURL = await fetch(SurflyAPIstring, fetchRequestOptions);
-  //               const { SurflyResponseURL } = await getSurflyURL.json();
-  //               if (getSurflyURL.status !== 200) { await router.push("/404"); }
-  //               setpaneValues(SurflyResponseURL);
-  //           }
-  //     }
 
 
 //   ProjectName Input Field
