@@ -47,17 +47,13 @@ const Index = () => {
           surflyProxy.embedLibary();
   }, []);
 
-  // store visitorID from router.query-Parameter
-  useEffect(() => {
-          getProjectListForUser();
-          if (router.query) {
-            setVisitorID(router.query.user_id); //
-         }
-  }, [user_id]);
+
 
 //   fetchProjectData from MongoDB
   useEffect(() => {
      if(router.isReady) {
+             // store visitorID from router.query-Parameter
+             setVisitorID(router.query.user_id);
         // console.log('ProjectData is now certainly available because of router.isReady:' , router.isReady ,  '. Only if  the "id" Value does not exists in the widows location query, then our id value will remain undefined . Otherwise it will be:  ', id,  )
         if(typeof id !== "undefined")  {
            const fetchProjectData = async () => {
@@ -73,6 +69,8 @@ const Index = () => {
                     setCssValue(data.css);
                     setJsValue(data.js);
                     setProjectID(id);
+                    //
+                    getProjectListForUser();// refresh ProjectList
                 }
             }
           fetchProjectData();
@@ -90,6 +88,7 @@ const Index = () => {
 //   DropDown-Element Eventhandler  (onClick for Option-Elements)
   const   ProjectList4User_DropDown = (event) => {
     if (event.target.value != "") { // console.log('dropdown was clicked => refresh Params in Query:  ',event.target.value,  userID_from_Fingerprint);
+       // stefano: add Spinner here potentially
        router.push(`?id=${event.target.value}&user_id=${userID_from_Fingerprint}`);
        setProjectID(event.target.value);
     } else { // console.log('option-item has no value, thus nothing shall happen, stefano: delete this else-Statement later ');
@@ -109,8 +108,14 @@ const Index = () => {
     const response = await fetch(pensAPI_url, requestOptions);
     const { success, data } = await response.json();
     if (success) {
-      location.href = "/";
-      setProjectID("");
+                    // location.href = "/";   // stefano: INSTEAD WE DO THE BELOW 6 things:
+                    router.push("/");
+                    setProjectName('')
+                    setLongurlValue('')
+                    setCssValue('');
+                    setJsValue('');
+                    setProjectID("");
+                    getProjectListForUser();
     }
   }
 
@@ -222,12 +227,12 @@ const Index = () => {
     };
 
     sendDB_Request(requestOptions);
-    getProjectListForUser();
+    // getProjectListForUser();
 };
 
 
 //   sendDB_Request to MongoDB
-const sendDB_Request = async (requestOptions)  => {   // console.log('Result stored in MongoDB: either updatedRecord (true undefined), or we created a newRecordId  (undefined 000000001 ): ',  updatedRecord, newRecordId )
+const sendDB_Request = async (requestOptions)  => {   //   console.log('Result stored in MongoDB: either updatedRecord (true undefined), or we created a newRecordId  (undefined 000000001 ): ',  updatedRecord, newRecordId )
 
     const response = await fetch(pensAPI_url, requestOptions);
     const {
@@ -237,6 +242,7 @@ const sendDB_Request = async (requestOptions)  => {   // console.log('Result sto
     setProvideProjName(false);
     if (!updatedRecord) {  // console.log('CLONE CONTENT NOW ==> Only if updatedRecord is FALSE (meaning: POST is false =  meaning we do not have same user AND same project = (thus not OVERWRITE ), ==>we will clone and then update both Params in the adress bar: ', updatedRecord, newRecordId , userID_from_Fingerprint,    )   //
        await router.push(`?id=${newRecordId}&user_id=${userID_from_Fingerprint}`);
+
     }
 }
 
@@ -356,7 +362,7 @@ const sendDB_Request = async (requestOptions)  => {   // console.log('Result sto
 
       {/*display the ProjectName and reveal the Project LongURL (on Hover) */}
         <div className={styles.customURL + ` customURL   `}>
-           {longurlValue && <span> {projectName && projectName } : &nbsp; <span> {longurlValue}</span></span> }
+           {longurlValue && <span> {projectName && projectName }   &nbsp; <span> {longurlValue}</span></span> }
         </div>
 
 
