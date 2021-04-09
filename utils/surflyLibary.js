@@ -16,8 +16,9 @@ const surflyProxy = {
             y.parentNode.insertBefore(l, y);
           })(window, document, "script", "Surfly");
  	},
-   surflyRender: async (projectID) => {
+   surflyRender: async (projectID, setpaneValues) => {
 
+               // STEFANO , this is for later ;)
                // const serverURL = process.env.NODE_ENV === "development" ? process.env.NEXT_PUBLIC_DEVURL : process.env.PRODURL;
                const serverURL = 'http://localhost:3000';
 

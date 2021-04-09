@@ -19,7 +19,7 @@ export default async (req, res) => {
           return;
         }
         res.status(200).json({ data });
-        console.log('WEBAPP-DISPLAY: GET Project-Data successfully');
+        // console.log('api/pens/id.js: GET Project-Data successfully');
         return;
       } catch (error) {
           res.status(500).json({ success: false });
@@ -30,11 +30,10 @@ export default async (req, res) => {
 
     case "PUT":
       try {
-        const { html, css, js, userID, projectName, longurl } = req.body;
+        const { css, js, userID, projectName, longurl } = req.body;
         const { db } = await connect();
 
         const result = await db.collection(collectionName).insertOne({
-          html,
           css,
           js,
           userID,
@@ -44,7 +43,7 @@ export default async (req, res) => {
         res
           .status(200)
           .json({ success: true, data: { newRecordId: result.insertedId } });
-          console.log('WEBAPP-DISPLAY: PUT Project-Data successfully');
+          // console.log('api/pens/id.js: PUT Project-Data successfully');
         return;
       } catch (error) {
         console.log(error);
@@ -54,20 +53,20 @@ export default async (req, res) => {
       break;
     case "POST":
       try {
-        const { html, css, js, id, userID, projectName, longurl } = req.body;
+        const { css, js, id, userID, projectName, longurl } = req.body;
         const { db } = await connect();
 
         await db
           .collection(collectionName)
           .updateOne(
             { _id: ObjectId(id) },
-            { $set: { html: html, css: css, js: js, userID: userID, projectName: projectName, longurl: longurl } }
+            { $set: { css: css, js: js, userID: userID, projectName: projectName, longurl: longurl } }
           );
           //  SEE LOADING INTERFACE by LONG-LOADING-TIME FAKED:    // await  new Promise((resolve) => {  setTimeout(() => resolve(), 4000);  });
         res
           .status(200)
           .json({ success: true, data: { updatedRecord: true } });
-        console.log('WEBAPP-DISPLAY: POST Project-Data successfully');
+        // console.log('api/pens/id.js: POST Project-Data successfully');
           return;
       } catch (error) {
         console.log(error);
@@ -84,7 +83,7 @@ export default async (req, res) => {
         const data = await db
           .collection(collectionName).deleteOne({ _id: ObjectId(id) });
         res.status(200).json({ success: true, data });
-        console.log('WEBAPP-DISPLAY:  DELETE Project-Data successfully');
+        // console.log('api/pens/id.js: DELETE Project-Data successfully');
         return;
       } catch (error) {
         res.status(500).json({ success: false });

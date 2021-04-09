@@ -12,7 +12,10 @@
 
 // ENV Vars in DEV and Production
 // we have 3 env variables: NODE_ENV  and  DEVURL and PRODURL , all in the .env File
-  const serverURL      = process.env.NODE_ENV === "development" ? process.env.DEVURL : process.env.PRODURL;
+  // const serverURL      = process.env.NODE_ENV === "development" ? process.env.DEVURL : process.env.PRODURL;
+  const serverURL = 'http://localhost:3000';
+
+
   const longurlAPI     = `${serverURL}/api/surfly/longurl/${projectID}` ;  //   console.log('longurlAPI from index.js: ',  longurlAPI)
   const projectDataURL = `${serverURL}/api/surfly/projectData/${projectID}?time=`+timestamp;  //   console.log('projectDataURL from index.js: ', projectDataURL)
 

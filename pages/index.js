@@ -285,7 +285,7 @@ const sendDB_Request = async (requestOptions)  => {   // console.log('Result sto
 
 
 //   SURFLY Save => CORS-ISSUE on Localhost
-  // const  surflyRender = async (projectID) => {
+  // const  surflyRender = async (projectID, setpaneValues) => {
   //       // console.log('pensAPI_url from index.js: ',  pensAPI_url)
   //           var timestamp = Date.now();
   //           if (projectID == "" || projectID == " " ) {
@@ -352,7 +352,7 @@ const sendDB_Request = async (requestOptions)  => {   // console.log('Result sto
            New Project</button>
            <button className={styles.button + ' toggleOnlongURLValue ' } onClick={() => {alert('This is still work in Progress. Nothing happens here: As of yet! ')   }} >
            Forward Result to a friend</button>
-           <button className={styles.button + ' toggleOnlongURLValue ' } onClick={() => {surflyProxy.surflyRender(projectID);   }} >
+           <button className={styles.button + ' toggleOnlongURLValue ' } onClick={() => {surflyProxy.surflyRender(projectID, setpaneValues);   }} >
            Look at Result</button>
 
            {(provideProjName)  ? '' :
