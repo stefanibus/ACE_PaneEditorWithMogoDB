@@ -285,21 +285,21 @@ const sendDB_Request = async (requestOptions)  => {   // console.log('Result sto
 
 
 //   SURFLY Save => CORS-ISSUE on Localhost
-  const  surflyRender = async (projectID) => {
-        // console.log('pensAPI_url from index.js: ',  pensAPI_url)
-            var timestamp = Date.now();
-            if (projectID == "" || projectID == " " ) {
-                alert('Please create a project before you click on SAVE (or work already existing projects) ');
-            } else {
-                const SurflyAPIstring = `${serverURL}/api/surfly/${projectID}/?timestamp=`+timestamp;
-                // console.log('SurflyAPIstring with projectID and TimeStamp: ',SurflyAPIstring);
-                const fetchRequestOptions = { method: "GET", headers: { "Content-Type": "application/json; charset=utf-8" } };
-                const getSurflyURL = await fetch(SurflyAPIstring, fetchRequestOptions);
-                const { SurflyResponseURL } = await getSurflyURL.json();
-                if (getSurflyURL.status !== 200) { await router.push("/404"); }
-                setpaneValues(SurflyResponseURL);
-            }
-      }
+  // const  surflyRender = async (projectID) => {
+  //       // console.log('pensAPI_url from index.js: ',  pensAPI_url)
+  //           var timestamp = Date.now();
+  //           if (projectID == "" || projectID == " " ) {
+  //               alert('Please create a project before you click on SAVE (or work already existing projects) ');
+  //           } else {
+  //               const SurflyAPIstring = `${serverURL}/api/surfly/${projectID}/?timestamp=`+timestamp;
+  //               // console.log('SurflyAPIstring with projectID and TimeStamp: ',SurflyAPIstring);
+  //               const fetchRequestOptions = { method: "GET", headers: { "Content-Type": "application/json; charset=utf-8" } };
+  //               const getSurflyURL = await fetch(SurflyAPIstring, fetchRequestOptions);
+  //               const { SurflyResponseURL } = await getSurflyURL.json();
+  //               if (getSurflyURL.status !== 200) { await router.push("/404"); }
+  //               setpaneValues(SurflyResponseURL);
+  //           }
+  //     }
 
 
 //   ProjectName Input Field
@@ -352,7 +352,7 @@ const sendDB_Request = async (requestOptions)  => {   // console.log('Result sto
            New Project</button>
            <button className={styles.button + ' toggleOnlongURLValue ' } onClick={() => {alert('This is still work in Progress. Nothing happens here: As of yet! ')   }} >
            Forward Result to a friend</button>
-           <button className={styles.button + ' toggleOnlongURLValue ' } onClick={() => { surflyRender(projectID);   }} >
+           <button className={styles.button + ' toggleOnlongURLValue ' } onClick={() => {surflyProxy.surflyRender(projectID);   }} >
            Look at Result</button>
 
            {(provideProjName)  ? '' :
