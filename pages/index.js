@@ -7,24 +7,40 @@ import { BsTrash, BsX, BsPencil } from "react-icons/bs";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import sliderSplitPane from "../utils/splitpane";
 import surflyProxy from "../utils/surflyLibary";
+import Auslagerung from "../utils/mongo_communication";
+
 
 
 
 const Index = () => {
 
+
+  // STEFANO DELETE THIS AGAIN LATER
+  const tester = () => {
+    console.log('test triggering Func')
+  }
+
+  const router = useRouter();
+  const { id, user_id } = router.query;
+
+
+  const [askLongURL, setAskLongURL] = useState(false);
+
   const [editorHeightValue, setEditorHeightValue] = useState("350px");
   const [verticalPaneSize, setverticalPaneSize] = useState(40);
   const [horizontalSize, setHorizontalSize] = useState(50);
-  const [askLongURL, setAskLongURL] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [provideProjName, setProvideProjName] = useState(false);
+
   const [jsValue, setJsValue] = useState("");
   const [cssValue, setCssValue] = useState("");
   const [longurlValue, setLongurlValue] = useState("");
   const [longurlValueTempoary, setLongurlValueTempoary] = useState("");
   const [shorturlValue, setLShorturlValue] = useState("");
   const [paneValues, setpaneValues] = useState("startpage.html");
+
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [provideProjName, setProvideProjName] = useState(false);
+
   const [project, setProject] = useState([]);
   const [projectID, setProjectID] = useState("");
   const [projectName, setProjectName] = useState("")
@@ -32,35 +48,28 @@ const Index = () => {
   const [userID_from_Fingerprint, setUserID_from_Fingerprint] = useState("");
   const [visitorID, setVisitorID] = useState();
 
-  const router = useRouter();
-  const { id, user_id } = router.query;
+
 
   // const serverURL = process.env.NODE_ENV === "development" ? process.env.NEXT_PUBLIC_DEVURL : process.env.PRODURL;
   const serverURL = 'http://localhost:3000';
 
-
-  const pensAPI_url  = `${serverURL}/api/pens/${id}` ;  //
-
+  const pensAPI_url  = `${serverURL}/api/pens/${id}` ;
 
 //   external Libary => load Surfly.com API Proxy
-  useEffect( () => {
-          surflyProxy.embedLibary();
-  }, []);
-
-
+  useEffect( () => { surflyProxy.embedLibary();   }, []);
 
 //   fetchProjectData from MongoDB
   useEffect(() => {
      if(router.isReady) {
-             // store visitorID from router.query-Parameter
-             setVisitorID(router.query.user_id);
-        // console.log('ProjectData is now certainly available because of router.isReady:' , router.isReady ,  '. Only if  the "id" Value does not exists in the widows location query, then our id value will remain undefined . Otherwise it will be:  ', id,  )
+
+         setVisitorID(router.query.user_id); // store visitorID from router.query-Parameter
+        // console.log('ProjectData is now certainly available: because router.isReady:' , router.isReady ,  '. Only if  the "id" Value does not exists in the widows location query, then our id value will remain undefined . Otherwise it will be:  ', id,  )
         if(typeof id !== "undefined")  {
            const fetchProjectData = async () => {
                 const response = await fetch(pensAPI_url);
                 const { data } = await response.json();
                       if (response.status !== 200) {
-                        alert("The Project you are trying to access was deleted! There is no ProjectData available anymore. We cannot deliver this projectID. We will forward you to the startpage instead. We hope you are fine with that. ");
+                        alert("The Project you are trying to access might be deleted (or you are offline)! There is no ProjectData available anymore. We cannot deliver this project. We will forward you to the startpage instead. We hope you are fine with that. ");
                         NewProject_Show();
                         router.push("/");
                       } else {
@@ -69,19 +78,18 @@ const Index = () => {
                     setCssValue(data.css);
                     setJsValue(data.js);
                     setProjectID(id);
-                    //
-                    getProjectListForUser();// refresh ProjectList
+                    getProjectListForUser();
                 }
             }
           fetchProjectData();
           setLoading(false);
         }
         else {
-          // console.log(' no  ProjectData is  available   ', id)
+          // console.log('no ProjectData is  available', id)
           setLoading(false);
+          getProjectListForUser();
           }
      }
-
   }, [id]);
 
 
@@ -99,25 +107,24 @@ const Index = () => {
   }
 
 //   Delete from MongoDB
- const onDelete =  async (id) => {
+ const onDelete =  async () => {
     const requestOptions = {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
     };
 
     const response = await fetch(pensAPI_url, requestOptions);
-    const { success, data } = await response.json();
-    if (success) {
-                    // location.href = "/";   // stefano: INSTEAD WE DO THE BELOW 6 things:
-                    router.push("/");
-                    setProjectName('')
-                    setLongurlValue('')
-                    setCssValue('');
-                    setJsValue('');
-                    setProjectID("");
-                    getProjectListForUser();
+    const { success } = await response.json();
+    if (success) { //  console.log('INSTEAD OF:  location.href = "/";    we will do the below 6 things:' )
+        router.push("/");
+        setProjectName('')
+        setLongurlValue('')
+        setCssValue('');
+        setJsValue('');
+        setProjectID("");
+        getProjectListForUser();
     }
-  }
+ }
 
 
 //   get ProjectList from MongoDB
@@ -141,7 +148,9 @@ const Index = () => {
 //   Save to MongoDB (New Project)
   const saveNewProject = (isNewProject) => {
       setSaving(true);
-      setUserID_from_Fingerprint(visitorID);
+      console.log('userID_from_Fingerprint: ', userID_from_Fingerprint )
+
+     // setUserID_from_Fingerprint(visitorID);
       var meth = "PUT";
          // ==> this is a new Project!
          // ==> we will empty the pre-existing data (exept for the longurl )
@@ -196,7 +205,6 @@ const Index = () => {
       alert("Please input a new project name");
       setProvideProjName(true);
       setSaving(false);
-      // setAskLongURL(true);
       return false;
     }
 
@@ -328,6 +336,8 @@ const sendDB_Request = async (requestOptions)  => {   //   console.log('Result s
 
       <div className={styles.header}>
 
+     <button className={styles.button} onClick={() => { Auslagerung.test(tester); }} >ex func </button>
+
     {/* Button to request the proxied result, Button to save work to MongoDB, Button to create new Project, Button to forward result to friend*/}
         <div className={styles.longURLButtons + ` longURLButtons  `}>
          <span className={` button-group `}>
@@ -399,7 +409,7 @@ const sendDB_Request = async (requestOptions)  => {   //   console.log('Result s
                 {project && project.length > 0 &&
                   <BsTrash style={{ color: "white", fontSize: 36 }}
                   onClick={() => {
-                                      if (window.confirm('Are you sure you wish to delete this Website-Manipulation-Project?')) { onDelete(projectID) }
+                                      if (window.confirm('Are you sure you wish to delete this Website-Manipulation-Project ?')) { onDelete() }
                                   }
                           }
                   />

@@ -35,7 +35,10 @@ const surflyProxy = {
                 if (getSurflyURL.status !== 200) { await router.push("/404"); }
                 setpaneValues(SurflyResponseURL);
             }
-   }
+   },
+   surflyTest:  () => {
+       console.log('surflyTest')
+    }
 }
 
 export default surflyProxy

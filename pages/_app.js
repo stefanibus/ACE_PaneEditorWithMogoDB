@@ -7,7 +7,7 @@ function MyApp({ Component, pageProps }) {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32_fingerprint.png"/>
-    {/* https://github.com/facebook/react/issues/20829 */}
+        {/* https://github.com/facebook/react/issues/20829 */}
         <script> if (!crossOriginIsolated) SharedArrayBuffer = ArrayBuffer </script>
       </Head>
       <Component {...pageProps} />
