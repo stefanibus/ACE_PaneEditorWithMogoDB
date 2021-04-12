@@ -19,7 +19,7 @@ export default async (req, res) => {
           return;
         }
         res.status(200).json({ data });
-        // console.log('api/pens/id.js: GET Project-Data successfully');
+        // console.log('api/proxyProjectData/id.js: GET Project-Data successfully');
         return;
       } catch (error) {
           res.status(500).json({ success: false });
@@ -43,7 +43,7 @@ export default async (req, res) => {
         res
           .status(200)
           .json({ success: true, data: { newRecordId: result.insertedId } });
-          // console.log('api/pens/id.js: PUT Project-Data successfully');
+          // console.log('api/proxyProjectData/id.js: PUT Project-Data successfully');
         return;
       } catch (error) {
         console.log(error);
@@ -66,7 +66,7 @@ export default async (req, res) => {
         res
           .status(200)
           .json({ success: true, data: { updatedRecord: true } });
-        // console.log('api/pens/id.js: POST Project-Data successfully');
+        // console.log('api/proxyProjectData/id.js: POST Project-Data successfully');
           return;
       } catch (error) {
         console.log(error);
@@ -83,7 +83,7 @@ export default async (req, res) => {
         const data = await db
           .collection(collectionName).deleteOne({ _id: ObjectId(id) });
         res.status(200).json({ success: true, data });
-        // console.log('api/pens/id.js: DELETE Project-Data successfully');
+        // console.log('api/proxyProjectData/id.js: DELETE Project-Data successfully');
         return;
       } catch (error) {
         res.status(500).json({ success: false });

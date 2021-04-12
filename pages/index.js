@@ -21,7 +21,7 @@ const Index = () => {
   }
 
   const router = useRouter();
-  const { id, user_id } = router.query;
+  const { projectQuery, userQuery } = router.query;
 
 
   const [askLongURL, setAskLongURL] = useState(false);
@@ -41,19 +41,19 @@ const Index = () => {
   const [saving, setSaving] = useState(false);
   const [provideProjName, setProvideProjName] = useState(false);
 
-  const [project, setProject] = useState([]);
-  const [projectID, setProjectID] = useState("");
+  const [userData, setUserData] = useState([]);
+  const [projectId, setprojectId] = useState("");
   const [projectName, setProjectName] = useState("")
   const [currentlyDragged, setCurrentlyDragged]  = useState(false);
   const [userID_from_Fingerprint, setUserID_from_Fingerprint] = useState("");
-  const [visitorID, setVisitorID] = useState();
+  const [visitorId, setvisitorId] = useState();
 
 
 
   // const serverURL = process.env.NODE_ENV === "development" ? process.env.NEXT_PUBLIC_DEVURL : process.env.PRODURL;
   const serverURL = 'http://localhost:3000';
 
-  const pensAPI_url  = `${serverURL}/api/pens/${id}` ;
+  const data4project  = `${serverURL}/api/projectData/${projectQuery}` ;
 
 //   external Libary => load Surfly.com API Proxy
   useEffect( () => { surflyProxy.embedLibary();   }, []);
@@ -62,14 +62,14 @@ const Index = () => {
   useEffect(() => {
      if(router.isReady) {
 
-         setVisitorID(router.query.user_id); // store visitorID from router.query-Parameter
-        // console.log('ProjectData is now certainly available: because router.isReady:' , router.isReady ,  '. Only if  the "id" Value does not exists in the widows location query, then our id value will remain undefined . Otherwise it will be:  ', id,  )
-        if(typeof id !== "undefined")  {
+         setvisitorId(router.query.userQuery); // store visitorId from router.query-Parameter
+        // console.log('ProjectData is now certainly available: because router.isReady:' , router.isReady ,  '. Only if  the "projectQuery" Value does not exists in the widows location query, then our projectQuery value will remain undefined . Otherwise it will be:  ', projectQuery,  )
+        if(typeof projectQuery !== "undefined")  {
            const fetchProjectData = async () => {
-                const response = await fetch(pensAPI_url);
+                const response = await fetch(data4project);
                 const { data } = await response.json();
                       if (response.status !== 200) {
-                        alert("The Project you are trying to access might be deleted (or you are offline)! There is no ProjectData available anymore. We cannot deliver this project. We will forward you to the startpage instead. We hope you are fine with that. ");
+                        alert("This Project might either be deleted, or you might be offline? No ProjectData is available anymore, or we cannot deliver this project currently. We will forward you to the startpage instead. We hope you are fine with that. Feel free to start a new Project by entering any URL you would like to manipulate. ");
                         NewProject_Show();
                         router.push("/");
                       } else {
@@ -77,7 +77,7 @@ const Index = () => {
                     setLongurlValue(data.longurl)
                     setCssValue(data.css);
                     setJsValue(data.js);
-                    setProjectID(id);
+                    setprojectId(projectQuery);
                     getProjectListForUser();
                 }
             }
@@ -85,24 +85,21 @@ const Index = () => {
           setLoading(false);
         }
         else {
-          // console.log('no ProjectData is  available', id)
+          // console.log('no ProjectData is  available', projectQuery)
           setLoading(false);
           getProjectListForUser();
           }
      }
-  }, [id]);
+  }, [projectQuery]);
 
 
 //   DropDown-Element Eventhandler  (onClick for Option-Elements)
   const   ProjectList4User_DropDown = (event) => {
     if (event.target.value != "") { // console.log('dropdown was clicked => refresh Params in Query:  ',event.target.value,  userID_from_Fingerprint);
-       // stefano: add Spinner here potentially
-       router.push(`?id=${event.target.value}&user_id=${userID_from_Fingerprint}`);
-       setProjectID(event.target.value);
-    } else { // console.log('option-item has no value, thus nothing shall happen, stefano: delete this else-Statement later ');
-      // prevent default !!  das wäre besser, bzw am einfachsten: die Funktionen werden  für's Erste gekillt
-      // location.href = "/";
-      // setProjectID("");
+       router.push(`?projectQuery=${event.target.value}&userQuery=${userID_from_Fingerprint}`);
+       setprojectId(event.target.value);
+    } else {
+       // console.log('option-item has no value, thus nothing shall happen ');
     }
   }
 
@@ -113,7 +110,7 @@ const Index = () => {
       headers: { "Content-Type": "application/json" },
     };
 
-    const response = await fetch(pensAPI_url, requestOptions);
+    const response = await fetch(data4project, requestOptions);
     const { success } = await response.json();
     if (success) { //  console.log('INSTEAD OF:  location.href = "/";    we will do the below 6 things:' )
         router.push("/");
@@ -121,7 +118,7 @@ const Index = () => {
         setLongurlValue('')
         setCssValue('');
         setJsValue('');
-        setProjectID("");
+        setprojectId("");
         getProjectListForUser();
     }
  }
@@ -131,52 +128,44 @@ const Index = () => {
  const  getProjectListForUser =  async  () => {
     const fp = await FingerprintJS.load();
     const result = await fp.get();
-    const visitorIdentification = result.visitorId; //  console.log('visitorIdentifier: ==> (from getProjectListForUser-Func): ',  visitorIdentification )
-    setUserID_from_Fingerprint(visitorIdentification);
+    const identificationOfTheVisitor = result.visitorId; //  console.log('visitorIdentifier: ==> (from getProjectListForUser-Func): ',  identificationOfTheVisitor )
+    setUserID_from_Fingerprint(identificationOfTheVisitor);
     const requestOptions = {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     };
-    const usersAPI_url = `${serverURL}/api/users/${visitorIdentification}`;  //  console.log('usersAPI_url from index.js: ', usersAPI_url)
+    const usersAPI_url = `${serverURL}/api/users/${identificationOfTheVisitor}`;  //  console.log('usersAPI_url from index.js: ', usersAPI_url)
     const response = await fetch(usersAPI_url, requestOptions);
     const { data } = await response.json(); // console.log('usersAPI_url DATA is =: ', data)
-    setProject(data);
+    setUserData(data);
   }
 
 
 
 //   Save to MongoDB (New Project)
-  const saveNewProject = (isNewProject) => {
+  const saveNewProject = () => {
+     // setUserID_from_Fingerprint(visitorId); // STEFANO DELETE this line LATER
       setSaving(true);
-      console.log('userID_from_Fingerprint: ', userID_from_Fingerprint )
-
-     // setUserID_from_Fingerprint(visitorID);
       var meth = "PUT";
-         // ==> this is a new Project!
-         // ==> we will empty the pre-existing data (exept for the longurl )
-        if (isNewProject) {
-                const AutoCreateFileName = (URLstring) => {
-                    const StringNoTrialingSlash = URLstring.replace(/\/$/, '');
-                    var filename = StringNoTrialingSlash.substring(StringNoTrialingSlash.lastIndexOf('/')+1);
-                    return filename;
-                }
-                const requestOptions = {
-                  method: meth,
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({
-                    css: '/* your additional CSS Code wil be proxied into: ' + longurlValue + ' */\n/* start coding here   (and click on "look at result") */\n\n' ,
-                    js: '// your additional JS Code wil be proxied into: \n// ' + longurlValue  +'\n// const collapseThisLine = () =>  {\n//console.log( "You can collapse this line --> and manage your space in this js-pane wisely! " } \n\n// start coding here   (and click on "look at result")  \n\n',
-                    id: id,
-                    userID: userID_from_Fingerprint,
-                    projectName: AutoCreateFileName(longurlValue),
-                    longurl: longurlValue
-                  }),
-              };
-              sendDB_Request(requestOptions);
-          }
-          else {
-              alert('// Stefano:  Existing Project (should never happen in this function) : ==> we will not reset the data for MongoDB: we do nothing (and keep the Project data) in this unlikely case. I still want to test on this.   ')
-          }
+              const AutoCreateFileName = (URLstring) => {
+                  const StringNoTrialingSlash = URLstring.replace(/\/$/, '');
+                  var filename = StringNoTrialingSlash.substring(StringNoTrialingSlash.lastIndexOf('/')+1);
+                  return filename;
+              }
+              // ==> this is a new Project!==> we will empty the pre-existing data (exept for the longurl )
+              const requestOptions = {
+                method: meth,
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  css: '/* your additional CSS Code wil be proxied into: ' + longurlValue + ' */\n/* start coding here   (and click on "look at result") */\n\n' ,
+                  js: '// your additional JS Code wil be proxied into: \n// ' + longurlValue  +'\n// const collapseThisLine = () =>  {\n//console.log( "You can collapse this line --> and manage your space in this js-pane wisely! " } \n\n// start coding here   (and click on "look at result")  \n\n',
+                  id: projectQuery,
+                  userID: userID_from_Fingerprint,
+                  projectName: AutoCreateFileName(longurlValue),
+                  longurl: longurlValue
+                }),
+            };
+            sendDB_Request(requestOptions);
 }
 
 
@@ -184,24 +173,24 @@ const Index = () => {
   const save = async () => {
     setSaving(true);
     var meth ;
-    if (visitorID) {
+    if (visitorId) {
           // visitor and  user are EQUAL to one another
-          if (visitorID == userID_from_Fingerprint) {  // alert('visitor and  user are EQUAL to one another ( value is userID_from_Fingerprint) = so we EITHER Update (overrite) OR Clone the Project  ' );                         console.log('id = Param aus der window adress bar:  ', id);
-            meth = id ? "POST" : "PUT"; //  POST = (overwrite) updatedRecord, Put = newRecordId (create new)
+          if (visitorId == userID_from_Fingerprint) {  // alert('visitor and  user are EQUAL to one another ( value is userID_from_Fingerprint) = so we EITHER Update (overrite) OR Clone the Project  ' );                         console.log('projectQuery = Param aus der window adress bar:  ', projectQuery);
+            meth = projectQuery ? "POST" : "PUT"; //  POST = (overwrite) updatedRecord, Put = newRecordId (create new)
           }
           else { // alert("same Project, but different User");
             meth = "PUT";
-            alert("We cloned this Project for you. You can re-name the Project-Name later if you wish.   " );
+            alert("We cloned this Project for you. If you wish, You can provide a different name for the Project later. Use the pencil in the top-right-corner to change the Name.   " );
           }
     }
     else {
-      alert("STEFANO:  This alert should only come up if you are OFFLINE! Take care:  Your result has probably not been stored!");
-      setUserID_from_Fingerprint(visitorID);
+      alert("This alert should only come up if you are OFFLINE! Take care:  Your result has probably not been stored!");
+      setUserID_from_Fingerprint(visitorId);
       meth = "PUT";
     }
 
-    // STEFANO dwell on this more
-    if (projectName == " " || projectName == "" || projectName == "needs_a_name") {
+    // ProjectName Field is left empty
+    if (projectName == " " || projectName == "" ) {
       alert("Please input a new project name");
       setProvideProjName(true);
       setSaving(false);
@@ -227,7 +216,7 @@ const Index = () => {
       body: JSON.stringify({
         css: cssValue,
         js: jsValue,
-        id: id,
+        id: projectQuery,
         userID: userID_from_Fingerprint,
         projectName: projectName,
         longurl: longurlValue
@@ -242,14 +231,14 @@ const Index = () => {
 //   sendDB_Request to MongoDB
 const sendDB_Request = async (requestOptions)  => {   //   console.log('Result stored in MongoDB: either updatedRecord (true undefined), or we created a newRecordId  (undefined 000000001 ): ',  updatedRecord, newRecordId )
 
-    const response = await fetch(pensAPI_url, requestOptions);
+    const response = await fetch(data4project, requestOptions);
     const {
       data: { updatedRecord, newRecordId },
     } = await response.json();
     setSaving(false);
     setProvideProjName(false);
     if (!updatedRecord) {  // console.log('CLONE CONTENT NOW ==> Only if updatedRecord is FALSE (meaning: POST is false =  meaning we do not have same user AND same project = (thus not OVERWRITE ), ==>we will clone and then update both Params in the adress bar: ', updatedRecord, newRecordId , userID_from_Fingerprint,    )   //
-       await router.push(`?id=${newRecordId}&user_id=${userID_from_Fingerprint}`);
+       await router.push(`?projectQuery=${newRecordId}&userQuery=${userID_from_Fingerprint}`);
 
     }
 }
@@ -273,7 +262,7 @@ const sendDB_Request = async (requestOptions)  => {   //   console.log('Result s
  const NewProject_Save = async () => {
  const UrlCheck = validateURL(longurlValue) ;
      if (UrlCheck) {
-      saveNewProject(true);
+      saveNewProject();
       NewProject_Hide();
      }
      else {
@@ -308,6 +297,7 @@ const sendDB_Request = async (requestOptions)  => {   //   console.log('Result s
                  NewProject_Save();
               } else {
                  save();
+                 getProjectListForUser()
               }
           }
   }
@@ -345,7 +335,7 @@ const sendDB_Request = async (requestOptions)  => {   //   console.log('Result s
            New Project</button>
            <button className={styles.button + ' toggleOnlongURLValue ' } onClick={() => {alert('This is still work in Progress. Nothing happens here: As of yet! ')   }} >
            Forward Result to a friend</button>
-           <button className={styles.button + ' toggleOnlongURLValue ' } onClick={() => {surflyProxy.surflyRender(projectID, setpaneValues);   }} >
+           <button className={styles.button + ' toggleOnlongURLValue ' } onClick={() => {surflyProxy.surflyRender(projectId, setpaneValues);   }} >
            Look at Result</button>
 
            {(provideProjName)  ? '' :
@@ -383,7 +373,7 @@ const sendDB_Request = async (requestOptions)  => {   //   console.log('Result s
                             className={`
                               projectName-InputField form-control form-input
                               ${provideProjName && ' provideProjName '  }
-                              ${(projectName == " " || projectName == "" || projectName == "needs_a_name") ? ' doBlink ':' doNotBlink '}
+                              ${(projectName == " " || projectName == "" ) ? ' doBlink ':' doNotBlink '}
                              `}
                             style={{ visibility: "hidden" }}
                             value={projectName}
@@ -406,27 +396,27 @@ const sendDB_Request = async (requestOptions)  => {   //   console.log('Result s
                       className=' toggleOnlongURLValue '
                        /> }
 
-                {project && project.length > 0 &&
+                {userData && userData.length > 0 &&
                   <BsTrash style={{ color: "white", fontSize: 36 }}
                   onClick={() => {
-                                      if (window.confirm('Are you sure you wish to delete this Website-Manipulation-Project ?')) { onDelete() }
+                                      if (window.confirm('You wish to delete this Project. Are you sure?')) { onDelete() }
                                   }
                           }
                   />
                 }
 
-                {project && project.length > 0 && (
+                {userData && userData.length > 0 && (
                   <select
                     className="projectName-DropdownField  form-control form-input"
                     style={{ width: 240 }}
-                    value={projectID && projectID }
+                    value={projectId && projectId }
                     onChange={ProjectList4User_DropDown}
                   >
                     <option value="">all your projects: </option>
-                    {project.map((item, i) => {
+                    {userData.map((item, i) => {
                       return (
                         <option key={i} value={item._id}>
-                          {item.projectName ? item.projectName : 'needs_a_name'}
+                          {item.projectName && item.projectName}
                         </option>
                       );
                     })}

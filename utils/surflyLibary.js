@@ -16,19 +16,19 @@ const surflyProxy = {
             y.parentNode.insertBefore(l, y);
           })(window, document, "script", "Surfly");
  	},
-   surflyRender: async (projectID, setpaneValues) => {
+   surflyRender: async (projectId, setpaneValues) => {
 
                // STEFANO , this is for later ;)
                // const serverURL = process.env.NODE_ENV === "development" ? process.env.NEXT_PUBLIC_DEVURL : process.env.PRODURL;
                const serverURL = 'http://localhost:3000';
 
-               console.log('projectID : ',  projectID)
+               console.log('projectId : ',  projectId)
             var timestamp = Date.now();
-            if (projectID == "" || projectID == " " ) {
+            if (projectId == "" || projectId == " " ) {
                 alert('Please create a project before you click on SAVE (or work already existing projects) ');
             } else {
-                const SurflyAPIstring = `${serverURL}/api/surfly/${projectID}/?timestamp=`+timestamp;
-                // console.log('SurflyAPIstring with projectID and TimeStamp: ',SurflyAPIstring);
+                const SurflyAPIstring = `${serverURL}/api/proxyService/${projectId}/?timestamp=`+timestamp;
+                // console.log('SurflyAPIstring with projectId and TimeStamp: ',SurflyAPIstring);
                 const fetchRequestOptions = { method: "GET", headers: { "Content-Type": "application/json; charset=utf-8" } };
                 const getSurflyURL = await fetch(SurflyAPIstring, fetchRequestOptions);
                 const { SurflyResponseURL } = await getSurflyURL.json();
