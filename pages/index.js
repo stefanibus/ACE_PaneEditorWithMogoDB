@@ -5,12 +5,10 @@ import { CssEditor, JavascriptEditor } from "../components/Editors";
 import styles from "./index.module.css";
 import { BsTrash, BsX, BsPencil } from "react-icons/bs";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
-import sliderSplitPane from "../utils/splitpane";
+import sliderSplitPane from "../utils/splitpane"; //Stefano still needed here?
 import surflyProxy from "../utils/surflyLibary";
 import Auslagerung from "../utils/mongo_communication";
-
-
-
+import ManageProject from '../components/ManageProject'
 
 const Index = () => {
 
@@ -33,7 +31,6 @@ const Index = () => {
   const [jsValue, setJsValue] = useState("");
   const [cssValue, setCssValue] = useState("");
   const [longurlValue, setLongurlValue] = useState("");
-  const [longurlValueTempoary, setLongurlValueTempoary] = useState("");
   const [shorturlValue, setLShorturlValue] = useState("");
   const [paneValues, setpaneValues] = useState("startpage.html");
 
@@ -70,7 +67,7 @@ const Index = () => {
                 const { data } = await response.json();
                       if (response.status !== 200) {
                         alert("This Project might either be deleted, or you might be offline? No ProjectData is available anymore, or we cannot deliver this project currently. We will forward you to the startpage instead. We hope you are fine with that. Feel free to start a new Project by entering any URL you would like to manipulate. ");
-                        NewProject_Show();
+                        NewProject_Show(); // STEFANO CANNOT WORK ANYMORE
                         router.push("/");
                       } else {
                     setProjectName(data.projectName)
@@ -243,52 +240,9 @@ const sendDB_Request = async (requestOptions)  => {   //   console.log('Result s
     }
 }
 
-//   open NewProject-Area
-  const NewProject_Show =  () => {  // console.log('toggle visibility ');
-      sliderSplitPane.closeSlide(setverticalPaneSize);
-      setAskLongURL(true);
-      setLongurlValueTempoary(longurlValue)
-      setLongurlValue('')
-  };
-
-//   close NewProject-Area
- const NewProject_Hide = () => {  // console.log('toggle visibility ');
-      sliderSplitPane.openSlide(setverticalPaneSize);
-      setAskLongURL(false);
-      setLongurlValue(longurlValueTempoary) // back to old value
-  }
-
-//   Save the NewProject
- const NewProject_Save = async () => {
- const UrlCheck = validateURL(longurlValue) ;
-     if (UrlCheck) {
-      saveNewProject();
-      NewProject_Hide();
-     }
-     else {
-       alert('I assume you did not type in a valid Website-Adress?')
-     }
-  }
-
-//   URL Validation
-  const validateURL = (str) => {
-    var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
-      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
-      '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
-      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
-      '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
-      '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
-    return !!pattern.test(str);
-  }
-
-
 //   ProjectName Input Field
   const HandleProjectNameChange = e => {
       setProjectName(e.target.value)
-  }
-//   URL Input Field (LongURL)
-  const HandleLongURL_Change = e => {
-      setLongurlValue(e.target.value)
   }
 //   ReturnKey for both fields: (ProjectName- & URL-Input)
   const HandleReturnkey = (e, howToSave) => {
@@ -326,39 +280,22 @@ const sendDB_Request = async (requestOptions)  => {   //   console.log('Result s
 
       <div className={styles.header}>
 
-     <button className={styles.button} onClick={() => { Auslagerung.test(tester); }} >ex func </button>
+{/*     <button className={styles.button} onClick={() => { Auslagerung.test(tester); }} >ex func </button>
+*/}
+     <ManageProject
+         HandleReturnkey={HandleReturnkey}
+         setLongurlValue={setLongurlValue}
+         provideProjName={provideProjName}
+         setpaneValues={setpaneValues}
+         longurlValue={longurlValue}
+         projectId={projectId}
+         saving={saving}
+         save={save}
+         setverticalPaneSize={setverticalPaneSize}
+         setAskLongURL={setAskLongURL}
+         saveNewProject={saveNewProject}
+       />
 
-    {/* Button to request the proxied result, Button to save work to MongoDB, Button to create new Project, Button to forward result to friend*/}
-        <div className={styles.longURLButtons + ` longURLButtons  `}>
-         <span className={` button-group `}>
-           <button className={styles.button} onClick={() => { NewProject_Show(); }} >
-           New Project</button>
-           <button className={styles.button + ' toggleOnlongURLValue ' } onClick={() => {alert('This is still work in Progress. Nothing happens here: As of yet! ')   }} >
-           Forward Result to a friend</button>
-           <button className={styles.button + ' toggleOnlongURLValue ' } onClick={() => {surflyProxy.surflyRender(projectId, setpaneValues);   }} >
-           Look at Result</button>
-
-           {(provideProjName)  ? '' :
-           <button className={styles.button + ' toggleOnlongURLValue ' }  onClick={() => {  save();  } } >
-           {saving ? "Saving..." : "Save"} </button>
-           }
-         </span>
-          <br/>
-          <input  type="url"  value={longurlValue} className={` longURLInput form-control form-input `}
-          style={{ display: "none" }} placeholder="enter any valid Internet-Website-Adress here (or look at examples)"
-          onChange={HandleLongURL_Change}
-          onKeyUp={() => { HandleReturnkey(event,'NewProject')} }
-          >
-          </input>
-          <span className={` newProjectButtons `} style={{ display: "none" }}>
-             <button onClick={() => { NewProject_Save(); }} className={styles.button + ' isVisible_TheCreateNewProjectField'}  >
-             create new project
-             </button>
-             <BsX onClick={() => {NewProject_Hide(); }} className="bootstrapButton" style={{ color: "white", fontSize: 36 }} />
-          </span>
-           <p className={` slogan  `} style={{ display: "none" }}>
-           You can change any static Website!</p>
-        </div>
 
       {/*display the ProjectName and reveal the Project LongURL (on Hover) */}
         <div className={styles.customURL + ` customURL   `}>

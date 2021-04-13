@@ -1,10 +1,12 @@
 
 /* START TOGGLE NEW PROJECT LAYOUT  ==> TOGGLE VISIBILITY */
- .toggleView.isVisible_TheCreateNewProjectField .button-group ,
  .toggleView.isVisible_TheCreateNewProjectField .Pane.horizontal.Pane2
    {
     opacity: .2;
   }
+.toggleView.isVisible_TheCreateNewProjectField .button-group {
+  display: none !important;
+}
   .toggleView.isVisible_TheCreateNewProjectField .SplitPane.horizontal {
     margin-top: 150px !important;
     /*Compensate for the Margin-Top: */
@@ -15,28 +17,41 @@
   }
 .toggleView.isVisible_TheCreateNewProjectField .longURLInput {
     display: inline-block !important;
-    margin: 30px 0;
+    margin: 30px 17px;
     max-width: 56vw;
   }
 .toggleView.isVisible_TheCreateNewProjectField .longURLButtons {
   width: 100vw !important;
+  height: 133px;
 }
 .toggleView.isVisible_TheCreateNewProjectField .slogan  {
   color: white;
   display: inline-block !important;
-  right: 1vw;
+  right: 1vw !important;
   position: absolute;
-  top: 8vh;
+  top: 5vh  !important;
+}
+.toggleView.isVisible_NoActiveProject .slogan  {
+  display: inline-block !important;
+  position: absolute;
+  right: 23vw;
+  color: white;
+  top: 1.65vh;
+}
+@media only screen and (max-width: 1300px) {
+  .toggleView.isVisible_TheCreateNewProjectField .slogan  {
+    display: none !important;
+  }
 }
 .toggleView.isVisible_TheCreateNewProjectField .customURL ,
 .toggleView.isVisible_TheCreateNewProjectField .custom-select  {
   display: none;
 }
-.toggleView.isVisible_TheCreateNewProjectField .newProjectButtons {
-  display: inline-block !important;
-}
 .isVisible_NoActiveProject .toggleOnlongURLValue {
   display: none;
+}
+.toggleView.isVisible_TheCreateNewProjectField .newProjectButtons {
+  display: inline-block !important;
 }
 /* END TOGGLE NEW PROJECT LAYOUT */
 

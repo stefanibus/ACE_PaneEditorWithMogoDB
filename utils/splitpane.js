@@ -1,5 +1,6 @@
 const sliderSplitPane = {
  	closeSlide:  (setverticalPaneSize) => {
+ 		console.log('test')
 		var i = 40;                  //  set your counter to 40
 		function myLoop() {         //  create a loop function
 		  setTimeout(function() {   //  call a setTimeout when the loop is called // console.log('scroll close: '+i);

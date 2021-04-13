@@ -3,6 +3,7 @@ import editorStyles from "./Editors.module.css";
 import buttonStyles from "../pages/index.module.css";
 import sliderSplitPane from "../utils/splitpane";
 
+
 const TogglePaneView = ({
     mode,
     buttonText,
