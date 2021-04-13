@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
-import SplitPane from "react-split-pane";
+import { useRouter }     from "next/router";
+import SplitPane         from "react-split-pane";
+import styles            from "./index.module.css";
+import {BsX}             from "react-icons/bs";
+import FingerprintJS     from "@fingerprintjs/fingerprintjs";
+import sliderSplitPane   from "../utils/splitpane"; //Stefano still needed here?
+import surflyProxy       from "../utils/surflyLibary";
+import Auslagerung       from "../utils/mongo_communication";
+import ManageProject     from '../components/ManageProject'
+import ManageUser        from '../components/ManageUser'
+import manageProjects    from "../utils/manageProjects";
+import ShowProjName      from "../components/ShowProjName";
 import { CssEditor, JavascriptEditor } from "../components/Editors";
-import styles from "./index.module.css";
-import { BsTrash, BsX, BsPencil } from "react-icons/bs";
-import FingerprintJS from "@fingerprintjs/fingerprintjs";
-import sliderSplitPane from "../utils/splitpane"; //Stefano still needed here?
-import surflyProxy from "../utils/surflyLibary";
-import Auslagerung from "../utils/mongo_communication";
-import ManageProject from '../components/ManageProject'
+
 
 const Index = () => {
 
@@ -23,6 +27,10 @@ const Index = () => {
 
 
   const [askLongURL, setAskLongURL] = useState(false);
+
+
+  const [longurlValueTempoary, setLongurlValueTempoary] = useState("");
+
 
   const [editorHeightValue, setEditorHeightValue] = useState("350px");
   const [verticalPaneSize, setverticalPaneSize] = useState(40);
@@ -49,8 +57,8 @@ const Index = () => {
 
   // const serverURL = process.env.NODE_ENV === "development" ? process.env.NEXT_PUBLIC_DEVURL : process.env.PRODURL;
   const serverURL = 'http://localhost:3000';
-
   const data4project  = `${serverURL}/api/projectData/${projectQuery}` ;
+
 
 //   external Libary => load Surfly.com API Proxy
   useEffect( () => { surflyProxy.embedLibary();   }, []);
@@ -67,7 +75,7 @@ const Index = () => {
                 const { data } = await response.json();
                       if (response.status !== 200) {
                         alert("This Project might either be deleted, or you might be offline? No ProjectData is available anymore, or we cannot deliver this project currently. We will forward you to the startpage instead. We hope you are fine with that. Feel free to start a new Project by entering any URL you would like to manipulate. ");
-                        NewProject_Show(); // STEFANO CANNOT WORK ANYMORE
+                        manageProjects.newProject_Show(sliderSplitPane, setverticalPaneSize, setAskLongURL, setLongurlValueTempoary, longurlValue, setLongurlValue)
                         router.push("/");
                       } else {
                     setProjectName(data.projectName)
@@ -90,35 +98,7 @@ const Index = () => {
   }, [projectQuery]);
 
 
-//   DropDown-Element Eventhandler  (onClick for Option-Elements)
-  const   ProjectList4User_DropDown = (event) => {
-    if (event.target.value != "") { // console.log('dropdown was clicked => refresh Params in Query:  ',event.target.value,  userID_from_Fingerprint);
-       router.push(`?projectQuery=${event.target.value}&userQuery=${userID_from_Fingerprint}`);
-       setprojectId(event.target.value);
-    } else {
-       // console.log('option-item has no value, thus nothing shall happen ');
-    }
-  }
 
-//   Delete from MongoDB
- const onDelete =  async () => {
-    const requestOptions = {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-    };
-
-    const response = await fetch(data4project, requestOptions);
-    const { success } = await response.json();
-    if (success) { //  console.log('INSTEAD OF:  location.href = "/";    we will do the below 6 things:' )
-        router.push("/");
-        setProjectName('')
-        setLongurlValue('')
-        setCssValue('');
-        setJsValue('');
-        setprojectId("");
-        getProjectListForUser();
-    }
- }
 
 
 //   get ProjectList from MongoDB
@@ -240,30 +220,6 @@ const sendDB_Request = async (requestOptions)  => {   //   console.log('Result s
     }
 }
 
-//   ProjectName Input Field
-  const HandleProjectNameChange = e => {
-      setProjectName(e.target.value)
-  }
-//   ReturnKey for both fields: (ProjectName- & URL-Input)
-  const HandleReturnkey = (e, howToSave) => {
-          if (e.key === "Enter") {
-              if (howToSave === "NewProject") {
-                 NewProject_Save();
-              } else {
-                 save();
-                 getProjectListForUser()
-              }
-          }
-  }
-
-//   get Mouse-Position for the Vertical SplitPane-DragHandler
-    const CalcWidthPosition = (size) => {
-     let intViewportWidth =  window.innerWidth;
-     let rightPosition    =  (intViewportWidth - size); // size-value is counted upwards from the right by default:
-     let leftPosition     =  (intViewportWidth - rightPosition );  // we are switching that logic around
-     let ViewPortPosition = ((leftPosition  /  intViewportWidth ) * 100 ).toFixed(2);
-     return ViewPortPosition;
-    }
 
 //   Loading indication while waiting for the initial Response from MongoDB
   if (loading) {
@@ -282,8 +238,10 @@ const sendDB_Request = async (requestOptions)  => {   //   console.log('Result s
 
 {/*     <button className={styles.button} onClick={() => { Auslagerung.test(tester); }} >ex func </button>
 */}
+
+
+
      <ManageProject
-         HandleReturnkey={HandleReturnkey}
          setLongurlValue={setLongurlValue}
          provideProjName={provideProjName}
          setpaneValues={setpaneValues}
@@ -293,74 +251,43 @@ const sendDB_Request = async (requestOptions)  => {   //   console.log('Result s
          save={save}
          setverticalPaneSize={setverticalPaneSize}
          setAskLongURL={setAskLongURL}
+         longurlValueTempoary={longurlValueTempoary}
+         setLongurlValueTempoary={setLongurlValueTempoary}
          saveNewProject={saveNewProject}
        />
 
 
+
       {/*display the ProjectName and reveal the Project LongURL (on Hover) */}
-        <div className={styles.customURL + ` customURL   `}>
-           {longurlValue && <span> {projectName && projectName }   &nbsp; <span> {longurlValue}</span></span> }
-        </div>
+       <ShowProjName
+         longurlValue={longurlValue}
+         projectName={projectName}
+       />
+
 
 
       {/*User can Manage his/her "account" & "Projects": Delete a Project, Save a Name for a Project, Dropdown to toggle through all Projects of the current User */}
-        <div className={styles.customSelect + ` customSelect custom-select `}>
-                        <>
-                          <input
-                            className={`
-                              projectName-InputField form-control form-input
-                              ${provideProjName && ' provideProjName '  }
-                              ${(projectName == " " || projectName == "" ) ? ' doBlink ':' doNotBlink '}
-                             `}
-                            style={{ visibility: "hidden" }}
-                            value={projectName}
-                            placeholder="provide Project Name"
-                            onChange={ HandleProjectNameChange }
-                            onKeyUp={() => { HandleReturnkey(event,'saveRegular')} }
-                            >
-                           </input>
+       <ManageUser
+          provideProjName={provideProjName}
+          projectName={projectName}
+          save={save}
+          setProvideProjName={setProvideProjName}
+          userData={userData}
+          projectId={projectId}
+          data4project={data4project}
+          setProjectName={setProjectName}
+          setLongurlValue={setLongurlValue}
+          setCssValue={setCssValue}
+          setJsValue={setJsValue}
+          setprojectId={setprojectId}
+          getProjectListForUser={getProjectListForUser}
+          projectQuery={projectQuery}
+          userID_from_Fingerprint={userID_from_Fingerprint}
+       />
 
-                          <button
-                              style={{ visibility: "hidden" }}
-                              className={ styles.button + ` SaveButton-for-ProjName form-control form-input ${provideProjName ? ' provideProjName ' : '' } ` }
-                              onClick={() => { save(); } } >Save
-                          </button>
-                        </>
 
-                {!provideProjName && <BsPencil
-                      style={{ color: "white", fontSize: 36 }}
-                      onClick={() => { setProvideProjName(true) } }
-                      className=' toggleOnlongURLValue '
-                       /> }
 
-                {userData && userData.length > 0 &&
-                  <BsTrash style={{ color: "white", fontSize: 36 }}
-                  onClick={() => {
-                                      if (window.confirm('You wish to delete this Project. Are you sure?')) { onDelete() }
-                                  }
-                          }
-                  />
-                }
 
-                {userData && userData.length > 0 && (
-                  <select
-                    className="projectName-DropdownField  form-control form-input"
-                    style={{ width: 240 }}
-                    value={projectId && projectId }
-                    onChange={ProjectList4User_DropDown}
-                  >
-                    <option value="">all your projects: </option>
-                    {userData.map((item, i) => {
-                      return (
-                        <option key={i} value={item._id}>
-                          {item.projectName && item.projectName}
-                        </option>
-                      );
-                    })}
-                  </select>
-                )}
-
-        </div>
       </div>
       <SplitPane
         style={{ marginTop: "60px" }}
@@ -378,7 +305,7 @@ const sendDB_Request = async (requestOptions)  => {   //   console.log('Result s
               split="vertical"
               minSize="50%"
               size={`${horizontalSize}%`}
-              onDragFinished={(size) => { setHorizontalSize(CalcWidthPosition(size)) }}
+              onDragFinished={(size) => { setHorizontalSize(sliderSplitPane.CalcWidthPosition(size)) }}
           >
             <CssEditor
               setEditorHeightValue={setEditorHeightValue}

@@ -1,6 +1,5 @@
 const sliderSplitPane = {
  	closeSlide:  (setverticalPaneSize) => {
- 		console.log('test')
 		var i = 40;                  //  set your counter to 40
 		function myLoop() {         //  create a loop function
 		  setTimeout(function() {   //  call a setTimeout when the loop is called // console.log('scroll close: '+i);
@@ -106,6 +105,13 @@ const sliderSplitPane = {
 		  }, 10)
 		}
   	    myLoop();
+ 	},
+ 	CalcWidthPosition: (size) => {
+     let intViewportWidth =  window.innerWidth;
+     let rightPosition    =  (intViewportWidth - size); // size-value is counted upwards from the right by default:
+     let leftPosition     =  (intViewportWidth - rightPosition );  // we are switching that logic around
+     let ViewPortPosition = ((leftPosition  /  intViewportWidth ) * 100 ).toFixed(2);
+     return ViewPortPosition;
  	}
 }
 
