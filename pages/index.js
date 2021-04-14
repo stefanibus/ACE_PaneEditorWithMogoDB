@@ -128,7 +128,7 @@ const Index = () => {
                 method: meth,
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                  css: '/* your additional CSS Code wil be proxied into: ' + longurlValue + ' */\n/* start coding here   (and click on "look at result") */\n\n' ,
+                  css: '/* your additional CSS Code wil be proxied into: ' + longurlValue + ' */\n/* start coding here   (and click on "look at result") */\n\n.collapseThisLineInThisEditor {\n   color: red;\n   background-color: white;\n  }   ' ,
                   js: '// your additional JS Code wil be proxied into: \n// ' + longurlValue  +'\n// const collapseThisLine = () =>  {\n//console.log( "You can collapse this line --> and manage your space in this js-pane wisely! " } \n\n// start coding here   (and click on "look at result")  \n\n',
                   id: projectQuery,
                   userID: userID_from_Fingerprint,

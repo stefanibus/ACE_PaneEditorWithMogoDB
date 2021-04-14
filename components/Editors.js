@@ -79,7 +79,12 @@ const Editor = ({
           showGutter={true}
           tabSize={2}
           showPrintMargin={false} // ace_print-margin
-          setOptions={{ useWorker: false }}
+          setOptions={{ useWorker: false } }
+          onLoad={editor => {
+              editor.once("change", function() {
+                editor.session.foldAll()
+                });
+              }}
         />
       </div>
       );
