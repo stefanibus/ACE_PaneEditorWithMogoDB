@@ -6,7 +6,7 @@ import {BsX}             from "react-icons/bs";
 import FingerprintJS     from "@fingerprintjs/fingerprintjs";
 import sliderSplitPane   from "../utils/splitpane"; //Stefano still needed here?
 import surflyProxy       from "../utils/surflyLibary";
-import Auslagerung       from "../utils/mongo_communication";
+import db_communication       from "../utils/mongo_communication";
 import ManageProject     from '../components/ManageProject'
 import ManageUser        from '../components/ManageUser'
 import manageProjects    from "../utils/manageProjects";
@@ -15,12 +15,6 @@ import { CssEditor, JavascriptEditor } from "../components/Editors";
 
 
 const Index = () => {
-
-
-  // STEFANO DELETE THIS AGAIN LATER
-  const tester = () => {
-    console.log('test triggering Func')
-  }
 
   const router = useRouter();
   const { projectQuery, userQuery } = router.query;
@@ -142,7 +136,7 @@ const Index = () => {
                   longurl: longurlValue
                 }),
             };
-            sendDB_Request(requestOptions);
+            db_communication.sendDB_Request(requestOptions, data4project, setSaving, setProvideProjName, userID_from_Fingerprint, router)
 }
 
 
@@ -199,26 +193,8 @@ const Index = () => {
         longurl: longurlValue
       }),
     };
-
-    sendDB_Request(requestOptions);
-    // getProjectListForUser();
+    db_communication.sendDB_Request(requestOptions, data4project, setSaving, setProvideProjName, userID_from_Fingerprint, router)
 };
-
-
-//   sendDB_Request to MongoDB
-const sendDB_Request = async (requestOptions)  => {   //   console.log('Result stored in MongoDB: either updatedRecord (true undefined), or we created a newRecordId  (undefined 000000001 ): ',  updatedRecord, newRecordId )
-
-    const response = await fetch(data4project, requestOptions);
-    const {
-      data: { updatedRecord, newRecordId },
-    } = await response.json();
-    setSaving(false);
-    setProvideProjName(false);
-    if (!updatedRecord) {  // console.log('CLONE CONTENT NOW ==> Only if updatedRecord is FALSE (meaning: POST is false =  meaning we do not have same user AND same project = (thus not OVERWRITE ), ==>we will clone and then update both Params in the adress bar: ', updatedRecord, newRecordId , userID_from_Fingerprint,    )   //
-       await router.push(`?projectQuery=${newRecordId}&userQuery=${userID_from_Fingerprint}`);
-
-    }
-}
 
 
 //   Loading indication while waiting for the initial Response from MongoDB
@@ -236,8 +212,6 @@ const sendDB_Request = async (requestOptions)  => {   //   console.log('Result s
 
       <div className={styles.header}>
 
-{/*     <button className={styles.button} onClick={() => { Auslagerung.test(tester); }} >ex func </button>
-*/}
 
 
 
