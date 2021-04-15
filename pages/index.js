@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useRouter }     from "next/router";
 import SplitPane         from "react-split-pane";
 import styles            from "./index.module.css";
-import {BsX}             from "react-icons/bs";
 import FingerprintJS     from "@fingerprintjs/fingerprintjs";
 import sliderSplitPane   from "../utils/splitpane"; //Stefano still needed here?
 import surflyProxy       from "../utils/surflyLibary";
@@ -21,6 +20,10 @@ const Index = () => {
 
   const [askLongURL, setAskLongURL] = useState(false);
   const [longurlValueTempoary, setLongurlValueTempoary] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [userData, setUserData] = useState([]);
+  const [projectId, setprojectId] = useState("");
+
   const [editorHeightValue, setEditorHeightValue] = useState("350px");
   const [verticalPaneSize, setverticalPaneSize] = useState(40);
   const [horizontalSize, setHorizontalSize] = useState(50);
@@ -30,10 +33,7 @@ const Index = () => {
   const [shorturlValue, setLShorturlValue] = useState("");
   const [paneValues, setpaneValues] = useState("startpage.html");
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
   const [provideProjName, setProvideProjName] = useState(false);
-  const [userData, setUserData] = useState([]);
-  const [projectId, setprojectId] = useState("");
   const [projectName, setProjectName] = useState("")
   const [currentlyDragged, setCurrentlyDragged]  = useState(false);
   const [userID_from_Fingerprint, setUserID_from_Fingerprint] = useState("");
@@ -97,18 +97,18 @@ const Index = () => {
            <ManageProject
                setLongurlValue={setLongurlValue}
                provideProjName={provideProjName}
+               setProvideProjName={setProvideProjName}
                setpaneValues={setpaneValues}
                longurlValue={longurlValue}
                projectId={projectId}
                saving={saving}
+               setSaving={setSaving}
                setverticalPaneSize={setverticalPaneSize}
                setAskLongURL={setAskLongURL}
                longurlValueTempoary={longurlValueTempoary}
                setLongurlValueTempoary={setLongurlValueTempoary}
-               setSaving={setSaving}
                projectQuery={projectQuery}
                userID_from_Fingerprint={userID_from_Fingerprint}
-               setProvideProjName={setProvideProjName}
                setUserID_from_Fingerprint={setUserID_from_Fingerprint}
                visitorId={visitorId}
                jsValue={jsValue}
@@ -116,34 +116,40 @@ const Index = () => {
                projectName={projectName}
              />
 
-            {/*display the ProjectName and LongURL */}
-             <ShowProjName
-               longurlValue={longurlValue}
-               projectName={projectName}
-             />
+
+            {/*display the ProjectName and the LongURL */}
+              {(provideProjName)  ?
+                  ''
+                :
+                  <ShowProjName
+                     longurlValue={longurlValue}
+                     projectName={projectName}
+                   />
+              }
+
 
             {/* Let the User view all Projects and manage them: view User-Projects, Delete, Save new Name. */}
              <ManageUser
                 provideProjName={provideProjName}
                 projectName={projectName}
+                setProjectName={setProjectName}
                 setProvideProjName={setProvideProjName}
                 userData={userData}
+                setUserData={setUserData}
                 projectId={projectId}
-                setProjectName={setProjectName}
+                setprojectId={setprojectId}
                 setLongurlValue={setLongurlValue}
                 setCssValue={setCssValue}
                 setJsValue={setJsValue}
-                setprojectId={setprojectId}
                 projectQuery={projectQuery}
                 userID_from_Fingerprint={userID_from_Fingerprint}
+                setUserID_from_Fingerprint={setUserID_from_Fingerprint}
                 setSaving={setSaving}
                 visitorId={visitorId}
-                setUserID_from_Fingerprint={setUserID_from_Fingerprint}
                 jsValue={jsValue}
                 cssValue={cssValue}
                 longurlValue={longurlValue}
                 FingerprintJS={FingerprintJS}
-                setUserData={setUserData}
              />
       </div>
       <SplitPane

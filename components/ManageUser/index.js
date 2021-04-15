@@ -100,16 +100,23 @@ const ManageUser = ({
                   </button>
                 </>
 
-                {!provideProjName && <BsPencil
-                      style={{ color: "white", fontSize: 36 }}
+                {!provideProjName &&
+                  <BsPencil
+                      style={{ color: "white", fontSize: 36 ,  width: '1.65em' }}
                       onClick={() => { setProvideProjName(true) } }
                       className=' toggleOnlongURLValue '
-                       /> }
+                      alt="Edit the Name for this Project"
+                      title="Edit the Name for this Project"
+                   /> }
 
                 {userData && userData.length > 0 &&
-                  <BsTrash style={{ color: "white", fontSize: 36 }} onClick={() => {
-                          if (window.confirm('You wish to delete this Project. Are you sure?')) {
+                  <BsTrash
+                      style={{ color: "white", fontSize: 36 ,  width: '1.65em' }}
+                      onClick={() => {
+                          if (window.confirm('\n\nYou wish to delete this Project? \n\nAre you sure? \n\nIf you confirm this: You cannot undo this.\n\n  ')) {
                                     onDelete( data4project, setProjectName, setLongurlValue, setCssValue, setJsValue, setprojectId ) } }}
+                      alt="Delete this Project"
+                      title="Delete this Project"
                   />
                 }
 

@@ -19,13 +19,15 @@
 
 
 
-@media only screen and (min-width: 1350px) {
-  .customSelect,
-  .longURLButtons {
+@media only screen and (min-width: 1050px) {
+  .customSelect  {
     width: 40vw;
   }
+  .longURLButtons {
+    width: 60vw;
+  }
 }
-@media only screen and (max-width: 1350px) {
+@media only screen and (max-width: 1050px) {
   .customURL {
     display: none;
   }
@@ -35,16 +37,62 @@
     padding: 3px;
     border: 3px;
     opacity: .5;
-    width: 10vw;
+    width: 20vw;
+}
+
+.customURL:hover {
+    opacity: 1;
+    z-index: 99999;
 }
 .customURL span {
     font-size: 0.8vw;
     word-break: break-all;
-    position: absolute;
+    /*position: absolute;*/
+    /*width: 21vw;*/
 }
 .customURL span span {
-    /**/display: none;
-    /*position: absolute;*/
+    display: none;
+}
+
+
+.customURL span:hover > span {
+    display: flex;
+    position: absolute;
+ /*   width: 98vw;
+    top: 25vh;*/
+    top: .6vh;
+/*     bottom: 3vh;
+    right: 2vh;
+   height: 34vh;*/
+    height: 4vh;
+    left: 33vw;/**/
+    background-color: sandybrown;
+    color: black;
+    border: 2px solid grey;
+    border-radius: 4px;
+    text-align: center;
+    z-index: 1;
+    padding: 1.5em;
+    justify-content: center;
+    align-items: center;
+
+
+    background-color: #333642;
+    color: #fff;
+    font-size: 15px;
+    padding: 3px 20px;
+    margin-right: 10px;
+    border: 3px solid #444857;
+    border-radius: 8px;
+    cursor: pointer;
+
+
+
+}
+.customURL span:hover > span a {
+    color: black;
+    color: white;
+    cursor: alias;
 }
 .loading {
   width: 100vw;
