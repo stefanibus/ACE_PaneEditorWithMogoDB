@@ -15,6 +15,7 @@ const surflyProxy = {
             l.src = "https://surfly.com/surfly.js";
             y.parentNode.insertBefore(l, y);
           })(window, document, "script", "Surfly");
+          console.log('embedLibary')
  	},
    surflyRender: async (projectId, setpaneValues) => {
 
@@ -22,10 +23,10 @@ const surflyProxy = {
                // const serverURL = process.env.NODE_ENV === "development" ? process.env.NEXT_PUBLIC_DEVURL : process.env.PRODURL;
                const serverURL = 'http://localhost:3000';
 
-               console.log('projectId : ',  projectId)
+               // console.log('projectId : ',  projectId)
             var timestamp = Date.now();
             if (projectId == "" || projectId == " " ) {
-                alert('Please create a project before you click on SAVE (or work already existing projects) ');
+                alert('Please create a project before you click on SAVE.');
             } else {
                 const SurflyAPIstring = `${serverURL}/api/proxyService/${projectId}/?timestamp=`+timestamp;
                 // console.log('SurflyAPIstring with projectId and TimeStamp: ',SurflyAPIstring);
@@ -35,10 +36,7 @@ const surflyProxy = {
                 if (getSurflyURL.status !== 200) { await router.push("/404"); }
                 setpaneValues(SurflyResponseURL);
             }
-   },
-   surflyTest:  () => {
-       console.log('surflyTest')
-    }
+   }
 }
 
 export default surflyProxy

@@ -12,7 +12,7 @@ const client = new MongoClient(url, {
 async function connect() {
   if (!client.isConnected()) await client.connect();
     const db = client.db(dbName);
-    console.log('mongo was requested ' + Date.now())
+    // console.log('mongo was requested ' + Date.now())
   return { db, client };
 }
 

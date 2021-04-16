@@ -56,7 +56,12 @@
          })
          .then(function(response) {
               const SurflyResponseURL =    response.leader_link ;
-             res.status(200).json( {SurflyResponseURL} )
+               res.status(200).json( {SurflyResponseURL} )
+            // Only for Next.js 9.4.5+
+            // this is cool! but visitors shall not be redirected to surfly.com
+            // thus it is the wrong approach:
+            // res.redirect(SurflyResponseURL)
+
          })
          .catch(function(error) {
              console.log('error: ');

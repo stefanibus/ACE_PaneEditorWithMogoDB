@@ -18,6 +18,31 @@
 
 
 
+/* START LOADING SPINNER FOR SHORTURL RESULT-PAGE */
+.trans {
+     opacity: 1;
+     z-index: 9;
+     transition: opacity 1.5s linear, z-index 1.5s 2s ;
+}
+.trans.disNone {
+  opacity: 0;
+  z-index:  -9;
+}
+.visHide {
+  visibility: hidden !important;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  opacity: 0;
+}
+/* END LOADING SPINNER FOR SHORTURL RESULT-PAGE */
+
+
+
+
+
+
+
 
 @media only screen and (min-width: 1050px) {
   .customSelect  {
@@ -47,8 +72,6 @@
 .customURL span {
     font-size: 0.8vw;
     word-break: break-all;
-    /*position: absolute;*/
-    /*width: 21vw;*/
 }
 .customURL span span {
     display: none;
@@ -57,26 +80,14 @@
 
 .customURL span:hover > span {
     display: flex;
-    position: absolute;
- /*   width: 98vw;
-    top: 25vh;*/
-    top: .6vh;
-/*     bottom: 3vh;
-    right: 2vh;
-   height: 34vh;*/
-    height: 4vh;
-    left: 33vw;/**/
-    background-color: sandybrown;
-    color: black;
-    border: 2px solid grey;
-    border-radius: 4px;
-    text-align: center;
-    z-index: 1;
-    padding: 1.5em;
     justify-content: center;
     align-items: center;
-
-
+    position: absolute;
+    z-index: 1;
+    top: .6vh;
+    height: 4vh;
+    left: 33vw;
+    text-align: center;
     background-color: #333642;
     color: #fff;
     font-size: 15px;
@@ -85,9 +96,6 @@
     border: 3px solid #444857;
     border-radius: 8px;
     cursor: pointer;
-
-
-
 }
 .customURL span:hover > span a {
     color: black;
@@ -103,6 +111,9 @@
   justify-content: center;
   align-items: center;
   font-family: Tahoma;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .header {

@@ -43,12 +43,12 @@ const Index = () => {
   const serverURL = 'http://localhost:3000';
   const data4project  = `${serverURL}/api/projectData/${projectQuery}` ;
 
-//   external Libary => load Surfly.com API Proxy
+// load Surfly.com API Proxy
   useEffect( () => {
     surflyProxy.embedLibary()
   }, []);
 
-//   fetchData from MongoDB
+// fetchData from MongoDB
   useEffect(() => {
      if(router.isReady) {
          setvisitorId(router.query.userQuery);// store visitorId from router.query-Parameter
@@ -94,27 +94,27 @@ const Index = () => {
 
       <div className={styles.header}>
 
-           <ManageProject
-               setLongurlValue={setLongurlValue}
-               provideProjName={provideProjName}
-               setProvideProjName={setProvideProjName}
-               setpaneValues={setpaneValues}
-               longurlValue={longurlValue}
-               projectId={projectId}
-               saving={saving}
-               setSaving={setSaving}
-               setverticalPaneSize={setverticalPaneSize}
-               setAskLongURL={setAskLongURL}
-               longurlValueTempoary={longurlValueTempoary}
-               setLongurlValueTempoary={setLongurlValueTempoary}
-               projectQuery={projectQuery}
-               userID_from_Fingerprint={userID_from_Fingerprint}
-               setUserID_from_Fingerprint={setUserID_from_Fingerprint}
-               visitorId={visitorId}
-               jsValue={jsValue}
-               cssValue={cssValue}
-               projectName={projectName}
-             />
+         <ManageProject
+             setLongurlValue={setLongurlValue}
+             provideProjName={provideProjName}
+             setProvideProjName={setProvideProjName}
+             setpaneValues={setpaneValues}
+             longurlValue={longurlValue}
+             projectId={projectId}
+             saving={saving}
+             setSaving={setSaving}
+             setverticalPaneSize={setverticalPaneSize}
+             setAskLongURL={setAskLongURL}
+             longurlValueTempoary={longurlValueTempoary}
+             setLongurlValueTempoary={setLongurlValueTempoary}
+             projectQuery={projectQuery}
+             userID_from_Fingerprint={userID_from_Fingerprint}
+             setUserID_from_Fingerprint={setUserID_from_Fingerprint}
+             visitorId={visitorId}
+             jsValue={jsValue}
+             cssValue={cssValue}
+             projectName={projectName}
+           />
 
 
             {/*display the ProjectName and the LongURL */}
