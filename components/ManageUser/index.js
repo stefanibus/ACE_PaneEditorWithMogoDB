@@ -113,7 +113,7 @@ const ManageUser = ({
                   <BsTrash
                       style={{ color: "white", fontSize: 36 ,  width: '1.65em' }}
                       onClick={() => {
-                          if (window.confirm('\n\nYou wish to delete this Project? \n\nAre you sure? \n\nIf you confirm this: You cannot undo this.\n\n  ')) {
+                          if (window.confirm('\n\nDo you really wish to delete this Project? \n\nThe deleted project can never be restored again.\n\nAre you sure you want to confirm?\n\n  ')) {
                                     onDelete( data4project, setProjectName, setLongurlValue, setCssValue, setJsValue, setprojectId ) } }}
                       alt="Delete this Project"
                       title="Delete this Project"

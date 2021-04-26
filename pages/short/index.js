@@ -20,6 +20,7 @@ const Short = () => {
 
            const loadProxy = async () => {
         // surfly API-Call to receive the URL for the Iframe (to load the proxied Page)
+           //
            await surflyProxy.surflyRender(projectQuery, setpaneValues);
         // Increase time for the LOADING SPINNER (loading)
            await  new Promise((resolve) => {  setTimeout(() => resolve(), 5000);  });
@@ -36,7 +37,30 @@ const Short = () => {
 
 return(
   <>
-      <div className={ loading ?  ` ${styles.trans}  ${styles.loading}` :  `  ${styles.trans}  ${styles.disNone}  ${styles.loading}`  } >Loading...</div>
+      <div className={ loading ?  ` ${styles.trans}  ${styles.loading}` :  `  ${styles.trans}  ${styles.disNone}  ${styles.loading}`  } >
+
+           {/* Additional Spinner Animation  */}
+           {/*       <div className={styles.demo}>
+                    <div className={styles.circle}>
+                      <div className={styles.inner}></div>
+                    </div>
+                    <div className={styles.circle}>
+                      <div className={styles.inner}></div>
+                    </div>
+                    <div className={styles.circle}>
+                      <div className={styles.inner}></div>
+                    </div>
+                    <div className={styles.circle}>
+                      <div className={styles.inner}></div>
+                    </div>
+                    <div className={styles.circle}>
+                      <div className={styles.inner}></div>
+                    </div>
+                  </div>*/}
+
+                <span><span>Loading</span></span>
+
+      </div>
       <div className={!loading ?  `                                   ` :  `  ${styles.visHide}`  } >
 
          <iframe

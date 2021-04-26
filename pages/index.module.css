@@ -71,7 +71,7 @@
 }
 .customURL span {
     font-size: 0.8vw;
-    word-break: break-all;
+    /*word-break: break-all;*/
 }
 .customURL span span {
     display: none;
@@ -85,8 +85,8 @@
     position: absolute;
     z-index: 1;
     top: .6vh;
-    height: 4vh;
-    left: 33vw;
+    height: 5vh;
+    left: 47vw;
     text-align: center;
     background-color: #333642;
     color: #fff;
@@ -138,3 +138,141 @@
 .button:hover, .button:focus {
   background-color: #5a6074;
 }
+
+
+
+
+
+
+
+
+/*start spinner*/
+.loading span  {
+    text-align: left;
+    margin-left: 13px;
+    width: 100px;
+    height: 87px;
+    border-radius: 100%;
+    position: absolute;
+    top: 45%;
+    left: calc(50% - 50px);
+}
+
+.loading span span {
+    font-size: .8em;
+    color: darkgrey;
+}
+
+.loading span span::after {
+  content: "\2026";
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  animation: dots steps(4, end) 2s infinite;
+  width: 0px;
+}
+@keyframes dots {
+  to {
+    width: 15px;
+  }
+}
+/*end loading spinner*/
+
+
+
+
+
+
+
+
+
+/*start Additional Spinner Animation */
+/*https://codepen.io/Mattykins/pen/wfJqk?editors=1100*/
+/*https://codepen.io/martinvd/pen/xbQJom?editors=1100*/
+
+
+.loading {
+  /*background: linear-gradient(90deg, #00b377, #00d68f);*/
+  /*background: linear-gradient(90deg, #141415, #1b1d25);*/
+/*  background: linear-gradient(90deg, #14141569, #080a11);*/
+  background: linear-gradient(90deg, #090a19, #080a11);
+  /*box-shadow: inset 0px 0px 90px rgba(0, 0, 0, 0.5);*/
+  margin: 0px;
+  padding: 0px;
+}
+
+
+ .demo {
+  width: 100px;
+  height: 102px;
+  border-radius: 100%;
+  position: absolute;
+  top: 45%;
+  left: calc(50% - 50px);
+}
+
+.circle {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+.circle .inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 100%;
+/*  border: 5px solid rgba( 0, 255, 170, 0.7);*/
+  border: 5px solid rgba(28,  29,  33, 0.7);
+  border-right: none;
+  border-top: none;
+  background-clip: padding;
+/*  box-shadow: inset 0px 0px 10px rgba(  0, 255, 170, 0.15);*/
+  box-shadow: inset 0px 0px 10px rgba(28,   29,  33, 0.15);
+  box-sizing: content-box;
+}
+
+@-webkit-keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.circle:nth-of-type(0) {
+  transform: rotate(0deg);
+}
+.circle:nth-of-type(0) .inner {
+  -webkit-animation: spin 2s infinite linear;
+          animation: spin 2s infinite linear;
+}
+
+.circle:nth-of-type(1) {
+  transform: rotate(70deg);
+}
+.circle:nth-of-type(1) .inner {
+  -webkit-animation: spin 2s infinite linear;
+          animation: spin 2s infinite linear;
+}
+
+.circle:nth-of-type(2) {
+  transform: rotate(140deg);
+}
+.circle:nth-of-type(2) .inner {
+  -webkit-animation: spin 2s infinite linear;
+          animation: spin 2s infinite linear;
+}
+
+.demo {
+  -webkit-animation: spin 5s infinite linear;
+          animation: spin 5s infinite linear;
+}
+/*end Additional Spinner Animation */

@@ -15,7 +15,7 @@ const surflyProxy = {
             l.src = "https://surfly.com/surfly.js";
             y.parentNode.insertBefore(l, y);
           })(window, document, "script", "Surfly");
-          console.log('embedLibary')
+          // console.log('embedLibary')
  	},
    surflyRender: async (projectId, setpaneValues) => {
 

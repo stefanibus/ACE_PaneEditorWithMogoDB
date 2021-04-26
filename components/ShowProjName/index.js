@@ -10,7 +10,7 @@ const ShowProjName = ({ longurlValue, projectName  }) => {
 		         className="bootstrapButton"
 		         style={{ color: "white", fontSize: 22, margin: '-2px 0 0 .3em' }} />
            		&nbsp;
-           		<span>you are editing on:&nbsp;
+           		<span>you&nbsp;are&nbsp;editing&nbsp;on:&nbsp;
            			<a href={longurlValue} target="_blank">{longurlValue}</a>
            		</span>
            	</span>

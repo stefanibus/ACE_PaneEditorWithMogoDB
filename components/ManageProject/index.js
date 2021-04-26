@@ -46,6 +46,14 @@ import db_communication   from "../../utils/mongo_communication";
                   var filename = StringNoTrialingSlash.substring(StringNoTrialingSlash.lastIndexOf('/')+1);
                   return filename;
               }
+
+
+              // add HTTPS-Protocol if not present
+              const newLongurlValue = (longurlValue) => {
+                return  (!longurlValue.match(/^[a-zA-Z]+:\/\//)) ?   ('https://' + longurlValue)  :  longurlValue
+              }
+
+
               // ==> new Project has empty data exept for longurl
               const requestOptions = {
                 method: meth,
@@ -56,7 +64,7 @@ import db_communication   from "../../utils/mongo_communication";
                   id: projectQuery,
                   userID: userID_from_Fingerprint,
                   projectName: AutoCreateFileName(longurlValue),
-                  longurl: longurlValue
+                  longurl: newLongurlValue(longurlValue)
                 }),
             };
             db_communication.sendDB_Request(requestOptions, data4project, setSaving, setProvideProjName, userID_from_Fingerprint, router)
@@ -78,7 +86,7 @@ import db_communication   from "../../utils/mongo_communication";
      const NewProject_Save = async () => {
        const UrlCheck =  manageProjects.validateURL(longurlValue) ;
        if (UrlCheck) {
-          saveNewProject( );
+          saveNewProject();
            manageProjects.NewProject_Hide(sliderSplitPane, setverticalPaneSize, setAskLongURL, setLongurlValue, longurlValueTempoary );
        }
        else {
