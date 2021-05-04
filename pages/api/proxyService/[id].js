@@ -16,7 +16,7 @@
 
 
 // longUrlResponse: will provide the relevant LongURL (for surfly to be proxied)
-  const longurlAPI     = `${serverURL}/api/proxyService/longurl/${projectId}` ;
+  const longurlAPI     = `/api/proxyService/longurl/${projectId}` ;
   const response = await fetch(longurlAPI, requestOptions);
   const { longUrlResponse } = await response.json();
 
@@ -26,7 +26,7 @@
 // Surfly will request the URL and insert the response into the surfly-proxied page
 // projectDataURL will respond with the relevant Code (js / CSS / longURL / SHortURL)
 // => this URL will be provided to our Surfly-api-request
-  const projectDataURL = `${serverURL}/api/proxyService/proxyProjectData/${projectId}?time=`+timestamp;
+  const projectDataURL = `/api/proxyService/proxyProjectData/${projectId}?time=`+timestamp;
 
 
 
