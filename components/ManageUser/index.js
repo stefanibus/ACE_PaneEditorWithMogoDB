@@ -28,9 +28,9 @@ const ManageUser = ({
     }) => {
 
       const router = useRouter();
-      // const serverURL = process.env.NODE_ENV === "development" ? process.env.NEXT_PUBLIC_DEVURL : process.env.PRODURL;
-      // STEFANO : I duplicated the below Vars from index.js, look into this later, probably ENV related approach
-      const serverURL = 'http://localhost:3000';
+
+   // ENV Vars in DEV and Production
+      const serverURL = process.env.NODE_ENV === "development" ? process.env.NEXT_PUBLIC_DEVURL : process.env.PRODURL;
       const data4project  = `${serverURL}/api/projectData/${projectQuery}` ;
 
       //   Delete from MongoDB

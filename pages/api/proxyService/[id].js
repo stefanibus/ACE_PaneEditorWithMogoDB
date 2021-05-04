@@ -12,8 +12,8 @@
 
 // ENV Vars in DEV and Production
 // we have 3 env variables: NODE_ENV  and  DEVURL and PRODURL , all in the .env File
-// const serverURL      = process.env.NODE_ENV === "development" ? process.env.DEVURL : process.env.PRODURL;
-  const serverURL = 'http://localhost:3000';
+   const serverURL = process.env.NODE_ENV === "development" ? process.env.NEXT_PUBLIC_DEVURL : process.env.PRODURL;
+
 
 
 // longUrlResponse: will provide the relevant LongURL (for surfly to be proxied)

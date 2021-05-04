@@ -39,8 +39,9 @@ const Index = () => {
   const [userID_from_Fingerprint, setUserID_from_Fingerprint] = useState("");
   const [visitorId, setvisitorId] = useState();
 
-  // const serverURL = process.env.NODE_ENV === "development" ? process.env.NEXT_PUBLIC_DEVURL : process.env.PRODURL;
-  const serverURL = 'http://localhost:3000';
+
+//ENV Vars in DEV and Production
+  const serverURL = process.env.NODE_ENV === "development" ? process.env.NEXT_PUBLIC_DEVURL : process.env.PRODURL;
   const data4project  = `${serverURL}/api/projectData/${projectQuery}` ;
 
 // load Surfly.com API Proxy

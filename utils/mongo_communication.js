@@ -119,6 +119,7 @@ const db_communication = {
 	      headers: { "Content-Type": "application/json" },
 	    };
 	    const usersAPI_url = `${serverURL}/api/users/${identificationOfTheVisitor}`;
+	    console.log('usersAPI_url: ', usersAPI_url)
 	    const response = await fetch(usersAPI_url, requestOptions);
 	    const { data } = await response.json();
 	    setUserData(data);
