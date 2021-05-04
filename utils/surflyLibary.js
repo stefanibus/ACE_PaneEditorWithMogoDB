@@ -20,8 +20,9 @@ const surflyProxy = {
    surflyRender: async (projectId, setpaneValues) => {
 
 
-            // ENV Vars in DEV and Production
-               const serverURL = process.env.NODE_ENV === "development" ? process.env.NEXT_PUBLIC_DEVURL : process.env.PRODURL;
+
+            const serverURL = process.env.NEXT_PUBLIC_PRODURL;
+
 
                // console.log('projectId : ',  projectId)
             var timestamp = Date.now();
@@ -29,8 +30,7 @@ const surflyProxy = {
                 alert('Please create a project before you click on SAVE.');
             } else {
                 const SurflyAPIstring = `${serverURL}/api/proxyService/${projectId}/?timestamp=`+timestamp;
-                //
-                console.log('SurflyAPIstring with projectId and TimeStamp: ', SurflyAPIstring);
+                // console.log('SurflyAPIstring with projectId and TimeStamp: ',SurflyAPIstring);
                 const fetchRequestOptions = { method: "GET", headers: { "Content-Type": "application/json; charset=utf-8" } };
                 const getSurflyURL = await fetch(SurflyAPIstring, fetchRequestOptions);
                 const { SurflyResponseURL } = await getSurflyURL.json();
