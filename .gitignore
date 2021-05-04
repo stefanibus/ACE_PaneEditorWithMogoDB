@@ -41,7 +41,9 @@ yarn-error.log*
 # vercel
 .vercel
 
-# next.js build output
+# next.js
+/.next/
+/out/
 .next/cache
 .next
 .next/
