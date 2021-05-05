@@ -14,19 +14,19 @@ export default async (req, res) => {
           .collection(collectionName2)
           .findOne({ _id: ObjectId(id) });
         if (!data) {
-          res.status(404).json({ success: false });
           // stop further execution in this callback
-          return;
+          return res.status(404).json({ success: false });
+
         }
-         res.setHeader('Content-Type', 'application/javascript') ;
-        let longUrlResponse = data.longurl
-        // console.log('SURFLY GET LongURL-STRING successfully');
-       return  res.send(  {longUrlResponse}  );
+          res.setHeader('Content-Type', 'application/javascript') ;
+          let longUrlResponse = data.longurl
+          // console.log('SURFLY GET LongURL-STRING successfully');
+          // stop further execution in this callback
+          return  res.send(  {longUrlResponse}  );
 
       } catch (error) {
-        res.
-        status(500).json({ success: false });
-        // stop further execution in this callback
-        return;
+          // stop further execution in this callback
+          return res. status(500).json({ success: false });
+
       }
 };

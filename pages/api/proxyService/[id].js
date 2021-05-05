@@ -1,13 +1,12 @@
  export default async (req, res) => {
 
-// dotENV Surfly KEY
+// Surfly KEY
      const surflyFetchURL = 'https://surfly.com/v2/sessions/?api_key=' + process.env.SURFLYKEY;
      var timestamp = Date.now();
 // projectId from query
      const { query: { id }, method, } = req;
      const projectId = id;
      const requestOptions   = { method: "GET", headers: { "Content-Type": "application/json" }, };
-
 
 
 // ENV Vars in DEV and Production
