@@ -36,6 +36,8 @@ import db_communication   from "../../utils/mongo_communication";
 
 // ENV Vars in DEV and Production
   const serverURL = process.env.NEXT_PUBLIC_PRODURL;
+  console.log('manageProjects -> NEXT_PUBLIC_PRODURL:  ', process.env.NEXT_PUBLIC_PRODURL);
+
   const data4project  = `${serverURL}/api/projectData/${projectQuery}` ;
 
 //   Save to MongoDB (New Project)

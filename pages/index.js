@@ -41,7 +41,9 @@ const Index = () => {
 
 
 //ENV Vars in DEV and Production
-  const serverURL = process.env.NEXT_PUBLIC_PRODURL
+  const serverURL = process.env.NEXT_PUBLIC_PRODURL;
+  console.log('index.js -> NEXT_PUBLIC_PRODURL:  ', process.env.NEXT_PUBLIC_PRODURL);
+
   const data4project  = `${serverURL}/api/projectData/${projectQuery}`
 
 // load Surfly.com API Proxy
