@@ -31,7 +31,6 @@ const ManageUser = ({
 
    // ENV Vars in DEV and Production
       const serverURL = process.env.NEXT_PUBLIC_PRODURL;
-      console.log('ManageUser -> NEXT_PUBLIC_PRODURL:  ', process.env.NEXT_PUBLIC_PRODURL);
 
       const data4project  = `${serverURL}/api/projectData/${projectQuery}` ;
 

@@ -20,8 +20,6 @@ const surflyProxy = {
    surflyRender: async (projectId, setpaneValues) => {
 
             const serverURL = process.env.NEXT_PUBLIC_PRODURL;
-            console.log('surflyLibary -> NEXT_PUBLIC_PRODURL:  ', process.env.NEXT_PUBLIC_PRODURL);
-
 
                // console.log('projectId : ',  projectId)
             var timestamp = Date.now();

@@ -13,8 +13,6 @@
 // we have 3 env variables: NODE_ENV  and  DEVURL and PRODURL , all in the .env File
   const serverURL = process.env.NEXT_PUBLIC_PRODURL;
 
-  console.log('api/proxyService -> NEXT_PUBLIC_PRODURL:  ', process.env.NEXT_PUBLIC_PRODURL);
-
 
 // longUrlResponse: will provide the relevant LongURL (for surfly to be proxied)
   const longurlAPI     = `${serverURL}/api/proxyService/longurl/${projectId}` ;
