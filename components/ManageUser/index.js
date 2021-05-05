@@ -31,7 +31,7 @@ const ManageUser = ({
 
    // ENV Vars in DEV and Production
       const serverURL = process.env.NEXT_PUBLIC_PRODURL;
-      const data4project  = `/api/projectData/${projectQuery}` ;
+      const data4project  = `${serverURL}/api/projectData/${projectQuery}` ;
 
       //   Delete from MongoDB
        const onDelete =  async ( data4project,  setProjectName,setLongurlValue,setCssValue,setJsValue,setprojectId ) => {

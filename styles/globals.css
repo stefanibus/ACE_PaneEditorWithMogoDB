@@ -134,11 +134,11 @@ div.custom-select > svg  {
 
 
 
-body {
+/*body {
     margin: 0px;
     font-family: Garamond,serif;
     font-size: 12px;
-}
+}*/
 .Resizer {
     z-index: 10000;
     box-sizing: border-box;

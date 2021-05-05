@@ -19,8 +19,6 @@ const surflyProxy = {
  	},
    surflyRender: async (projectId, setpaneValues) => {
 
-
-
             const serverURL = process.env.NEXT_PUBLIC_PRODURL;
 
 
@@ -29,7 +27,7 @@ const surflyProxy = {
             if (projectId == "" || projectId == " " ) {
                 alert('Please create a project before you click on SAVE.');
             } else {
-                const SurflyAPIstring = `/api/proxyService/${projectId}/?timestamp=`+timestamp;
+                const SurflyAPIstring = `${serverURL}/api/proxyService/${projectId}/?timestamp=`+timestamp;
                 // console.log('SurflyAPIstring with projectId and TimeStamp: ',SurflyAPIstring);
                 const fetchRequestOptions = { method: "GET", headers: { "Content-Type": "application/json; charset=utf-8" } };
                 const getSurflyURL = await fetch(SurflyAPIstring, fetchRequestOptions);
