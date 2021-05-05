@@ -1,4 +1,4 @@
-//  import { connect, ObjectId } from "../../../../utils/database";
+import { connect, ObjectId } from "../../../../utils/database";
 
 export default async (req, res) => {
   const collectionName2 = "pensName";
