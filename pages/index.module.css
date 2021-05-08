@@ -62,7 +62,10 @@
     padding: 3px;
     border: 3px;
     opacity: .5;
-    width: 20vw;
+    width: 25vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .customURL:hover {

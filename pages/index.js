@@ -64,12 +64,16 @@ const Index = () => {
                         manageProjects.newProject_Show(sliderSplitPane, setverticalPaneSize, setAskLongURL, setLongurlValueTempoary, longurlValue, setLongurlValue)
                         router.push("/");
                       } else {
-                    setProjectName(data.projectName)
-                    setLongurlValue(data.longurl)
-                    setCssValue(data.css);
-                    setJsValue(data.js);
-                    setprojectId(projectQuery);
-                    db_communication.getProjectListForUser(FingerprintJS, setUserID_from_Fingerprint, setUserData, serverURL)
+                        setProjectName(data.projectName)
+                        setLongurlValue(data.longurl)
+                        setCssValue(data.css);
+                        setJsValue(data.js);
+                        setprojectId(projectQuery);
+                        db_communication.getProjectListForUser(FingerprintJS, setUserID_from_Fingerprint, setUserData, serverURL)
+                        // console.log('projectID'+projectId+'ProjectId' )
+                        // console.log('projectQuerY'+projectQuery+'ProjectQuery' )
+
+                        surflyProxy.surflyRender(projectQuery, setpaneValues); // (re-)load the result-page if projectQuery changes
                 }
             }
           fetchProjectData();

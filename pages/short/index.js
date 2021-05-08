@@ -1,3 +1,4 @@
+// request like this: https://domainname.com/short?projectQuery=6093ad076b9cac002d946b15
 import React, { useState, useEffect } from "react";
 import { useRouter }     from "next/router";
 import surflyProxy       from "../../utils/surflyLibary";

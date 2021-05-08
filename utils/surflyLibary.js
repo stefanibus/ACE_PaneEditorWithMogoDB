@@ -20,11 +20,11 @@ const surflyProxy = {
    surflyRender: async (projectId, setpaneValues) => {
 
             const serverURL = process.env.NEXT_PUBLIC_PRODURL;
-
+            setpaneValues("load_page.html");
                // console.log('projectId : ',  projectId)
             var timestamp = Date.now();
             if (projectId == "" || projectId == " " ) {
-                alert('Please create a project before you click on SAVE.');
+                alert('Please create a project before you click on SAVE...nix'+projectId+'nix');
             } else {
                 const SurflyAPIstring = `${serverURL}/api/proxyService/${projectId}/?timestamp=`+timestamp;
                 // console.log('SurflyAPIstring with projectId and TimeStamp: ',SurflyAPIstring);
