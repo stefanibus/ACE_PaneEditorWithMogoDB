@@ -24,7 +24,7 @@ const surflyProxy = {
                // console.log('projectId : ',  projectId)
             var timestamp = Date.now();
             if (projectId == "" || projectId == " " ) {
-                alert('Please create a project before you click on SAVE...nix'+projectId+'nix');
+                alert('Please create a project before you click on SAVE.');
             } else {
                 const SurflyAPIstring = `${serverURL}/api/proxyService/${projectId}/?timestamp=`+timestamp;
                 // console.log('SurflyAPIstring with projectId and TimeStamp: ',SurflyAPIstring);

@@ -115,7 +115,7 @@ import db_communication   from "../../utils/mongo_communication";
      <button
        className={styles.button + ' toggleOnlongURLValue ' }
        onClick={() => {alert('This is still work in Progress. Nothing happens here: As of yet! ')   }} >
-       Forward Result to a friend
+       Forward Result
      </button>
 
      {/* Button to request the proxied result*/}

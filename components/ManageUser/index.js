@@ -24,7 +24,8 @@ const ManageUser = ({
         setUserID_from_Fingerprint,
         longurlValue,
         FingerprintJS,
-        setUserData
+        setUserData,
+        setpaneValues
     }) => {
 
       const router = useRouter();
@@ -35,7 +36,7 @@ const ManageUser = ({
       const data4project  = `${serverURL}/api/projectData/${projectQuery}` ;
 
       //   Delete from MongoDB
-       const onDelete =  async ( data4project,  setProjectName,setLongurlValue,setCssValue,setJsValue,setprojectId ) => {
+       const onDelete =  async ( data4project,  setProjectName,setLongurlValue,setCssValue,setJsValue,setprojectId, setpaneValues ) => {
           const requestOptions = {
             method: "DELETE",
             headers: { "Content-Type": "application/json" },
@@ -51,9 +52,26 @@ const ManageUser = ({
               setJsValue('');
               setprojectId('');
               db_communication.getProjectListForUser(FingerprintJS, setUserID_from_Fingerprint, setUserData, serverURL)
+              setpaneValues("startpage.html");
           }
        }
 
+        // console.log('test: ', `${styles.trashIconIsVisible}`);
+
+   const trashIconIsVisible = {
+      display: "inline-block"
+    };
+
+
+        // make sure no foreign project can be deleted ==> Thus: Only display the Delete-Icon if the projectId really belongs to that user-portfolio
+        const ShowTrashIconIfOwner = (userData, projectId, trashIconIsVisible ) => {
+                        let result;
+                          userData.map((item, i) => {
+                           if (item._id === projectId) {
+                              result =   trashIconIsVisible
+                           } })
+                        return result
+        }
       //   ProjectName Input Field
         const HandleProjectNameChange = e => {
             setProjectName(e.target.value)
@@ -101,24 +119,28 @@ const ManageUser = ({
                   </button>
                 </>
 
-                {!provideProjName &&
+                {!provideProjName && (
                   <BsPencil
                       style={{ color: "white", fontSize: 36 ,  width: '1.65em' }}
                       onClick={() => { setProvideProjName(true) } }
                       className=' toggleOnlongURLValue '
                       alt="Edit the Name for this Project"
                       title="Edit the Name for this Project"
-                   /> }
+                  />
 
-                {userData && userData.length > 0 &&
-                  <BsTrash
-                      style={{ color: "white", fontSize: 36 ,  width: '1.65em' }}
+  )}
+
+                {!provideProjName  && userData && userData.length > 0 &&  (
+                    <BsTrash
+                      className={`${styles.trashIcon} toggleOnlongURLValue`}
+                      style={ShowTrashIconIfOwner(userData, projectId, trashIconIsVisible)}
                       onClick={() => {
                           if (window.confirm('\n\nDo you really wish to delete this Project? \n\nThe deleted project can never be restored again.\n\nAre you sure you want to confirm?\n\n  ')) {
-                                    onDelete( data4project, setProjectName, setLongurlValue, setCssValue, setJsValue, setprojectId ) } }}
+                                    onDelete( data4project, setProjectName, setLongurlValue, setCssValue, setJsValue, setprojectId, setpaneValues ) } }}
                       alt="Delete this Project"
                       title="Delete this Project"
-                  />
+                     />
+                  )
                 }
 
                 {userData && userData.length > 0 && (
