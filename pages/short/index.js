@@ -59,7 +59,7 @@ return(
                     </div>
                   </div>*/}
 
-                <span><span>Loading</span></span>
+                <span><span>Heroku-Server will boot /  Loading</span></span>
 
       </div>
       <div className={!loading ?  `                                   ` :  `  ${styles.visHide}`  } >

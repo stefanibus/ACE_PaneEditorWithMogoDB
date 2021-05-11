@@ -121,7 +121,11 @@ import db_communication   from "../../utils/mongo_communication";
      {/* Button to request the proxied result*/}
      <button
        className={styles.button + ' toggleOnlongURLValue ' }
-       onClick={() => {surflyProxy.surflyRender(projectId, setpaneValues);   }} >
+       onClick={() => {
+         // save
+         // we might want to "save" the latest user-data before we start to render
+         // Render
+         surflyProxy.surflyRender(projectId, setpaneValues);   }} >
        Look at Result
      </button>
 
@@ -130,8 +134,8 @@ import db_communication   from "../../utils/mongo_communication";
      <button
        className={styles.button + ' toggleOnlongURLValue ' }
        onClick={() => {
+         // save
          db_communication.save(data4project, setSaving, visitorId, userID_from_Fingerprint, projectQuery, projectName, setProvideProjName, jsValue, cssValue, longurlValue, router, setUserID_from_Fingerprint);
-         // save();
        } } >
        {saving ? "Saving..." : "Save"} </button>
      }
