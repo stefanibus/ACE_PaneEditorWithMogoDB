@@ -24,7 +24,7 @@ const Short = () => {
            //
            await surflyProxy.surflyRender(projectQuery, setpaneValues);
         // Increase time for the LOADING SPINNER (loading)
-           await  new Promise((resolve) => {  setTimeout(() => resolve(), 5000);  });
+           // await  new Promise((resolve) => {  setTimeout(() => resolve(), 5000);  });
            setLoading(false);
         }
         loadProxy();
