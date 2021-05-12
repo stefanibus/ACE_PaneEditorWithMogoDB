@@ -1,8 +1,10 @@
 // request like this: https://domainname.com/short?projectQuery=6093ad076b9cac002d946b15
 import React, { useState, useEffect } from "react";
 import { useRouter }     from "next/router";
+import Head              from "next/head";
 import surflyProxy       from "../../utils/surflyLibary";
 import styles            from "../index.module.css";
+
 
 const Short = () => {
 
@@ -27,7 +29,7 @@ const Short = () => {
            // await  new Promise((resolve) => {  setTimeout(() => resolve(), 5000);  });
            setLoading(false);
         }
-        loadProxy();
+        // loadProxy();
         }
         else {
           // console.log('ProjectData is not yet available: ', projectQuery)
@@ -38,6 +40,10 @@ const Short = () => {
 
 return(
   <>
+      <Head>
+        <title>Smazy - Short-URL</title>
+      </Head>
+
       <div className={ loading ?  ` ${styles.trans}  ${styles.loading}` :  `  ${styles.trans}  ${styles.disNone}  ${styles.loading}`  } >
 
            {/* Additional Spinner Animation  */}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useRouter }     from "next/router";
+import Head              from "next/head"
 import SplitPane         from "react-split-pane";
 import styles            from "./index.module.css";
 import FingerprintJS     from "@fingerprintjs/fingerprintjs";
@@ -71,7 +72,7 @@ const Index = () => {
                         setJsValue(data.js);
                         setprojectId(projectQuery);
                         db_communication.getProjectListForUser(FingerprintJS, setUserID_from_Fingerprint, setUserData, serverURL)
-                        // surflyProxy.surflyRender(projectQuery, setpaneValues); // (re-)load the result-page if projectQuery changes
+                        surflyProxy.surflyRender(projectQuery, setpaneValues); // (re-)load the result-page if projectQuery changes
                 }
             }
           fetchProjectData();
@@ -91,12 +92,12 @@ const Index = () => {
     };
 
   // waiting for initial Response from MongoDB
-  if (loading) { return <div className={styles.loading}>Loading...</div>; }
+  if (loading) { return <><Head><title>Smazy - Long-URL</title></Head> <div className={styles.loading}>Loading...</div></>; }
 
 
   // display page after initial Response from MongoDB
 
-  return ( <>
+  return ( <><Head><title>Smazy - Long-URL</title></Head>
     <div className={`${styles.smartphone} ${seeOnMobileDevice ?  styles.toggle_IframeIntoView   : null  } `} >
        <div>
            <h3>You are on a tablet-device or a smartphone</h3>
@@ -104,10 +105,10 @@ const Index = () => {
                 (<>
                      <br/><br/>
                      If you merely want to <strong>look</strong> <br/>
-                     at the result of this project:&nbsp;<br/>
+                     at the result of the following project:&nbsp;<br/>
                      <span className={styles.link} onClick={showResultOnMobileDevice}>
                      {projectName}
-                     </span><br/>
+                     </span>,<br/>
                      please click the above link.<br/><br/>
                  </>)
                 :
