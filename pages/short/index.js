@@ -62,7 +62,7 @@ return(
                 <span><span>Heroku-Server will boot /  Loading</span></span>
 
       </div>
-      <div className={!loading ?  `                                   ` :  `  ${styles.visHide}`  } >
+      <div className={`${styles.short}  ${!loading ? '' : styles.visHide }`}>
 
          <iframe
             key={paneValues}
@@ -70,7 +70,6 @@ return(
             id="resultFrame"
             name="resultFrame"
             className={styles.previewIframe}
-            style={{ height: "99vh" }}
            >
          </iframe>
     </div>

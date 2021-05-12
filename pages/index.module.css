@@ -35,6 +35,9 @@
   width: 100%;
   opacity: 0;
 }
+.short {
+  height: 101vh;
+}
 /* END LOADING SPINNER FOR SHORTURL RESULT-PAGE */
 
 
@@ -342,6 +345,7 @@
     .smartphone div {
         color: floralwhite;
         text-align: center;
+        padding: 1em;
     }
   }
 /* END: Mobile Devices - Toggle Classes */

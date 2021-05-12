@@ -71,7 +71,7 @@ const Index = () => {
                         setJsValue(data.js);
                         setprojectId(projectQuery);
                         db_communication.getProjectListForUser(FingerprintJS, setUserID_from_Fingerprint, setUserData, serverURL)
-                        surflyProxy.surflyRender(projectQuery, setpaneValues); // (re-)load the result-page if projectQuery changes
+                        // surflyProxy.surflyRender(projectQuery, setpaneValues); // (re-)load the result-page if projectQuery changes
                 }
             }
           fetchProjectData();
@@ -99,20 +99,25 @@ const Index = () => {
   return ( <>
     <div className={`${styles.smartphone} ${seeOnMobileDevice ?  styles.toggle_IframeIntoView   : null  } `} >
        <div>
-           <h3>You are on a smartphone or tablet-device</h3>
-           <br/><br/>
-           If you merely want to <strong>look</strong> <br/>
-           at the result of this project:&nbsp;<br/>
+           <h3>You are on a tablet-device or a smartphone</h3>
+           {(projectName) ?
+                (<>
+                     <br/><br/>
+                     If you merely want to <strong>look</strong> <br/>
+                     at the result of this project:&nbsp;<br/>
+                     <span className={styles.link} onClick={showResultOnMobileDevice}>
+                     {projectName}
+                     </span><br/>
+                     please click the above link.<br/><br/>
+                 </>)
+                :
+                      <br/>
+              }
 
-           <span className={styles.link} onClick={showResultOnMobileDevice}>
-             {(provideProjName) ? '' : projectName}
-           </span><br/>
-           please click the above link.<br/><br/>
 
 
-
-           On desktop-devices you will be able to<br/>
-           '<strong>edit all static webpages</strong> on the internet'<br/>
+           On desktop-devices you will be able to
+           '<strong>edit all static webpages</strong> on the internet'
            &nbsp;with our service.
         </div>
     </div>
