@@ -167,12 +167,12 @@
     height: 87px;
     border-radius: 100%;
     position: absolute;
-    top: 45%;
-    left: calc(50% - 50px);
+    top: 33%;
+    left: calc(50% - 60px);
 }
 
 .loading span span {
-    font-size: .8em;
+    font-size: .95em;
     color: darkgrey;
 }
 

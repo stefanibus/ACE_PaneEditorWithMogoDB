@@ -21,7 +21,7 @@ const Short = () => {
      if(router.isReady) {
         if(typeof projectQuery !== "undefined")  {
          // surfly will load the proxied Page ==>  API-Call to receive the URL for the Iframe
-            surflyProxy.surflyRender(projectQuery, setpaneValues, setLoading);
+            // surflyProxy.surflyRender(projectQuery, setpaneValues, setLoading);
         }
         else {
           // console.log('ProjectData is not yet available: ', projectQuery)
