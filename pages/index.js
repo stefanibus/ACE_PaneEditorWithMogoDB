@@ -18,6 +18,7 @@ const Index = () => {
   const { projectQuery, userQuery } = router.query;
 
 
+  const [seeOnMobileDevice, setSeeOnMobileDevice] = useState(false);
   const [askLongURL, setAskLongURL] = useState(false);
   const [longurlValueTempoary, setLongurlValueTempoary] = useState("");
   const [saving, setSaving] = useState(false);
@@ -85,17 +86,43 @@ const Index = () => {
   }, [projectQuery]);
 
 
+    const showResultOnMobileDevice = () => {
+      setSeeOnMobileDevice(true);
+    };
+
   // waiting for initial Response from MongoDB
   if (loading) { return <div className={styles.loading}>Loading...</div>; }
 
 
   // display page after initial Response from MongoDB
-  return (
-    <div className={`toggleView
+
+  return ( <>
+    <div className={`${styles.smartphone} ${seeOnMobileDevice ?  styles.toggle_IframeIntoView   : null  } `} >
+       <div>
+           <h3>You are on a smartphone or tablet-device</h3>
+           <br/><br/>
+           If you merely want to <strong>look</strong> <br/>
+           at the result of this project:&nbsp;<br/>
+
+           <span className={styles.link} onClick={showResultOnMobileDevice}>
+             {(provideProjName) ? '' : projectName}
+           </span><br/>
+           please click the above link.<br/><br/>
+
+
+
+           On a Desktop-Device you will be able to<br/>
+           '<strong>edit all static webpages</strong> on the internet'<br/>
+           &nbsp;with our service.
+        </div>
+    </div>
+    <div  className={`
+                ${styles.desktop} ${seeOnMobileDevice ?   styles.toggle_IframeIntoView  : null  }  `+`
+                toggleView `+`
                 ${askLongURL && ' isVisible_TheCreateNewProjectField ' } `+`
                 ${!longurlValue &&  ' isVisible_NoActiveProject ' } `} >
 
-      <div className={styles.header}>
+      <div className={styles.header}  >
 
          <ManageProject
              setLongurlValue={setLongurlValue}
@@ -157,6 +184,7 @@ const Index = () => {
              />
       </div>
       <SplitPane
+        className={`${styles.imp} ${seeOnMobileDevice ? styles.marginTopZero : null } ` }
         style={{ marginTop: "60px" }}
         split="horizontal"
         size={`${verticalPaneSize}%`}
@@ -204,6 +232,7 @@ const Index = () => {
          </iframe>
       </SplitPane>
     </div>
+    </>
   );
 };
 
