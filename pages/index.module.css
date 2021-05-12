@@ -296,9 +296,17 @@
 }
 .smartphone.toggle_IframeIntoView,
 .desktop.toggle_IframeIntoView > .header,
-.marginTopZero > div:nth-of-type(1) {
+.marginTopZero  > div:nth-of-type(1),
+.marginTopZero  > span {
   display: none !important;
 }
+
+.marginTopZero  > div:nth-of-type(2) {
+    display: block;
+    position: static;
+    height: 98vh ;
+}
+
 .smartphone {
     display: none;
     justify-content: center;
@@ -338,4 +346,5 @@
     }
   }
 /* END: Mobile Devices - Toggle Classes */
+
 

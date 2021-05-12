@@ -111,7 +111,7 @@ const Index = () => {
 
 
 
-           On a Desktop-Device you will be able to<br/>
+           On desktop-devices you will be able to<br/>
            '<strong>edit all static webpages</strong> on the internet'<br/>
            &nbsp;with our service.
         </div>
