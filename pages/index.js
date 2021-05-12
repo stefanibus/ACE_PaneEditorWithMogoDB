@@ -72,11 +72,10 @@ const Index = () => {
                         setJsValue(data.js);
                         setprojectId(projectQuery);
                         db_communication.getProjectListForUser(FingerprintJS, setUserID_from_Fingerprint, setUserData, serverURL)
-                        surflyProxy.surflyRender(projectQuery, setpaneValues); // (re-)load the result-page if projectQuery changes
+                        surflyProxy.surflyRender(projectQuery, setpaneValues, setLoading); // (re-)load the result-page if projectQuery changes
                 }
             }
           fetchProjectData();
-          setLoading(false);
         }
         else {
           // console.log('ProjectData is not available: ', projectQuery)
@@ -92,12 +91,12 @@ const Index = () => {
     };
 
   // waiting for initial Response from MongoDB
-  if (loading) { return <><Head><title>Smazy - Long-URL</title></Head> <div className={styles.loading}>Loading...</div></>; }
+  if (loading) { return <><Head><title>Long-URL - Smazy</title></Head> <div className={styles.loading}>Loading...</div></>; }
 
 
   // display page after initial Response from MongoDB
 
-  return ( <><Head><title>Smazy - Long-URL</title></Head>
+  return ( <><Head><title>Long-URL - Smazy</title></Head>
     <div className={`${styles.smartphone} ${seeOnMobileDevice ?  styles.toggle_IframeIntoView   : null  } `} >
        <div>
            <h3>You are on a tablet-device or a smartphone</h3>
@@ -117,7 +116,7 @@ const Index = () => {
 
 
 
-           On desktop-devices you will be able to
+           On any desktop-device you will be able to
            '<strong>edit all static webpages</strong> on the internet'
            &nbsp;with our service.
         </div>

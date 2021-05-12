@@ -20,16 +20,8 @@ const Short = () => {
 
      if(router.isReady) {
         if(typeof projectQuery !== "undefined")  {
-
-           const loadProxy = async () => {
-        // surfly API-Call to receive the URL for the Iframe (to load the proxied Page)
-           //
-           await surflyProxy.surflyRender(projectQuery, setpaneValues);
-        // Increase time for the LOADING SPINNER (loading)
-           // await  new Promise((resolve) => {  setTimeout(() => resolve(), 5000);  });
-           setLoading(false);
-        }
-        loadProxy();
+         // surfly will load the proxied Page ==>  API-Call to receive the URL for the Iframe
+            surflyProxy.surflyRender(projectQuery, setpaneValues, setLoading);
         }
         else {
           // console.log('ProjectData is not yet available: ', projectQuery)
@@ -41,7 +33,7 @@ const Short = () => {
 return(
   <>
       <Head>
-        <title>Smazy - Short-URL</title>
+        <title>Short-URL - Smazy</title>
       </Head>
 
       <div className={ loading ?  ` ${styles.trans}  ${styles.loading}` :  `  ${styles.trans}  ${styles.disNone}  ${styles.loading}`  } >

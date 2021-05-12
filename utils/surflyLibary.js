@@ -1,4 +1,4 @@
-const surflyProxy = {
+  const surflyProxy = {
  	embedLibary: () => {
 		// EXTERNAL SURFLY LIBARY will be loaded
 		// in order to minimize unnessesary reloading
@@ -17,7 +17,7 @@ const surflyProxy = {
           })(window, document, "script", "Surfly");
           // console.log('embedLibary')
  	},
-   surflyRender: async (projectId, setpaneValues) => {
+   surflyRender: async (projectId, setpaneValues, setLoading) => {
 
             const serverURL = process.env.NEXT_PUBLIC_PRODURL;
             setpaneValues("load_page.html");
@@ -33,6 +33,7 @@ const surflyProxy = {
                 const { SurflyResponseURL } = await getSurflyURL.json();
                 if (getSurflyURL.status !== 200) { await router.push("/404"); }
                 setpaneValues(SurflyResponseURL);
+                setLoading(false);
             }
    }
 }
