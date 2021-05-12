@@ -29,7 +29,7 @@ const Short = () => {
            // await  new Promise((resolve) => {  setTimeout(() => resolve(), 5000);  });
            setLoading(false);
         }
-        // loadProxy();
+        loadProxy();
         }
         else {
           // console.log('ProjectData is not yet available: ', projectQuery)
