@@ -10,19 +10,34 @@ const Short = () => {
   const router = useRouter();
   const { projectQuery, userQuery } = router.query;
   const [loading, setLoading] = useState(true);
+  const [noProject, setNoProject] = useState(false);
   const [paneValues, setpaneValues] = useState("startpage.html");
+
+
+  const data4project  = `${process.env.NEXT_PUBLIC_PRODURL}/api/projectData/${projectQuery}`
+
 
   useEffect(() => {
       // load Surfly.com API Proxy
+      //
       surflyProxy.embedLibary()
 
      if(router.isReady) {
-        if(typeof projectQuery !== "undefined")  {
-         // surfly will load the proxied Page ==>  API-Call to receive the URL for the Iframe
-            surflyProxy.surflyRender(projectQuery, setpaneValues, setLoading);
-        }
-        else {   // console.log('ProjectData is not yet available: ', projectQuery)
-          }
+            if(typeof projectQuery !== "undefined")  {
+                 const fetchProjectData = async () => {
+                  const response = await fetch(data4project);
+                  const { data } = await response.json();
+                        if (response.status !== 200) {  //console.log("This projectQuery no longer exists or some other error has occurred:  ", projectQuery);
+                          setNoProject(true);
+                        } else
+                        { // surfly will load the proxied Page ==>  API-Call to receive the URL for the Iframe
+                          surflyProxy.surflyRender(projectQuery, setpaneValues, setLoading);
+                        }
+                  }
+                  fetchProjectData();
+            }
+            else {  // console.log('The ProjectData is not yet available: ', projectQuery)
+            }
      }
   }, [projectQuery]);
 
@@ -34,8 +49,27 @@ return(
       </Head>
 
       <div className={ loading ?  ` ${styles.trans}  ${styles.loading}` :  `  ${styles.trans}  ${styles.disNone}  ${styles.loading}`  } >
-           <span><span>Heroku-Server will boot /  Loading</span></span>
+
+           {noProject ?
+               <>
+                 <div>
+                     The Project you are asking for <br/>
+                     was probably deleted.
+                   {/*This project no longer exists or some other error has occurred. */}
+                     <br/><br/>
+                     To manipulate any other static webpage, please visit our startpage:<br/><br/>
+                          <button
+                           className={styles.button}
+                           onClick={() => {router.push("/"); }} >
+                           Go to Smazy Startpage
+                         </button>
+                  </div>
+                </>
+               :
+               <span><span>Heroku-Server will boot /  Loading</span></span>
+           }
       </div>
+
       <div className={`${styles.short}  ${!loading ? '' : styles.visHide }`}>
          <iframe
             key={paneValues}

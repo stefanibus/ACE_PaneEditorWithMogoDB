@@ -14,7 +14,7 @@ export default async (req, res) => {
           .collection(collectionName)
           .findOne({ _id: ObjectId(id) });
         if (!data) {
-          res.status(404).json({ success: false });
+          res.status(404).json({ success: false, data: "line 17" });
           // stop further execution in this callback
           return;
         }
@@ -22,7 +22,8 @@ export default async (req, res) => {
         // console.log('api/proxyProjectData/id.js: GET Project-Data successfully');
         return;
       } catch (error) {
-          res.status(500).json({ success: false });
+          console.log(error);
+          res.status(500).json({ success: false, data: "line 26" });
           return;
       }
       break;
@@ -47,7 +48,7 @@ export default async (req, res) => {
         return;
       } catch (error) {
         console.log(error);
-        res.status(400).json({ success: false });
+        res.status(400).json({ success: false, data: "line 52" });
         return;
       }
       break;
@@ -70,7 +71,7 @@ export default async (req, res) => {
           return;
       } catch (error) {
         console.log(error);
-        res.status(400).json({ success: false });
+        res.status(400).json({ success: false, data: "line 76" });
         return;
       }
       break;
@@ -86,7 +87,8 @@ export default async (req, res) => {
         // console.log('api/proxyProjectData/id.js: DELETE Project-Data successfully');
         return;
       } catch (error) {
-        res.status(500).json({ success: false });
+        console.log( error );
+        res.status(500).json({ success: false, data: "line 95" });
         return;
       }
       break;

@@ -25,7 +25,7 @@
   height: 133px;
 }
 .toggleView.isVisible_TheCreateNewProjectField .slogan  {
-  color: white;
+  color: floralwhite;
   display: inline-block !important;
   right: 1vw !important;
   position: absolute;
@@ -35,7 +35,7 @@
   display: inline-block !important;
   position: absolute;
   right: 23vw;
-  color: white;
+  color: floralwhite;
   top: 1.65vh;
 }
 @media only screen and (max-width: 1300px) {

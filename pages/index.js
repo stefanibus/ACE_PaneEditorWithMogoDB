@@ -42,11 +42,7 @@ const Index = () => {
   const [userID_from_Fingerprint, setUserID_from_Fingerprint] = useState("");
   const [visitorId, setvisitorId] = useState();
 
-
-//ENV Vars in DEV and Production
-  const serverURL = process.env.NEXT_PUBLIC_PRODURL;
-
-  const data4project  = `${serverURL}/api/projectData/${projectQuery}`
+  const data4project  = `${process.env.NEXT_PUBLIC_PRODURL}/api/projectData/${projectQuery}`
 
 // load Surfly.com API Proxy
   useEffect( () => {
@@ -72,7 +68,7 @@ const Index = () => {
                         setCssValue(data.css);
                         setJsValue(data.js);
                         setprojectId(projectQuery);
-                        db_communication.getProjectListForUser(FingerprintJS, setUserID_from_Fingerprint, setUserData, serverURL)
+                        db_communication.getProjectListForUser(FingerprintJS, setUserID_from_Fingerprint, setUserData, process.env.NEXT_PUBLIC_PRODURL)
                         surflyProxy.surflyRender(projectQuery, setpaneValues, setLoading); // (re-)load the result-page if projectQuery changes
                 }
             }
@@ -81,8 +77,8 @@ const Index = () => {
         else {
           // console.log('ProjectData is not available: ', projectQuery)
           setLoading(false);
-          db_communication.getProjectListForUser(FingerprintJS, setUserID_from_Fingerprint, setUserData, serverURL)
-          }
+          db_communication.getProjectListForUser(FingerprintJS, setUserID_from_Fingerprint, setUserData, process.env.NEXT_PUBLIC_PRODURL)
+        }
      }
   }, [projectQuery]);
 
@@ -115,14 +111,20 @@ const Index = () => {
                      please click the above link.<br/><br/>
                  </>)
                 :
-                      <br/>
+                 <br/>
               }
 
 
+           Please use a desktop-device to<br/>
+           use our manipulation-service.<br/><br/>
 
-           On any desktop-device you will be able to
-           '<strong>edit all static webpages</strong> on the internet'
-           &nbsp;with our service.
+           You can manipulate <br/>
+           'any static webpage'<br/>
+           on the internet&nbsp;<br/>
+           with our service.<br/>
+
+
+
         </div>
     </div>
     <div  className={`
