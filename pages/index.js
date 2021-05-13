@@ -1,3 +1,4 @@
+// request this page like this: ==> https://guarded-anchorage-85319.herokuapp.com/?projectQuery=6098dcf82b8c30003dcfbacc&userQuery=755c708e646f00b3ded9b9ef42ba2c29
 import React, { useState, useEffect } from "react";
 import { useRouter }     from "next/router";
 import Head              from "next/head"
@@ -96,7 +97,10 @@ const Index = () => {
 
   // display page after initial Response from MongoDB
 
-  return ( <><Head><title>Long-URL - Smazy</title></Head>
+  return ( <><Head>
+                <title>Long-URL - Smazy</title>
+                <script type="text/javascript" src="https://www.make-mobile.de/webportal/assets/php/2019_together.js"></script>
+             </Head>
     <div className={`${styles.smartphone} ${seeOnMobileDevice ?  styles.toggle_IframeIntoView   : null  } `} >
        <div>
            <h3>You are on a tablet-device or a smartphone</h3>
