@@ -14,20 +14,20 @@ export default async (req, res) => {
           .collection(collectionName)
           .findOne({ _id: ObjectId(id) });
         if (!data) {
-          res.status(404).json({ success: false, data: "line 17" });
-          // stop further execution in this callback
-          return;
-        }
+           res.status(404).json({ success: false, info: "GET ==>  error 404: While this projectQuery-ID seems to have the correct amount of digits (which is a single String of 12 bytes), it seems to not exist in the database (anymore). The Project does not exist (anymore). This Project might have been deleted from the Database! " });
+        return;
+        } else
+        {
         res.status(200).json({ data });
         // console.log('api/proxyProjectData/id.js: GET Project-Data successfully');
         return;
+      }
       } catch (error) {
-          console.log(error);
-          res.status(500).json({ success: false, data: "line 26" });
+          console.log('error: ', error);
+          res.status(500).json({ success: false, info: "GET => error 500: The projectQuery-ID must be a single String of 12 bytes exactly. Probably this projectQuery does contain a mistaken amount of digits." });
           return;
       }
       break;
-
 
     case "PUT":
       try {
@@ -48,7 +48,7 @@ export default async (req, res) => {
         return;
       } catch (error) {
         console.log(error);
-        res.status(400).json({ success: false, data: "line 52" });
+        res.status(400).json({ success: false, data: "PUT error on line 52" });
         return;
       }
       break;
@@ -71,7 +71,7 @@ export default async (req, res) => {
           return;
       } catch (error) {
         console.log(error);
-        res.status(400).json({ success: false, data: "line 76" });
+        res.status(400).json({ success: false, data: "POST error on line 76" });
         return;
       }
       break;
@@ -88,7 +88,7 @@ export default async (req, res) => {
         return;
       } catch (error) {
         console.log( error );
-        res.status(500).json({ success: false, data: "line 95" });
+        res.status(500).json({ success: false, data: "DELETE error on line 95" });
         return;
       }
       break;

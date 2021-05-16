@@ -47,7 +47,8 @@
 .trashIcon {
   color: floralwhite;
   font-size: 36px;
-  width: 1.65em;
+  width: .6em;
+  min-width: .6em;
   display: none;
 }
 /* TrashIcon */
@@ -95,7 +96,7 @@
 
 .customURL span:hover > span {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     position: absolute;
     z-index: 1;
@@ -111,6 +112,8 @@
     border: 3px solid #444857;
     border-radius: 8px;
     cursor: pointer;
+    width: 50vw;
+    overflow: hidden;
 }
 .customURL span:hover > span a {
     color: black;

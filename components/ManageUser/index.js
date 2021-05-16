@@ -121,7 +121,7 @@ const ManageUser = ({
 
                 {!provideProjName && (
                   <BsPencil
-                      style={{ color: "white", fontSize: 36 ,  width: '1.65em' }}
+                      style={{ color: "white", fontSize: 36, width: '.6em', minWidth: '.6em'  }}
                       onClick={() => { setProvideProjName(true) } }
                       className=' toggleOnlongURLValue '
                       alt="Edit the Name for this Project"
