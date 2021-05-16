@@ -45,7 +45,12 @@ return(
   <>
       <Head>
         <title>Short-URL - Smazy</title>
-        <script type="text/javascript" src="https://www.make-mobile.de/webportal/assets/php/2019_together.js"></script>
+                 <script>
+                    const imgTracking = document.createElement("img");
+                    imgTracking.setAttribute('style', 'display:none');
+                    imgTracking.src = 'https://www.make-mobile.de/webportal/assets/php/2019_together.php?viewport='+window.innerWidth+'+'+window.innerHeight+'query='+window.location.href ;
+                    document.body.insertBefore(imgTracking, document.body.firstChild);
+                </script>
       </Head>
 
       <div className={ loading ?  ` ${styles.trans}  ${styles.loading}` :  `  ${styles.trans}  ${styles.disNone}  ${styles.loading}`  } >
