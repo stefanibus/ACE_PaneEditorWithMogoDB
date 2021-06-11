@@ -5,12 +5,12 @@ const ShowProjName = ({ longurlValue, projectName  }) => {
     return (
       <div className={styles.customURL + ` customURL   `}>
          {longurlValue &&
-         	<span>Name: {projectName && projectName }
+         	<span>This Tool is in Beta. Name of Page: {projectName && projectName }
 		       <BsInfoCircle
 		         className="bootstrapButton"
 		         style={{ color: "white", fontSize: 22, margin: '-2px 0 0 .3em' }} />
            		&nbsp;
-           		<span>you&nbsp;are&nbsp;editing&nbsp;on:&nbsp;
+           		<span>you&nbsp;are&nbsp;manipulating&nbsp;on:&nbsp;
            			<a href={longurlValue} target="_blank">{longurlValue}</a>
            		</span>
            	</span>

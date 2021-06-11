@@ -100,7 +100,7 @@
     align-items: center;
     position: absolute;
     z-index: 1;
-    top: .6vh;
+    top: .3vh;
     height: 5vh;
     left: 47vw;
     text-align: center;
@@ -114,6 +114,7 @@
     cursor: pointer;
     width: 50vw;
     overflow: hidden;
+    border: 2px solid red;
 }
 .customURL span:hover > span a {
     color: black;
