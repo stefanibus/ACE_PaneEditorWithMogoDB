@@ -119,9 +119,8 @@ const Index = () => {
                  <br/>
               }
 
-
-           Please use a desktop-device to<br/>
-           use our manipulation-service.<br/><br/>
+           To actively use our manipulation-service,<br/>
+           please use a desktop-device.<br/><br/>
 
            You can manipulate <br/>
            'any static webpage'<br/>
