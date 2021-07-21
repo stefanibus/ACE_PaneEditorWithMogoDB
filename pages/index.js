@@ -207,8 +207,8 @@ const Index = () => {
         onDragStarted={() => { setCurrentlyDragged(true) } }
         onDragFinished={(heightFromDragEvent) => {
           setCurrentlyDragged(false)
-          setEditorHeightValue(`${heightFromDragEvent - 40}px`);
-          setverticalPaneSize(`${heightFromDragEvent - 40}px`) } }
+          setEditorHeightValue(`${heightFromDragEvent - 50}px`);
+          setverticalPaneSize(`${heightFromDragEvent - 50}px`) } }
       >
           <SplitPane
               split="vertical"

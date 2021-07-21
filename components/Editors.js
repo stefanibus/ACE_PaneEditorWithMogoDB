@@ -42,11 +42,11 @@ const Editor = ({
 
     useEffect(() => {
         if (mode === "css") {
-               if (horizontalSize > 55) { setButtonText('Regular View'); }
+               if (horizontalSize > 55) { setButtonText('go back to Regular View'); }
                else { setButtonText('F11'); }
         }
         if (mode === "javascript")  {
-              if (horizontalSize < 45) { setButtonText('Regular View'); }
+              if (horizontalSize < 45) { setButtonText('go back to Regular View'); }
               else { setButtonText('F11'); }
         }
     }, [horizontalSize]);

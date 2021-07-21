@@ -27,90 +27,116 @@ const sliderSplitPane = {
  	},
  	cssFullscreen:  (setverticalPaneSize, setHorizontalSize, setEditorHeightValue, verticalPaneSize) => {
 
-		var i = 30;
-		var w ;
-		function myLoop() {
-		  setTimeout(function() {
+ 		// established resize without the sliding-effect to circumvent pane-size issues
+        setEditorHeightValue(`81vh`);
+	    setHorizontalSize(80);
+	    setverticalPaneSize(91);
 
-			if (verticalPaneSize > 80 ) {
-		       setverticalPaneSize(90);
-			} else {
-				setverticalPaneSize(i);
-			}
-            setEditorHeightValue(`90vh`);
-		     setHorizontalSize(w);
-		    i= i+2;
-		    w= 50+i/2;
-		    if (i < 91) {
-		      myLoop();
-		    }
-		  }, 10)
-		}
-		myLoop();
+		// var i = 30;
+		// var w ;
+		// function myLoop() {
+		//   setTimeout(function() {
+
+		// 	if (verticalPaneSize > 80 ) {
+		//        setverticalPaneSize(90);
+		// 	} else {
+		// 		setverticalPaneSize(i);
+		// 	}
+  //           setEditorHeightValue(`90vh`);
+		//      setHorizontalSize(w);
+		//     i= i+2;
+		//     w= 50+i/2;
+		//     if (i < 91) {
+		//       myLoop();
+		//     }
+		//   }, 10)
+		// }
+		// myLoop();
  	},
  	jsFullscreen:  (setverticalPaneSize, setHorizontalSize, setEditorHeightValue, verticalPaneSize) => {
-		var i = 30;
-		var w ;
-		function myLoop() {
-		  setTimeout(function() {
-		     if (verticalPaneSize > 80 ) {
-		       setverticalPaneSize(90);
-			} else {
-				setverticalPaneSize(i);
-			}
-            setEditorHeightValue(`90vh`);
-   	    	setHorizontalSize(w);
-		    i= i+2;
-		    w= 50-i/2;
-		    if (i < 91) {
-		      myLoop();
-		    }
-		  }, 10)
-		}
-		myLoop();
+
+ 		// established resize without the sliding-effect to circumvent pane-size issues
+            setEditorHeightValue(`81vh`);
+   	    	setHorizontalSize(10);
+   	    	setverticalPaneSize(91);
+
+		// var i = 30;
+		// var w ;
+		// function myLoop() {
+		//   setTimeout(function() {
+		//      if (verticalPaneSize > 80 ) {
+		//        setverticalPaneSize(90);
+		// 	} else {
+		// 		setverticalPaneSize(i);
+		// 	}
+  //           setEditorHeightValue(`90vh`);
+  //  	    	setHorizontalSize(w);
+		//     i= i+2;
+		//     w= 50-i/2;
+		//     if (i < 91) {
+		//       myLoop();
+		//     }
+		//   }, 10)
+		// }
+		// myLoop();
+		// trigger the manual dragging of the vertical HandeBar in order to reset all of the various Splitpane size values
+
  	},
  	cssRegularScreenView: (setverticalPaneSize, setHorizontalSize, setEditorHeightValue) => {
-		var i =  70;
-		var w;
-		function myLoop() {
-		  setTimeout(function() {
-		     setverticalPaneSize(i)
-            setEditorHeightValue(`30vh`);
-		     setHorizontalSize(w);
-		    i= i-2;
-		    w=  15 + i;
-		    if (i >  31) {
-		      myLoop();
-		    }
-		  }, 10)
-		}
-  	    myLoop();
+
+ 		// established resize without the sliding-effect to circumvent pane-size issues
+        setEditorHeightValue(`40.5vh`);
+	    setHorizontalSize(48.1);
+	    setverticalPaneSize(48);
+
+		// var i =  70;
+		// var w;
+		// function myLoop() {
+		//   setTimeout(function() {
+		//      setverticalPaneSize(i)
+  //           setEditorHeightValue(`30vh`);
+		//      setHorizontalSize(w);
+		//     i= i-2;
+		//     w=  15 + i;
+		//     if (i >  31) {
+		//       myLoop();
+		//     }
+		//   }, 10)
+		// }
+  // 	    myLoop();
  	},
  	jsRegularScreenView: (setverticalPaneSize, setHorizontalSize, setEditorHeightValue) => {
-		var i =  90;
-		var w =  100 ;
-		function myLoop() {
-		  setTimeout(function() {
-		    //
-		    setverticalPaneSize(i)
-            setEditorHeightValue(`30vh`);
-			w=  (100-i);
-		    if (w <  48.1) {
-		     setHorizontalSize(w);
-			}
-		    i= i-2;
-		    if (i >  31) {
-		      myLoop();
-		    }
-		  }, 10)
-		}
-  	    myLoop();
+
+ 		// established resize without the sliding-effect to circumvent pane-size issues
+        setEditorHeightValue(`40.5vh`);
+	    setHorizontalSize(48.1);
+	    setverticalPaneSize(48);
+
+		// var i =  90;
+		// var w =  100 ;
+		// function myLoop() {
+		//   setTimeout(function() {
+		//     //
+		//     setverticalPaneSize(i)
+  //           setEditorHeightValue(`30vh`);
+		// 	w=  (100-i);
+		//     if (w <  48.1) {
+		//      setHorizontalSize(w);
+		// 	}
+		//     i= i-2;
+		//     if (i >  31) {
+		//       myLoop();
+		//     }
+		//   }, 10)
+		// }
+  // 	    myLoop();
  	},
  	CalcWidthPosition: (size) => {
      let intViewportWidth =  window.innerWidth;
      let rightPosition    =  (intViewportWidth - size); // size-value is counted upwards from the right by default:
      let leftPosition     =  (intViewportWidth - rightPosition );  // we are switching that logic around
      let ViewPortPosition = ((leftPosition  /  intViewportWidth ) * 100 ).toFixed(2);
+     //console.log('ViewPortPosition will calc the Horizontal-width-position of the HandleBar ', ViewPortPosition)
      return ViewPortPosition;
  	}
 }
