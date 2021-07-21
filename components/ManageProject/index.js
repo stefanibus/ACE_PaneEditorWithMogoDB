@@ -122,9 +122,9 @@ import db_communication   from "../../utils/mongo_communication";
      <button
        className={styles.button + ' toggleOnlongURLValue ' }
        onClick={() => {
-         // save
-         // we might want to "save" the latest user-data before we start to render
-         // Render
+         // save: we want to "save" the latest user-data before we start to render
+         db_communication.save(data4project, setSaving, visitorId, userID_from_Fingerprint, projectQuery, projectName, setProvideProjName, jsValue, cssValue, longurlValue, router, setUserID_from_Fingerprint);
+         // start to Render the result into the iframe
          surflyProxy.surflyRender(projectId, setpaneValues);   }} >
        Look at Result
      </button>
