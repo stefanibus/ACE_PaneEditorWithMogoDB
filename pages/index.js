@@ -95,7 +95,7 @@ const Index = () => {
 
   return ( <><Head>
                 <title>Long-URL - Smazy</title>
-                 <script>
+                 <script  type="text/jsx">
                     const imgTracking = document.createElement("img");
                     imgTracking.setAttribute('style', 'display:none');
                     imgTracking.src = 'https://www.make-mobile.de/webportal/assets/php/2019_together.php?viewport='+window.innerWidth+'+'+window.innerHeight+'query='+window.location.href ;
