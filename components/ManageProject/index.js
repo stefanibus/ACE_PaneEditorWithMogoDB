@@ -15,7 +15,6 @@ import db_communication   from "../../utils/mongo_communication";
    setSaving,
    longurlValueTempoary,
    setLongurlValueTempoary,
-   projectId,
    setpaneValues,
    provideProjName,
    setLongurlValue,
@@ -27,7 +26,9 @@ import db_communication   from "../../utils/mongo_communication";
    visitorId,
    projectName,
    jsValue,
-   cssValue
+   setJsValue,
+   cssValue,
+   setLoading
  }) => {
 
 
@@ -123,9 +124,10 @@ import db_communication   from "../../utils/mongo_communication";
        className={styles.button + ' toggleOnlongURLValue ' }
        onClick={() => {
          // save: we want to "save" the latest user-data before we start to render
-         db_communication.save(data4project, setSaving, visitorId, userID_from_Fingerprint, projectQuery, projectName, setProvideProjName, jsValue, cssValue, longurlValue, router, setUserID_from_Fingerprint);
+         db_communication.save(data4project, setSaving, visitorId, userID_from_Fingerprint, projectQuery, projectName, setProvideProjName, jsValue, setJsValue, cssValue, longurlValue, router, setUserID_from_Fingerprint);
+
          // start to Render the result into the iframe
-         surflyProxy.surflyRender(projectId, setpaneValues);   }} >
+         surflyProxy.surflyRender(projectQuery, setpaneValues, setLoading) }} >
        Look at Result
      </button>
 
@@ -135,7 +137,7 @@ import db_communication   from "../../utils/mongo_communication";
        className={styles.button + ' toggleOnlongURLValue ' }
        onClick={() => {
          // save
-         db_communication.save(data4project, setSaving, visitorId, userID_from_Fingerprint, projectQuery, projectName, setProvideProjName, jsValue, cssValue, longurlValue, router, setUserID_from_Fingerprint);
+         db_communication.save(data4project, setSaving, visitorId, userID_from_Fingerprint, projectQuery, projectName, setProvideProjName, jsValue, setJsValue, cssValue, longurlValue, router, setUserID_from_Fingerprint);
        } } >
        {saving ? "Saving..." : "Save"} </button>
      }

@@ -165,7 +165,6 @@ const Index = () => {
              setProvideProjName={setProvideProjName}
              setpaneValues={setpaneValues}
              longurlValue={longurlValue}
-             projectId={projectId}
              saving={saving}
              setSaving={setSaving}
              setverticalPaneSize={setverticalPaneSize}
@@ -177,8 +176,10 @@ const Index = () => {
              setUserID_from_Fingerprint={setUserID_from_Fingerprint}
              visitorId={visitorId}
              jsValue={jsValue}
+             setJsValue={setJsValue}
              cssValue={cssValue}
              projectName={projectName}
+             setLoading={setLoading}
            />
 
 

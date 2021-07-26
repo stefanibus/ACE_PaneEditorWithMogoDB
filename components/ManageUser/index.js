@@ -88,7 +88,7 @@ const ManageUser = ({
       //    ReturnKey for  input field:
         const HandleReturnkey = (e, howToSave) => {
           if (e.key === "Enter") {
-                 db_communication.save(data4project, setSaving, visitorId, userID_from_Fingerprint, projectQuery, projectName, setProvideProjName, jsValue, cssValue, longurlValue, router, setUserID_from_Fingerprint);
+                 db_communication.save(data4project, setSaving, visitorId, userID_from_Fingerprint, projectQuery, projectName, setProvideProjName, jsValue, setJsValue, cssValue, longurlValue, router, setUserID_from_Fingerprint);
                  db_communication.getProjectListForUser(FingerprintJS, setUserID_from_Fingerprint, setUserData, serverURL)
           }
         }
@@ -114,7 +114,7 @@ const ManageUser = ({
                       style={{ visibility: "hidden" }}
                       className={ styles.button + ` SaveButton-for-ProjName form-control form-input ${provideProjName ? ' provideProjName ' : '' } ` }
                       onClick={() => {
-                        db_communication.save(data4project, setSaving, visitorId, userID_from_Fingerprint, projectQuery, projectName, setProvideProjName, jsValue, cssValue, longurlValue, router, setUserID_from_Fingerprint);
+                        db_communication.save(data4project, setSaving, visitorId, userID_from_Fingerprint, projectQuery, projectName, setProvideProjName, jsValue, setJsValue, cssValue, longurlValue, router, setUserID_from_Fingerprint);
                         db_communication.getProjectListForUser(FingerprintJS, setUserID_from_Fingerprint, setUserData, serverURL);
                         } } >Save
                   </button>

@@ -49,6 +49,7 @@ const db_communication = {
 	    projectName,
 	    setProvideProjName,
 	    jsValue,
+	    setJsValue,
 	    cssValue,
 	    longurlValue,
 	    router,
