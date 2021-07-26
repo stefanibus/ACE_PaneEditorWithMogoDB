@@ -121,7 +121,7 @@ const Index = () => {
   // display page after initial Response from MongoDB
 
   return ( <><Head>
-                <title>Long-URL - Smazy</title>
+                <title>{projectName} / Long-URL</title>
              </Head>
     <div  ref={targetRef} className={`${styles.smartphone} ${seeOnMobileDevice ?  styles.toggle_IframeIntoView   : null  } `} >
        <div>

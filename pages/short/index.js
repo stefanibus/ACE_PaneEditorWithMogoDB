@@ -11,6 +11,7 @@ const Short = () => {
   const { projectQuery, userQuery } = router.query;
   const [loading, setLoading] = useState(true);
   const [noProject, setNoProject] = useState(false);
+  const [projectName, setProjectName] = useState("");
   const [paneValues, setpaneValues] = useState("startpage.html");
   const data4project  = `${process.env.NEXT_PUBLIC_PRODURL}/api/projectData/${projectQuery}`
   const targetRef = useRef();
@@ -39,6 +40,7 @@ const Short = () => {
                         } else
                         { // surfly will load the proxied Page ==>  API-Call to receive the URL for the Iframe
                           surflyProxy.surflyRender(projectQuery, setpaneValues, setLoading);
+                          setProjectName(data.projectName)
                         }
                   }
                   fetchProjectData();
@@ -60,7 +62,7 @@ const Short = () => {
 return(
   <>
       <Head>
-        <title>Short-URL - Smazy</title>
+        <title>{projectName} / Short-URL - Smazy</title>
       </Head>
       <div ref={targetRef} className={ loading ?
                       ` ${styles.trans}  ${styles.loading}`
