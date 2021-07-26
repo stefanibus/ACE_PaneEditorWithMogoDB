@@ -117,8 +117,8 @@ import db_communication   from "../../utils/mongo_communication";
        className={styles.button + ' toggleOnlongURLValue ' }
 
        onClick={() => {
-         window.open(`/short?projectQuery=${projectQuery}`, "_blank");
-         alert('The Resultpage should be open in a new tab now. Grab your URL from there!')   }} >
+         alert('The Resultpage will be opened in a new tab now. Grab your URL from there!')
+         window.open(`/short?projectQuery=${projectQuery}`, "_blank");  }} >
        Forward Result
      </button>
 
