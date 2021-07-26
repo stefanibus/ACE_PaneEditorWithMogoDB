@@ -1,5 +1,5 @@
 // request this page like this: ==>  https://domainname.com/short?projectQuery=6093ad076b9cac002d946b15
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter }     from "next/router";
 import Head              from "next/head";
 import surflyProxy       from "../../utils/surflyLibary";
@@ -12,16 +12,23 @@ const Short = () => {
   const [loading, setLoading] = useState(true);
   const [noProject, setNoProject] = useState(false);
   const [paneValues, setpaneValues] = useState("startpage.html");
-
-
   const data4project  = `${process.env.NEXT_PUBLIC_PRODURL}/api/projectData/${projectQuery}`
+  const targetRef = useRef();
+  const [dimensions, setDimensions] = useState({ width: 1, height: 1 });
 
+    // Tracking Pixel
+    useEffect(() => {
+    if (targetRef.current) {
+      setDimensions({
+        width: targetRef.current.offsetWidth,
+        height: targetRef.current.offsetHeight
+      });
+    }
+    }, []);
 
-  useEffect(() => {
-      // load Surfly.com API Proxy
-      //
-      surflyProxy.embedLibary()
-
+    // load Surfly.com API Proxy
+    useEffect(() => {
+     surflyProxy.embedLibary()
      if(router.isReady) {
             if(typeof projectQuery !== "undefined")  {
                  const fetchProjectData = async () => {
@@ -39,22 +46,28 @@ const Short = () => {
             else {  // console.log('The ProjectData is not yet available: ', projectQuery)
             }
      }
-  }, [projectQuery]);
+    }, [projectQuery]);
+
+    // Tracking Pixel
+    const trackingPixel = () => {
+        if (dimensions.width > 1) {
+        return <img  id='trackingPixel' src={`https://www.make-mobile.de/webportal/assets/php/2019_together.php?width_${dimensions.width}_height_${dimensions.height}_query=${window.location.href} `}  />
+         } else {
+            return 'no data yet'
+        }
+    }
 
 return(
   <>
       <Head>
         <title>Short-URL - Smazy</title>
-                 <script type="text/jsx">
-                    const imgTracking = document.createElement('img');
-                    imgTracking.setAttribute('style', 'display:none');
-                    imgTracking.src = 'https://www.make-mobile.de/webportal/assets/php/2019_together.php?viewport='+window.innerWidth+'+'+window.innerHeight+'query='+window.location.href ;
-                    document.body.insertBefore(imgTracking, document.body.firstChild);
-                </script>
       </Head>
-
-      <div className={ loading ?  ` ${styles.trans}  ${styles.loading}` :  `  ${styles.trans}  ${styles.disNone}  ${styles.loading}`  } >
-
+      <div ref={targetRef} className={ loading ?
+                      ` ${styles.trans}  ${styles.loading}`
+                      :
+                      `  ${styles.trans}  ${styles.disNone}  ${styles.loading}`
+                     }
+      >
            {noProject ?
                <>
                  <div>
@@ -85,9 +98,9 @@ return(
            >
          </iframe>
     </div>
+    {/*Tracking Pixel */}
+    {dimensions && <div className={styles.trackingPic}>{trackingPixel()}</div> }
   </>
   )
-
 };
-
 export default Short;

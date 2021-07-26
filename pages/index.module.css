@@ -1,3 +1,10 @@
+.trackingPic {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  visibility: hidden;
+}
+
 .previewIframe {
   width: 100%;
   height: 100%;

@@ -32,7 +32,9 @@
                 const getSurflyURL = await fetch(SurflyAPIstring, fetchRequestOptions);
                 const { SurflyResponseURL } = await getSurflyURL.json();
                 if (getSurflyURL.status !== 200) { await router.push("/404"); }
+                //
                 setpaneValues(SurflyResponseURL);
+                //  setpaneValues('startpage.html'); // dev-Env
                 setLoading(false);
             }
    }

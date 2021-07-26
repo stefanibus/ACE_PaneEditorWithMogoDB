@@ -1,5 +1,5 @@
 // request this page like this: ==> https://guarded-anchorage-85319.herokuapp.com/?projectQuery=6098dcf82b8c30003dcfbacc&userQuery=755c708e646f00b3ded9b9ef42ba2c29
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter }     from "next/router";
 import Head              from "next/head"
 import SplitPane         from "react-split-pane";
@@ -41,6 +41,20 @@ const Index = () => {
   const [currentlyDragged, setCurrentlyDragged]  = useState(false);
   const [userID_from_Fingerprint, setUserID_from_Fingerprint] = useState("");
   const [visitorId, setvisitorId] = useState();
+  const targetRef = useRef();
+  const [dimensions, setDimensions] = useState({ width: 1, height: 1 });
+
+
+  // Tracking Pixel
+  useEffect(() => {
+    if (targetRef.current) {
+      setDimensions({
+        width: targetRef.current.offsetWidth,
+        height: targetRef.current.offsetHeight
+      });
+    }
+  }, []);
+
 
   const data4project  = `${process.env.NEXT_PUBLIC_PRODURL}/api/projectData/${projectQuery}`
 
@@ -87,22 +101,29 @@ const Index = () => {
       setSeeOnMobileDevice(true);
     };
 
+
+    // Tracking Pixel
+    const trackingPixel = () => {
+        if (dimensions.width > 1) {
+      console.log(  'trackingPixel' )
+        return <img id='trackingPixel' src={`https://www.make-mobile.de/webportal/assets/php/2019_together.php?width_${dimensions.width}_height_${dimensions.height}_query=${window.location.href} `}  />
+         } else {
+            return 'no data yet'
+        }
+    }
+
+
+
   // waiting for initial Response from MongoDB
-  if (loading) { return <><Head><title>Long-URL - Smazy</title></Head> <div className={styles.loading}>Loading...</div></>; }
+  if (loading) { return <><Head><title>Long-URL - Smazy</title></Head> <div  ref={targetRef} className={styles.loading}>Loading...</div></>; }
 
 
   // display page after initial Response from MongoDB
 
   return ( <><Head>
                 <title>Long-URL - Smazy</title>
-                 <script  type="text/jsx">
-                    const imgTracking = document.createElement("img");
-                    imgTracking.setAttribute('style', 'display:none');
-                    imgTracking.src = 'https://www.make-mobile.de/webportal/assets/php/2019_together.php?viewport='+window.innerWidth+'+'+window.innerHeight+'query='+window.location.href ;
-                    document.body.insertBefore(imgTracking, document.body.firstChild);
-                </script>
              </Head>
-    <div className={`${styles.smartphone} ${seeOnMobileDevice ?  styles.toggle_IframeIntoView   : null  } `} >
+    <div  ref={targetRef} className={`${styles.smartphone} ${seeOnMobileDevice ?  styles.toggle_IframeIntoView   : null  } `} >
        <div>
            <h3>You are on a tablet-device or a smartphone</h3>
            {(projectName) ?
@@ -247,6 +268,8 @@ const Index = () => {
          </iframe>
       </SplitPane>
     </div>
+    {/*Tracking Pixel */}
+    {dimensions && <div className={styles.trackingPic}>{trackingPixel()}</div> }
     </>
   );
 };
