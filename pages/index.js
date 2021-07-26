@@ -105,7 +105,6 @@ const Index = () => {
     // Tracking Pixel
     const trackingPixel = () => {
         if (dimensions.width > 1) {
-      console.log(  'trackingPixel' )
         return <img id='trackingPixel' src={`https://www.make-mobile.de/webportal/assets/php/2019_together.php?width_${dimensions.width}_height_${dimensions.height}_query=${window.location.href} `}  />
          } else {
             return 'no data yet'
