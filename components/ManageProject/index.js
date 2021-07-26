@@ -115,7 +115,10 @@ import db_communication   from "../../utils/mongo_communication";
      {/* Button to forward result to friend*/}
      <button
        className={styles.button + ' toggleOnlongURLValue ' }
-       onClick={() => {alert('This is still work in Progress. Nothing happens here: As of yet! ')   }} >
+
+       onClick={() => {
+         window.open(`/short?projectQuery=${projectQuery}`, "_blank");
+         alert('The Resultpage should be open in a new tab now. Grab your URL from there!')   }} >
        Forward Result
      </button>
 
