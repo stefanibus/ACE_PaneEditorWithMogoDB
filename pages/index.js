@@ -55,6 +55,16 @@ const Index = () => {
     }
   }, []);
 
+  // Check for Startpage: if true -> drag the Horizontal-Pane-Handlebar to the very top
+  useEffect(() => {
+    const hasQuery = location.search == ""; //Equals true if we're at the root
+    if (hasQuery) { // console.log('We are testing if this is the Startpage: The URL does NOT have a Query-String, thus this IS in fact the startpage. The answer is true. Thus we are going to drag the HorizontalPane to the top.', location.pathname, location.search);
+    setverticalPaneSize(0);
+    }
+    else { // console.log('The URL does have a Query-String. Thus this is not the startpage. We will not change the position of the horizontal-Pane-Handlebar.', location.pathname, location.search);
+    }
+  }, []);
+
 
   const data4project  = `${process.env.NEXT_PUBLIC_PRODURL}/api/projectData/${projectQuery}`
 

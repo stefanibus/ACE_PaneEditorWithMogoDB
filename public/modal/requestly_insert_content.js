@@ -12,7 +12,7 @@ var contentOne =
 `
 	<div class="modal password-modal" id="most_important" >
 		<div class="most_important_inside">
-		    <h3>${CustomerName} <br/>is modified </h3>
+		    <h3>${CustomerName}</h3>
 				This page cannot be indexed by Search Engines. </br>
 				It will be deactivated at the 30th of August 2021. </br> </br>
 				More information on</br>
