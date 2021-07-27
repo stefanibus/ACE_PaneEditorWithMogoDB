@@ -3,7 +3,7 @@
 // for the layout of this Info-Layer we will do a CSS-FILE Injection
 var externalCSS = document.createElement('link');
 externalCSS.id = "dynamic-externalCSS";
-externalCSS.href = 'https://guarded-anchorage-85319.herokuapp.com/requestly_insert_content.css?v=1.0';
+externalCSS.href = 'https://guarded-anchorage-85319.herokuapp.com/modal/requestly_insert_content.css?v=1.0';
 externalCSS.setAttribute('rel', 'stylesheet');
 externalCSS.type = 'text/css';
 document.getElementsByTagName('head')[0].appendChild(externalCSS);
