@@ -86,7 +86,7 @@ import db_communication   from "../../utils/mongo_communication";
       }
 
 //   Save the NewProject
-     const NewProject_Save = async () => {
+     const NewProject_Save = () => {
        const UrlCheck =  manageProjects.validateURL(longurlValue) ;
        if (UrlCheck) {
           saveNewProject();
