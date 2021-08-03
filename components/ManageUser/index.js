@@ -51,7 +51,7 @@ const ManageUser = ({
               setCssValue('');
               setJsValue('');
               setprojectId('');
-              db_communication.getProjectListForUser(FingerprintJS, setUserID_from_Fingerprint, setUserData, serverURL);
+              db_communication.getProjectListForUser(FingerprintJS, setUserID_from_Fingerprint, setUserData, serverURL, visitorId);
               setpaneValues("startpage.html");
           }
        }
@@ -89,7 +89,7 @@ const ManageUser = ({
         const HandleReturnkey = (e, howToSave) => {
           if (e.key === "Enter") {
                  db_communication.save(data4project, setSaving, visitorId, userID_from_Fingerprint, projectQuery, projectName, setProvideProjName, jsValue, setJsValue, cssValue, longurlValue, router, setUserID_from_Fingerprint);
-                 db_communication.getProjectListForUser(FingerprintJS, setUserID_from_Fingerprint, setUserData, serverURL)
+                 db_communication.getProjectListForUser(FingerprintJS, setUserID_from_Fingerprint, setUserData, serverURL, visitorId)
           }
         }
 
@@ -115,7 +115,7 @@ const ManageUser = ({
                       className={ styles.button + ` SaveButton-for-ProjName form-control form-input ${provideProjName ? ' provideProjName ' : '' } ` }
                       onClick={() => {
                         db_communication.save(data4project, setSaving, visitorId, userID_from_Fingerprint, projectQuery, projectName, setProvideProjName, jsValue, setJsValue, cssValue, longurlValue, router, setUserID_from_Fingerprint);
-                        db_communication.getProjectListForUser(FingerprintJS, setUserID_from_Fingerprint, setUserData, serverURL);
+                        db_communication.getProjectListForUser(FingerprintJS, setUserID_from_Fingerprint, setUserData, serverURL, visitorId);
                         } } >Save
                   </button>
                 </>

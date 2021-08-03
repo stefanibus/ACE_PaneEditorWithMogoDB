@@ -59,9 +59,8 @@ const db_communication = {
 		    setSaving(true);
 		    var meth ;
 		    if (visitorId) {
-		    	alert('visitorId: ' + visitorId )
 		          // visitor is set to ADMIN
-		          if  (visitorId == 'admin') {   // alert('visitor is admin  (visitorId): ' + visitorId )
+		          if (visitorId == 'admin') {   // alert('visitor is admin  (visitorId): ' + visitorId )
 		          // => admin is always allowed to overwrite the existing content
 		            meth =  "POST";
 		            //  POST = updatedRecord (overwrite)
@@ -72,8 +71,12 @@ const db_communication = {
 		            meth = projectQuery ? "POST" : "PUT"; //  POST = updatedRecord (overwrite) , Put = newRecordId (create new)
 		          }
 		          else { // alert("same Project, but different User ( visitorId , userID_from_Fingerprint): "  + visitorId + ", "  + userID_from_Fingerprint);
-		            meth = "PUT";
-		            alert("We cloned this Project for you. If you wish, You can provide a different name for the Project later. Use the pencil in the top-right-corner to change the Name.   " );
+						if (visitorId == 'admin') {
+				            meth = "POST";
+				          } else {
+				            meth = "PUT";
+				            alert("We cloned this Project for you. If you wish, You can provide a different name for the Project later. Use the pencil in the top-right-corner to change the Name.   " );
+				          }
 		          }
 		    }
 		    else {
@@ -117,7 +120,8 @@ const db_communication = {
 		    db_communication.sendDB_Request(requestOptions, data4project, setSaving, setProvideProjName, userID_from_Fingerprint, router)
 	},
 //   get ProjectList from MongoDB
-	getProjectListForUser: async (FingerprintJS, setUserID_from_Fingerprint, setUserData, serverURL) => {
+	getProjectListForUser: async (FingerprintJS, setUserID_from_Fingerprint, setUserData, serverURL, visitorId) => {
+	    //console.log('from getProjectListForUser()  this is the visitorId: ', visitorId);
 	    const fp = await FingerprintJS.load();
 	    const result = await fp.get();
 	    const identificationOfTheVisitor = result.visitorId;
@@ -126,7 +130,14 @@ const db_communication = {
 	      method: "GET",
 	      headers: { "Content-Type": "application/json" },
 	    };
-	    const usersAPI_url = `${serverURL}/api/users/${identificationOfTheVisitor}`;
+		let usersAPI_url;
+	    if (visitorId == 'admin') {
+	        // console.log('yes we are admin now and we pass the term 'admin to api/users/[here] ' ')
+		    usersAPI_url = `${serverURL}/api/users/${visitorId}`;
+	    } else {
+	        // console.log('we are a specific user now and we pass the userQuery-id to api/users/[here] ')
+		    usersAPI_url = `${serverURL}/api/users/${identificationOfTheVisitor}`;
+	    }
 	    // console.log('usersAPI_url: ', usersAPI_url)
 	    const response = await fetch(usersAPI_url, requestOptions);
 	    const { data } = await response.json();

@@ -92,7 +92,7 @@ const Index = () => {
                         setCssValue(data.css);
                         setJsValue(data.js);
                         setprojectId(projectQuery);
-                        db_communication.getProjectListForUser(FingerprintJS, setUserID_from_Fingerprint, setUserData, process.env.NEXT_PUBLIC_PRODURL)
+                        db_communication.getProjectListForUser(FingerprintJS, setUserID_from_Fingerprint, setUserData, process.env.NEXT_PUBLIC_PRODURL, router.query.userQuery)
                         surflyProxy.surflyRender(projectQuery, setpaneValues, setLoading); // (re-)load the result-page if projectQuery changes
                 }
             }
@@ -101,7 +101,7 @@ const Index = () => {
         else {
           // console.log('ProjectData is not available: ', projectQuery)
           setLoading(false);
-          db_communication.getProjectListForUser(FingerprintJS, setUserID_from_Fingerprint, setUserData, process.env.NEXT_PUBLIC_PRODURL)
+          db_communication.getProjectListForUser(FingerprintJS, setUserID_from_Fingerprint, setUserData, process.env.NEXT_PUBLIC_PRODURL, visitorId)
         }
      }
   }, [projectQuery]);
