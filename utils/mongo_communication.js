@@ -59,12 +59,19 @@ const db_communication = {
 		    setSaving(true);
 		    var meth ;
 		    if (visitorId) {
+		    	alert('visitorId: ' + visitorId )
+		          // visitor is set to ADMIN
+		          if  (visitorId == 'admin') {   // alert('visitor is admin  (visitorId): ' + visitorId )
+		          // => admin is always allowed to overwrite the existing content
+		            meth =  "POST";
+		            //  POST = updatedRecord (overwrite)
+		          }
 		          // visitor and  user are EQUAL to one another
-		          if (visitorId == userID_from_Fingerprint) {   // alert('visitor and  user are EQUAL to one another ' )
+		          else if (visitorId == userID_from_Fingerprint) {   // alert('visitor and  user are EQUAL to one another: ' + visitorId  )
 		          // => that means we EITHER Update (overwrite) OR Clone the Project
 		            meth = projectQuery ? "POST" : "PUT"; //  POST = updatedRecord (overwrite) , Put = newRecordId (create new)
 		          }
-		          else { // alert("same Project, but different User");
+		          else { // alert("same Project, but different User ( visitorId , userID_from_Fingerprint): "  + visitorId + ", "  + userID_from_Fingerprint);
 		            meth = "PUT";
 		            alert("We cloned this Project for you. If you wish, You can provide a different name for the Project later. Use the pencil in the top-right-corner to change the Name.   " );
 		          }
