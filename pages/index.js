@@ -147,24 +147,25 @@ const Index = () => {
                      <span className={styles.link} onClick={showResultOnMobileDevice}>
                      {projectName}
                      </span>,<br/>
-                     please click the above link.<br/><br/>
+                     please click the above link.<br/>
                  </>)
                 :
                  (<>
-                    <br/>
-                    <br/>You can manipulate
-                    <br/>'all static webpages'
-                    <br/>on the internet:&nbsp;
-                  </>)
-              }
-                  <br/>You are on a tablet-device or on a smartphone.
-                  <br/>To actively create something with our manipulation-service,
-                  <br/>please use a desktop-device. Demo:
+                  <br/>
+                  Demo:
                   <br/>
                     <a  className={styles.link}  href="https://guarded-anchorage-85319.herokuapp.com/short?projectQuery=60fe83abd8d488002d4c3dec" target="_top">
                        Manipulate Google
-                    </a>.
+                    </a>
                   <br/>
+                    <br/>You can manipulate
+                    <br/>'all static webpages'
+                    <br/>on the internet.&nbsp;
+                  </>)
+              }
+                  <br/>Currently, you are on a smartphone-device.
+                  <br/>To actively create something with this manipulation-service,
+                  <br/>please use a desktop-device.
         </div>
     </div>
     <div  className={`

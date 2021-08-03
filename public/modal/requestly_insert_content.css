@@ -105,7 +105,7 @@
 
 code {
     color: #ea0a8e;
-    word-break: break-word;
+    line-height: 1.5;
 }
 
 div.modal.password-modal-two  {
@@ -114,6 +114,11 @@ div.modal.password-modal-two  {
 
 
 @media only screen and (max-width: 768px) {
+
+    code {
+    word-break: break-word;
+}
+
         .modal {
             top: 270px !important;
         }
