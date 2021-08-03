@@ -65,7 +65,7 @@
     justify-content: center;
 }  */
 
-.modal {
+.modal  {
     position: fixed !important;
     background: #000 !important;
     color: #fff !important;
@@ -92,8 +92,20 @@
     padding: 2em !important;
 }
 
+
+.modal h3  {
+    color:  #fff !important
+}
+
+
+#most_important,
+#most_important-two  {
+    box-sizing: border-box;
+}
+
 code {
-    color: #ea0a8e
+    color: #ea0a8e;
+    word-break: break-word;
 }
 
 div.modal.password-modal-two  {
@@ -166,7 +178,7 @@ div.modal.password-modal-two > a  {
         top: 3vh !important;
         height: 81vh !important;
         max-height: 81vh !important;
-        padding: .5em !important;
+        padding: .95em !important;
     }
      .most_important_inside {
         font-size: 15px !important;
@@ -181,7 +193,7 @@ div.modal.password-modal-two > a  {
     line-height: 2.2 !important;
     max-width: 60vw !important;
     width: 90vw !important;
-    left: 15vw !important;
+    left: 5vw !important;
     top: 8vh !important;
     height: 74vh !important;
     max-height: 550px !important;

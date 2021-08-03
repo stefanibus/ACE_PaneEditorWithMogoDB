@@ -134,10 +134,14 @@ const Index = () => {
              </Head>
     <div  ref={targetRef} className={`${styles.smartphone} ${seeOnMobileDevice ?  styles.toggle_IframeIntoView   : null  } `} >
        <div>
-           <h3>You are on a tablet-device or a smartphone</h3>
+           <h3>
+             ## Smazy ##
+             <br/>
+             ## _Manipulate any static website on the internet_ ##
+           </h3>
            {(projectName) ?
                 (<>
-                     <br/><br/>
+                     <br/>
                      If you merely want to <strong>look</strong> <br/>
                      at the result of the following project:&nbsp;<br/>
                      <span className={styles.link} onClick={showResultOnMobileDevice}>
@@ -146,19 +150,21 @@ const Index = () => {
                      please click the above link.<br/><br/>
                  </>)
                 :
-                 <br/>
+                 (<>
+                    <br/>
+                    <br/>You can manipulate
+                    <br/>'all static webpages'
+                    <br/>on the internet:&nbsp;
+                  </>)
               }
-
-           To actively use our manipulation-service,<br/>
-           please use a desktop-device.<br/><br/>
-
-           You can manipulate <br/>
-           'any static webpage'<br/>
-           on the internet&nbsp;<br/>
-           with our service.<br/>
-
-
-
+                  <br/>You are on a tablet-device or on a smartphone.
+                  <br/>To actively create something with our manipulation-service,
+                  <br/>please use a desktop-device. Demo:
+                  <br/>
+                    <a  className={styles.link}  href="https://guarded-anchorage-85319.herokuapp.com/short?projectQuery=60fe83abd8d488002d4c3dec" target="_top">
+                       Manipulate Google
+                    </a>.
+                  <br/>
         </div>
     </div>
     <div  className={`
