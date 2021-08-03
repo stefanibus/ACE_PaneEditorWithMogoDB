@@ -63,7 +63,7 @@ const Index = () => {
     }
     else { // console.log('The URL does have a Query-String. Thus this is not the startpage. We will not change the position of the horizontal-Pane-Handlebar.', location.pathname, location.search);
     }
-  }, []);
+  }, [projectQuery]);
 
 
   const data4project  = `${process.env.NEXT_PUBLIC_PRODURL}/api/projectData/${projectQuery}`
