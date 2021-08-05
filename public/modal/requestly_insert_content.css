@@ -195,13 +195,20 @@ div.modal.password-modal-two > a  {
     #most_important,
     #most_important-two  {
     font-size: 15px !important;
-    line-height: 2.2 !important;
     max-width: 60vw !important;
     width: 90vw !important;
     left: 5vw !important;
     top: 8vh !important;
     height: 74vh !important;
     max-height: 550px !important;
+    }
+}
+
+
+@media (min-width: 580px)     {
+    #most_important,
+    #most_important-two  {
+    line-height: 2.2 !important;
     }
 }
 
