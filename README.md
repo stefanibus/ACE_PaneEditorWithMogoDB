@@ -1,4 +1,53 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+
+
+
+## Web-App to manipulate   foreign webpages
+
+
+[![Image of Proxy smazy Interface.](https://content.screencast.com/users/stefanibus/folders/Capture/media/0d963ef3-c669-485b-b80f-17b192fdb860/LWR_Recording.png 'Image of Proxy smazy Interface.')](https://guarded-anchorage-85319.herokuapp.com/?projectQuery=60fe83abd8d488002d4c3dec)
+
+## _Manipulate any static website on the internet_
+
+###### Online Demo on Heroku:  https://guarded-anchorage-85319.herokuapp.com/
+Feel free to contribute and ask questions!
+
+
+
+
+## in a nutshell
+🚀  Smazy is an Online-Proxy-Service. You  may inject  additional  JavaScript and CSS-Code to any existing static webpage on the internet and enjoy the result. Or forward the result to a friend. ⚡️
+
+ - the web-app offers a JS-/CSS-Editor to enter additional code
+ - any code written inside of the code-editor will be to be injected into the foreign page
+ - Our webapp uses an API from  surfly .com API to proxy the result and render the additional JS into the proxied page
+ - the additional js/css-code (comming from the editor) will be rendered into the foreign proxied webpage almost in realtime
+ - ✨Magic ✨
+
+
+
+#### build with 
+- 🦁 User Management via Fingerprinting
+-  👌 Show Result Preview  
+- ↔  Pane Resizing with F11 key 
+- 🔥 [Next.js](https://nextjs.org) for Static Site Generator 
+- 🎨 [Tailwind CSS](https://tailwindcss.com) (w/ JIT mode) 
+- ✏️ Lint](https://eslint.org) (default NextJS, NextJS Core Web Vitals and Airbnb configuration)
+- 🛠 [Prettier](https://prettier.io) Code Formatter    
+- ☕ Minify HTML & CSS
+- 💨 Live reload
+- ✅ Cache busting
+  
+
+
+
+[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
+
+
+###### Click here for a Demo : [  on HerokuApp.com](https://guarded-anchorage-85319.herokuapp.com/?projectQuery=60fe83abd8d488002d4c3dec).
+
+
+
 
 ## Getting Started
 
@@ -9,26 +58,74 @@ npm run dev
 # or
 yarn dev
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+ 
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result. 
+   
 
 You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+ 
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+## caveats
+You will need to register with surfly.com and grab an API TOKEN. Also: Bear in mind the JavaScript-Injection will not work on your localhost machine due to CORS-restriction.    
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
-## Learn More
+#ENDE ENDE ENDE ENDE ENDE 
 
-To learn more about Next.js, take a look at the following resources:
+   
+ 
+ 
+### Requirements
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Node.js and npm
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### Getting started
+ 
+```
+.
+📦my-code-pen
+📦components
+ ┣ 📂ManageProject
+ ┃ ┗ 📜index.js
+ ┣ 📂ManageUser
+ ┃ ┗ 📜index.js
+ ┣ 📂ShowProjName
+ ┃ ┗ 📜index.js
+ ┣ 📜Editors.js
+ ┣ 📜Editors.module.css
+ ┗ 📜TogglePaneView.js
+ 📦components
+ ┣ 📂ManageProject
+ ┃ ┗ 📜index.js
+ ┣ 📂ManageUser
+ ┃ ┗ 📜index.js
+ ┣ 📂ShowProjName
+ ┃ ┗ 📜index.js
+ ┣ 📜Editors.js
+ ┣ 📜Editors.module.css
+ ┗ 📜TogglePaneView.js
+ 📦public
+ ┣ 📂modal
+ ┃ ┣ 📜requestly_insert_content.css
+ ┃ ┗ 📜requestly_insert_content.js
+ ┣ 📜favicon-32x32_fingerprint.png
+ ┣ 📜favicon.ico
+ ┣ 📜load_page.html
+ ┗ 📜startpage.html
+ 📦styles
+ ┣ 📜globals.css
+ ┗ 📜Home.module.css
+ 📦utils
+ ┣ 📜database.js
+ ┣ 📜manageProjects.js
+ ┣ 📜mongo_communication.js
+ ┣ 📜splitpane.js
+ ┗ 📜surflyLibary.js
+  
+```
+ 
+ 
+  
+---
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Made with ♥ by [make-mobile.de](https://make-mobile.de)  
+ 
