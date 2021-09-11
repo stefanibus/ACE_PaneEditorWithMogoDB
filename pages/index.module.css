@@ -12,30 +12,26 @@
   pointer-events: auto;
 }
 
-
 /* .isInteractive: */
-  /* 1: IF pointer-events is NOT set to none for the Iframe, then SplitPane will have issues  onDragFinished */
-  /* 2: BUT IF the pointer-events rule IS set to NONE for the Iframe, then the Irfame-Content cannot be clicked anymore.
+/* 1: IF pointer-events is NOT set to none for the Iframe, then SplitPane will have issues  onDragFinished */
+/* 2: BUT IF the pointer-events rule IS set to NONE for the Iframe, then the Irfame-Content cannot be clicked anymore.
    ==>  To prevent the second issue we will toggle the state on Drag, also see: https://github.com/tomkp/react-split-pane/issues/30  */
 /* //  useState-Hook "IsDragging" will toggle as a boolean Value  */
 .isInteractive {
   pointer-events: none !important ;
 }
 
-
-
-
 /* START LOADING SPINNER FOR SHORTURL RESULT-PAGE */
 .trans {
-     opacity: 1;
-     z-index: 9;
-     transition: opacity 1.5s linear, z-index 1.5s 2s ;
-    text-align: center;
-    padding: 2em !important;
+  opacity: 1;
+  z-index: 9;
+  transition: opacity 1.5s linear, z-index 1.5s 2s;
+  text-align: center;
+  padding: 2em !important;
 }
 .trans.disNone {
   opacity: 0;
-  z-index:  -9;
+  z-index: -9;
 }
 .visHide {
   visibility: hidden !important;
@@ -49,23 +45,18 @@
 }
 /* END LOADING SPINNER FOR SHORTURL RESULT-PAGE */
 
-
 /* TrashIcon */
 .trashIcon {
   color: floralwhite;
   font-size: 36px;
-  width: .6em;
-  min-width: .6em;
+  width: 0.6em;
+  min-width: 0.6em;
   display: none;
 }
 /* TrashIcon */
 
-
-
-
-
 @media only screen and (min-width: 1050px) {
-  .customSelect  {
+  .customSelect {
     width: 40vw;
   }
   .longURLButtons {
@@ -78,55 +69,54 @@
   }
 }
 .customURL {
-    color: floralwhite;
-    padding: 3px;
-    border: 3px;
-    opacity: .5;
-    width: 25vw;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  color: floralwhite;
+  padding: 3px;
+  border: 3px;
+  opacity: 0.5;
+  width: 25vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .customURL:hover {
-    opacity: 1;
-    z-index: 99999;
+  opacity: 1;
+  z-index: 99999;
 }
 .customURL span {
-    font-size: 0.8vw;
-    /*word-break: break-all;*/
+  font-size: 0.8vw;
+  /*word-break: break-all;*/
 }
 .customURL span span {
-    display: none;
+  display: none;
 }
-
 
 .customURL span:hover > span {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    position: absolute;
-    z-index: 1;
-    top: .3vh;
-    height: 5vh;
-    left: 47vw;
-    text-align: center;
-    background-color: #333642;
-    color: #fff;
-    font-size: 15px;
-    padding: 3px 20px;
-    margin-right: 10px;
-    border: 3px solid #444857;
-    border-radius: 8px;
-    cursor: pointer;
-    width: 50vw;
-    overflow: hidden;
-    border: 1px solid #802323;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  position: absolute;
+  z-index: 1;
+  top: 0.3vh;
+  height: 5vh;
+  left: 47vw;
+  text-align: center;
+  background-color: #333642;
+  color: #fff;
+  font-size: 15px;
+  padding: 3px 20px;
+  margin-right: 10px;
+  border: 3px solid #444857;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 50vw;
+  overflow: hidden;
+  border: 1px solid #802323;
 }
 .customURL span:hover > span a {
-    color: black;
-    color: floralwhite;
-    cursor: alias;
+  color: black;
+  color: floralwhite;
+  cursor: alias;
 }
 .loading {
   width: 100vw;
@@ -161,32 +151,26 @@
   border-radius: 8px;
   cursor: pointer;
 }
-.button:hover, .button:focus {
+.button:hover,
+.button:focus {
   background-color: #5a6074;
 }
 
-
-
-
-
-
-
-
 /*start spinner*/
-.loading span  {
-    text-align: left;
-    margin-left: 13px;
-    width: 100px;
-    height: 87px;
-    border-radius: 100%;
-    position: absolute;
-    top: 33%;
-    left: calc(50% - 60px);
+.loading span {
+  text-align: left;
+  margin-left: 13px;
+  width: 100px;
+  height: 87px;
+  border-radius: 100%;
+  position: absolute;
+  top: 33%;
+  left: calc(50% - 60px);
 }
 
 .loading span span {
-    font-size: .95em;
-    color: darkgrey;
+  font-size: 0.95em;
+  color: darkgrey;
 }
 
 .loading span span::after {
@@ -204,31 +188,21 @@
 }
 /*end loading spinner*/
 
-
-
-
-
-
-
-
-
 /*start Additional Spinner Animation */
 /*https://codepen.io/Mattykins/pen/wfJqk?editors=1100*/
 /*https://codepen.io/martinvd/pen/xbQJom?editors=1100*/
 
-
 .loading {
   /*background: linear-gradient(90deg, #00b377, #00d68f);*/
   /*background: linear-gradient(90deg, #141415, #1b1d25);*/
-/*  background: linear-gradient(90deg, #14141569, #080a11);*/
+  /*  background: linear-gradient(90deg, #14141569, #080a11);*/
   background: linear-gradient(90deg, #090a19, #080a11);
   /*box-shadow: inset 0px 0px 90px rgba(0, 0, 0, 0.5);*/
   margin: 0px;
   padding: 0px;
 }
 
-
- .demo {
+.demo {
   width: 100px;
   height: 102px;
   border-radius: 100%;
@@ -246,13 +220,13 @@
   width: 100%;
   height: 100%;
   border-radius: 100%;
-/*  border: 5px solid rgba( 0, 255, 170, 0.7);*/
-  border: 5px solid rgba(28,  29,  33, 0.7);
+  /*  border: 5px solid rgba( 0, 255, 170, 0.7);*/
+  border: 5px solid rgba(28, 29, 33, 0.7);
   border-right: none;
   border-top: none;
   background-clip: padding;
-/*  box-shadow: inset 0px 0px 10px rgba(  0, 255, 170, 0.15);*/
-  box-shadow: inset 0px 0px 10px rgba(28,   29,  33, 0.15);
+  /*  box-shadow: inset 0px 0px 10px rgba(  0, 255, 170, 0.15);*/
+  box-shadow: inset 0px 0px 10px rgba(28, 29, 33, 0.15);
   box-sizing: content-box;
 }
 
@@ -278,7 +252,7 @@
 }
 .circle:nth-of-type(0) .inner {
   -webkit-animation: spin 2s infinite linear;
-          animation: spin 2s infinite linear;
+  animation: spin 2s infinite linear;
 }
 
 .circle:nth-of-type(1) {
@@ -286,7 +260,7 @@
 }
 .circle:nth-of-type(1) .inner {
   -webkit-animation: spin 2s infinite linear;
-          animation: spin 2s infinite linear;
+  animation: spin 2s infinite linear;
 }
 
 .circle:nth-of-type(2) {
@@ -294,17 +268,14 @@
 }
 .circle:nth-of-type(2) .inner {
   -webkit-animation: spin 2s infinite linear;
-          animation: spin 2s infinite linear;
+  animation: spin 2s infinite linear;
 }
 
 .demo {
   -webkit-animation: spin 5s infinite linear;
-          animation: spin 5s infinite linear;
+  animation: spin 5s infinite linear;
 }
 /*end Additional Spinner Animation */
-
-
-
 
 /* Start: Mobile Devices - Toggle Classes */
 .desktop.toggle_IframeIntoView {
@@ -312,35 +283,35 @@
 }
 .smartphone.toggle_IframeIntoView,
 .desktop.toggle_IframeIntoView > .header,
-.marginTopZero  > div:nth-of-type(1),
-.marginTopZero  > span {
+.marginTopZero > div:nth-of-type(1),
+.marginTopZero > span {
   display: none !important;
 }
 
-.marginTopZero  > div:nth-of-type(2) {
-    display: block;
-    position: static !important;
+.marginTopZero > div:nth-of-type(2) {
+  display: block;
+  position: static !important;
 }
 
 .smartphone {
-    display: none;
-    justify-content: center;
-    align-items: center;
-    padding: 10px;
-    box-sizing: border-box;
-    min-height: 60px;
-    background-color: #1d1e22;
-    border-bottom: 5px solid #333642;
-    height: 100vh;
-    width: 100%;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  box-sizing: border-box;
+  min-height: 60px;
+  background-color: #1d1e22;
+  border-bottom: 5px solid #333642;
+  height: 100vh;
+  width: 100%;
 }
 .link {
-    color: indianred !important;
-    line-height: 2;
-    cursor: pointer;
-    text-decoration: underline;
+  color: indianred !important;
+  line-height: 2;
+  cursor: pointer;
+  text-decoration: underline;
 }
-.imp.marginTopZero  {
+.imp.marginTopZero {
   margin-top: 0px !important;
   height: 100% !important;
   height: 100% !important;
@@ -348,19 +319,16 @@
   min-height: 100% !important;
 }
 @media only screen and (max-width: 1250px) {
-    .desktop {
-      display:none;
-    }
-    .smartphone {
-        display: flex;
-
-    }
-    .smartphone div {
-        color: floralwhite;
-        text-align: center;
-        padding: 1em;
-    }
+  .desktop {
+    display: none;
   }
+  .smartphone {
+    display: flex;
+  }
+  .smartphone div {
+    color: floralwhite;
+    text-align: center;
+    padding: 1em;
+  }
+}
 /* END: Mobile Devices - Toggle Classes */
-
-

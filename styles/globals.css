@@ -1,37 +1,35 @@
-
 /* START TOGGLE NEW PROJECT LAYOUT  ==> TOGGLE VISIBILITY */
- .toggleView.isVisible_TheCreateNewProjectField .Pane.horizontal.Pane2
-   {
-    opacity: .2;
-  }
+.toggleView.isVisible_TheCreateNewProjectField .Pane.horizontal.Pane2 {
+  opacity: 0.2;
+}
 .toggleView.isVisible_TheCreateNewProjectField .button-group {
   display: none !important;
 }
-  .toggleView.isVisible_TheCreateNewProjectField .SplitPane.horizontal {
-    margin-top: 150px !important;
-    /*Compensate for the Margin-Top: */
-    height: 90% !important;   /*FALLBACK*/
-    height: calc(100% - 150px) !important;
-    min-height: 90% !important;   /*FALLBACK*/
-    min-height: calc(100% - 150px) !important;
-  }
+.toggleView.isVisible_TheCreateNewProjectField .SplitPane.horizontal {
+  margin-top: 150px !important;
+  /*Compensate for the Margin-Top: */
+  height: 90% !important; /*FALLBACK*/
+  height: calc(100% - 150px) !important;
+  min-height: 90% !important; /*FALLBACK*/
+  min-height: calc(100% - 150px) !important;
+}
 .toggleView.isVisible_TheCreateNewProjectField .longURLInput {
-    display: inline-block !important;
-    margin: 30px 17px;
-    max-width: 56vw;
-  }
+  display: inline-block !important;
+  margin: 30px 17px;
+  max-width: 56vw;
+}
 .toggleView.isVisible_TheCreateNewProjectField .longURLButtons {
   width: 100vw !important;
   height: 133px;
 }
-.toggleView.isVisible_TheCreateNewProjectField .slogan  {
+.toggleView.isVisible_TheCreateNewProjectField .slogan {
   color: floralwhite;
   display: inline-block !important;
   right: 1vw !important;
   position: absolute;
-  top: 5vh  !important;
+  top: 5vh !important;
 }
-.toggleView.isVisible_NoActiveProject .slogan  {
+.toggleView.isVisible_NoActiveProject .slogan {
   display: inline-block !important;
   position: absolute;
   right: 23vw;
@@ -39,12 +37,12 @@
   top: 1.65vh;
 }
 @media only screen and (max-width: 1300px) {
-  .toggleView.isVisible_TheCreateNewProjectField .slogan  {
+  .toggleView.isVisible_TheCreateNewProjectField .slogan {
     display: none !important;
   }
 }
-.toggleView.isVisible_TheCreateNewProjectField .customURL ,
-.toggleView.isVisible_TheCreateNewProjectField .custom-select  {
+.toggleView.isVisible_TheCreateNewProjectField .customURL,
+.toggleView.isVisible_TheCreateNewProjectField .custom-select {
   display: none;
 }
 .isVisible_NoActiveProject .toggleOnlongURLValue {
@@ -55,8 +53,6 @@
 }
 /* END TOGGLE NEW PROJECT LAYOUT */
 
-
-
 /*https://css-tricks.com/snippets/css/glowing-blue-input-highlights/*/
 .doBlink {
   -webkit-transition: all 1.19s ease-in-out !important;
@@ -66,73 +62,60 @@
   outline: none !important;
   padding: 3px 0px 3px 3px !important;
   margin: 0px 1px 3px 0px !important;
-  border: 2px solid rgba(8,221,50,.7) !important;
+  border: 2px solid rgba(8, 221, 50, 0.7) !important;
 }
-.doBlink:focus  {
+.doBlink:focus {
   box-shadow: 0 0 5px rgba(81, 203, 238, 1) !important;
   padding: 3px 0px 3px 3px !important;
   margin: 0px 1px 3px 0px !important;
-  border: 2px solid rgba(8,221,50,1) !important;
-  text-align: center ;
+  border: 2px solid rgba(8, 221, 50, 1) !important;
+  text-align: center;
 }
 
-
-
 .SplitPane.horizontal {
-  height: 90% !important;   /*FALLBACK*/
+  height: 90% !important; /*FALLBACK*/
   height: calc(100% - 60px) !important;
-  min-height: 90% !important;   /*FALLBACK*/
+  min-height: 90% !important; /*FALLBACK*/
   min-height: calc(100% - 60px) !important;
-  }
-
-
+}
 
 .projectName-InputField.provideProjName,
 .SaveButton-for-ProjName.provideProjName {
-visibility: visible !important;
-position: relative;
-z-index: 1;
+  visibility: visible !important;
+  position: relative;
+  z-index: 1;
 }
 
 .createNewProject {
-   margin: 0 1em;
+  margin: 0 1em;
 }
 
-
 .SaveButton-for-ProjName {
-    width: 5vw !important;
+  width: 5vw !important;
 }
 
 .bootstrapButton {
-    font-size: 46px;
+  font-size: 46px;
 }
 
-
-div.custom-select > svg  {
-    margin: 0 .2em;
-    cursor: pointer;
+div.custom-select > svg {
+  margin: 0 0.2em;
+  cursor: pointer;
 }
-
 
 .longURLInput.form-control.form-input {
-    color: darkslategrey;
-    text-align: center;
+  color: darkslategrey;
+  text-align: center;
 }
 
-
- span.newProjectButtons > svg {
-    margin: 0 .2em;
-    cursor: pointer;
+span.newProjectButtons > svg {
+  margin: 0 0.2em;
+  cursor: pointer;
 }
 
- span.newProjectButtons > svg:nth-child(1) {
-    color: red !important;
+span.newProjectButtons > svg:nth-child(1) {
+  color: red !important;
 }
-
-
-
-
-
 
 /*body {
     margin: 0px;
@@ -140,51 +123,47 @@ div.custom-select > svg  {
     font-size: 12px;
 }*/
 .Resizer {
-    z-index: 10000;
-    box-sizing: border-box;
-    background-clip: padding-box;
+  z-index: 10000;
+  box-sizing: border-box;
+  background-clip: padding-box;
 }
 
 .Resizer:hover {
-    transition: all 2s ease;
-    border: 10px solid #333642;
+  transition: all 2s ease;
+  border: 10px solid #333642;
 }
 
 .Resizer.horizontal {
-    height: 11px;
-    margin: -5px 0;
-    cursor: row-resize;
-    width: 100%;
-    border: 8px solid #333642;
+  height: 11px;
+  margin: -5px 0;
+  cursor: row-resize;
+  width: 100%;
+  border: 8px solid #333642;
 }
 
 .Resizer.vertical {
-    margin: 0 -5px;
+  margin: 0 -5px;
 
-    cursor: col-resize;
-    border: 8px solid #333642;
+  cursor: col-resize;
+  border: 8px solid #333642;
 }
 
 .Resizer.disabled {
-    cursor: not-allowed;
+  cursor: not-allowed;
 }
 .Resizer.disabled:hover {
-    border-color: transparent;
+  border-color: transparent;
 }
 
-.ace_fold-widget  {
-    border: 1px solid green;
+.ace_fold-widget {
+  border: 1px solid green;
 }
-
 
 .ace_fold-widget.ace_open {
-    border: 1px solid red;
+  border: 1px solid red;
 }
 
-
-
-
-.ace_fold-widget  {
+.ace_fold-widget {
   display: inline;
   position: relative;
 }
@@ -196,14 +175,14 @@ div.custom-select > svg  {
 
 .ace_fold-widget:hover:after {
   background: #111;
-  background: rgba(0, 0, 0, .8);
-  border-radius: .5em;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 0.5em;
   bottom: 1.35em;
   color: #fff;
   content: attr(title);
   display: block;
   left: 1em;
-  padding: .3em 1em;
+  padding: 0.3em 1em;
   position: absolute;
   text-shadow: 0 1px 0 #000;
   white-space: nowrap;
@@ -213,8 +192,8 @@ div.custom-select > svg  {
 .ace_fold-widget:hover:before {
   border: solid;
   border-color: #111 transparent;
-  border-color: rgba(0, 0, 0, .8) transparent;
-  border-width: .4em .4em 0 .4em;
+  border-color: rgba(0, 0, 0, 0.8) transparent;
+  border-width: 0.4em 0.4em 0 0.4em;
   bottom: 1em;
   content: "";
   display: block;
@@ -223,13 +202,12 @@ div.custom-select > svg  {
   z-index: 99;
 }
 
-.custom-select{
-    display: flex;
-    align-items: flex-start;
+.custom-select {
+  display: flex;
+  align-items: flex-start;
 }
-.form-input{
-    height: 36px;
-    margin: 0 10px;
-    font-family: Garamond,
-    serif;
+.form-input {
+  height: 36px;
+  margin: 0 10px;
+  font-family: Garamond, serif;
 }
