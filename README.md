@@ -20,7 +20,7 @@ Feel free to contribute and ask questions!
 
  - the web-app offers a JS-/CSS-Editor to enter additional code
  - any code written inside of the code-editor will be to be injected into the foreign page
- - Our webapp uses an API from  surfly.io API to proxy the result and render the additional JS into the proxied page
+ - Our webapp uses an API from  surfly.com API to proxy the result and render the additional JS into the proxied page
  - the additional js/css-code (comming from the editor) will be rendered into the foreign proxied webpage almost in realtime
  - ✨Magic ✨
 
@@ -66,7 +66,7 @@ You can start editing the page by modifying `pages/index.js`. The page auto-upda
  
 
 ## caveats
-for the proxy-service to work you will need to register with surfly.io and grab an API TOKEN. Also: Bear in mind the JavaScript-Injection will not work on your localhost machine due to CORS-restriction, you may install NGrok to circumvent this restriction. If you merely aim to look at the result without your Injections, that will work via http://localhost 
+for the proxy-service to work you will need to register with surfly.com and grab an API TOKEN. Also: Bear in mind the JavaScript-Injection will not work on your localhost machine due to CORS-restriction, you may install NGrok to circumvent this restriction. If you merely aim to look at the result without your Injections, that will work via http://localhost 
 
 
  
